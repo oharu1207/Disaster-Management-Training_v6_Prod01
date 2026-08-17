@@ -409,10 +409,12 @@
   };
 
   window.idealMapAcute     = null;
+  window.idealMapRecovery  = null;
   window.actualMapAcute    = null;
   window.actualMapRecovery = null;
   const mapLoadStatus = {
     idealAcute:     "idle",
+    idealRecovery:  "idle",
     actualAcute:    "idle",
     actualRecovery: "idle",
   };
@@ -5788,6 +5790,42 @@
     }
   }
 
+  // 復旧期正解マップ（ideal_map_recovery.json）の読み込み。
+  // json.recovery.nodes/edges を優先し、後方互換でルート直下 json.nodes/edges にも対応する
+  // （extractActualPhaseMap を流用。検証に失敗した場合は ready にしない）。
+  // 復旧期の差分表示フェーズ（後続作業）はまだ存在しないため、読み込み後の自動再描画は行わない。
+  async function loadIdealMapRecovery() {
+    mapLoadStatus.idealRecovery = "loading";
+    try {
+      const resp = await fetch('./ideal_map_recovery.json');
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const json = await resp.json();
+      const result = extractActualPhaseMap(json, "recovery");
+      if (!result.ok) throw new Error(result.reason);
+
+      const mapVersion = json?.recovery?.mapVersion ?? json?.mapVersion ?? null;
+      window.idealMapRecovery = { nodes: result.map.nodes, edges: result.map.edges, mapVersion };
+      mapLoadStatus.idealRecovery = "ready";
+
+      if (mapVersion === null) {
+        console.warn('[ICS] ideal_map_recovery.json（対象: recovery）に mapVersion がありません。後続段階のエクスポート contentVersions には null で記録されます。');
+      }
+      console.log(
+        `[ICS] ideal_map_recovery.json（対象: recovery）を読み込みました: nodeCount=${window.idealMapRecovery.nodes.length}, edgeCount=${window.idealMapRecovery.edges.length}, mapVersion=${mapVersion}`
+      );
+      logOp("IDEAL_MAP_RECOVERY_LOADED", {
+        source: "fetch",
+        nodeCount: window.idealMapRecovery.nodes.length,
+        edgeCount: window.idealMapRecovery.edges.length,
+        mapVersion: window.idealMapRecovery.mapVersion,
+      });
+    } catch (e) {
+      console.error(`[ICS] ideal_map_recovery.json の読み込みに失敗（対象: recovery）:`, e && e.message || e);
+      mapLoadStatus.idealRecovery = "error";
+      logOp("IDEAL_MAP_RECOVERY_LOAD_FAILED", { message: String(e && e.message || e) });
+    }
+  }
+
   async function loadActualMapAcute() {
     mapLoadStatus.actualAcute = "loading";
     try {
@@ -6757,6 +6795,7 @@
       scoringRuleVersion: window.__ICS_SCORING__?.version ?? null, // [ADDED axis4]
     });
     idealAcuteLoadPromise = loadIdealMapAcute();
+    loadIdealMapRecovery();
     loadActualMapAcute();
     loadActualMapRecovery();
   }
