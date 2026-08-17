@@ -6819,17 +6819,6 @@
   // 被験者切替・実験者向け運用 API
   window.__icsClearStorage = clearLocalStorage;
 
-  /* ===== DEV-ONLY-START（本番コピー時にこのブロックを削除） ===== */
-  // dev-tools.js（正解マップ出力）が現在表示中フェーズのマップを読むための窓口。
-  // state.nodes / state.edges は現在表示中フェーズのライブ状態を保持している。
-  window.__ICS_DEV__ = {
-    getActiveMap: () => ({
-      nodes: state.nodes.map(n => n),
-      edges: state.edges.map(e => e),
-    }),
-  };
-  /* ===== DEV-ONLY-END ===== */
-
   window.addEventListener("blur", () => { logOp("WINDOW_BLUR", {}); });
   window.addEventListener("focus", () => { logOp("WINDOW_FOCUS", {}); });
   document.addEventListener("visibilitychange", () => {

@@ -104,14 +104,6 @@ button {
 .btn-secondary:hover { border-color: var(--accent); }
 .btn-danger    { background: rgba(255,90,106,0.10); color: var(--red); border: 1px solid rgba(255,90,106,0.25); }
 .btn-danger:hover { background: rgba(255,90,106,0.18); }
-/* DEV-ONLY-START（本番コピー時にこのブロックを削除） */
-.btn-dev {
-  background: rgba(255, 193, 7, 0.12);
-  color: #ffc107;
-  border: 1px dashed rgba(255, 193, 7, 0.5);
-}
-.btn-dev:hover { background: rgba(255, 193, 7, 0.20); }
-/* DEV-ONLY-END */
 .btn-accent    { background: linear-gradient(135deg,#2d6edb,#7c3aed); color: #fff; font-weight: 700; }
 .btn-accent:hover { filter: brightness(1.15); }
 button.sm  { padding: 5px 11px; font-size: 12px; border-radius: 7px; }
