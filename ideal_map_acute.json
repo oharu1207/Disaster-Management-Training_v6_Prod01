@@ -1,0 +1,461 @@
+{
+  "mapVersion": "acute-v3.1-35e",
+  "nodes": [
+    {
+      "layerId": 4,
+      "layerReason": "被災した住民を受け入れ保護する場所です。支援を受ける側なので、支援対象の層に置きます。",
+      "edgeReason": "実働の層のチームから支援を受けます。",
+      "hintReason": "避難所は支援を行う側、受ける側どちらですか?",
+      "id": "n-rb8efqk",
+      "label": "避難所",
+      "group": "g-team",
+      "x": 604.91015625,
+      "y": 603.03125
+    },
+    {
+      "layerId": 4,
+      "layerReason": "けがや病気の人を受け入れて治療する場所です。支援を受ける側なので、支援対象の層に置きます。",
+      "edgeReason": "実働の層のチームから支援を受けます。",
+      "hintReason": "医療機関は支援を行う側、受ける側どちらですか?",
+      "id": "n-7kny1d4",
+      "label": "医療機関",
+      "group": "g-team",
+      "x": 229.6015625,
+      "y": 597.3203125
+    },
+    {
+      "layerId": 1,
+      "layerReason": "県全体の災害対応の方針を決める本部です。対応全体を統括する側なので、指揮の層に置きます。",
+      "edgeReason": "県全体の方針を決める本部として、C県A保健所へ指示命令を出します。",
+      "hintReason": "県庁は行政機関の統括を担っています。現場で手を動かす働き・対応全体を方向づける働きどちらが適切でしょうか?",
+      "id": "n-q5rb5n7",
+      "label": "県庁",
+      "group": "g-command",
+      "x": 453.58984375,
+      "y": 12.6796875
+    },
+    {
+      "layerId": 1,
+      "layerReason": "地域の災害対応を動かす現場の拠点です。地域の対応を統括する側なので、指揮の層に置きます。",
+      "edgeReason": "県庁から指示命令を受けて動きます。管内で活動する地域の職能団体（医師会・歯科医師会・AB薬剤師会）や、調整役（地域災害医療コーディネーター・市町村保健センター）、W民間団体とは、別の組織どうしとして対等な連携協力で直接結びます。",
+      "hintReason": "A保健所は現場指揮の拠点として関係者会議を主催しています。この役割は4つの層のどこにあたるでしょうか?",
+      "id": "n-uxjlc8r",
+      "label": "C県A保健所",
+      "group": "g-command",
+      "x": 453.81640625,
+      "y": 113.9140625
+    },
+    {
+      "layerId": 3,
+      "layerReason": "災害時の医療を現場で支える災害派遣医療チームです。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "災害医療の担い手として、医療機関と避難所を支援します。",
+      "hintReason": "DMATの動き(救急外来支援・搬送・診療再開支援)は、どの層の働きでしょうか?",
+      "id": "n-wjv45yi",
+      "label": "DMAT",
+      "group": "g-unit",
+      "x": 6.00390625,
+      "y": 373.05078125
+    },
+    {
+      "layerId": 2,
+      "layerReason": "保健所の指揮や調整の仕事を中から助ける応援チームです。保健所の中で働くため、調整の層に置きます。",
+      "edgeReason": "保健所の中で働く応援チームなので、外部の組織と違って、唯一保健所から指示命令を受けます。",
+      "hintReason": "DHEATは「保健所の指揮調整機能の支援」を行っています。避難所で活動するチームと同じ場所で働いているでしょうか?",
+      "id": "n-lktnlns",
+      "label": "DHEAT",
+      "group": "g-section",
+      "x": 676.1953125,
+      "y": 254.6640625
+    },
+    {
+      "layerId": 3,
+      "layerReason": "心のケアを担う災害派遣精神医療チームです。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "心のケアを担うため、医療機関と避難所の両方を支援します。",
+      "hintReason": "DPATの動き(避難所でのメンタル相談など)は、どの層の働きでしょうか?",
+      "id": "n-80rx3s0",
+      "label": "DPAT",
+      "group": "g-unit",
+      "x": 153.0546875,
+      "y": 370.87890625
+    },
+    {
+      "layerId": 3,
+      "layerReason": "高齢者や障がいのある人など、特に配慮が必要な人を支える災害派遣福祉チームです。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "避難所で高齢者や障がいのある人など、特に配慮が必要な人を支援します。",
+      "hintReason": "DWATの動き(避難所の福祉支援)は、どの層の働きでしょうか?",
+      "id": "n-94y59kf",
+      "label": "DWAT",
+      "group": "g-unit",
+      "x": 873.3984375,
+      "y": 370.5234375
+    },
+    {
+      "layerId": 3,
+      "layerReason": "日本医師会の災害医療チームです。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "避難所の医療と健康管理を支援します。",
+      "hintReason": "JMATの動き(避難所での医療支援)は、どの層の働きでしょうか?",
+      "id": "n-7kbjanf",
+      "label": "JMAT",
+      "group": "g-unit",
+      "x": 188.46484375,
+      "y": 451.84765625
+    },
+    {
+      "layerId": 3,
+      "layerReason": "体を動かせないことによる体調悪化や災害関連死を防ぐ、リハビリ支援のチームです。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "避難生活による体調悪化や災害関連死を防ぐため、避難所を支援します。",
+      "hintReason": "JRATの動き(避難所の環境整備・リハビリ支援)は、どの層の働きでしょうか?",
+      "id": "n-9ogsp8u",
+      "label": "JRAT",
+      "group": "g-unit",
+      "x": 962,
+      "y": 441.90234375
+    },
+    {
+      "layerId": 3,
+      "layerReason": "災害支援ナースを派遣する看護職の団体です。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "災害支援ナースの派遣を通じて、医療機関と避難所の両方を支援します。",
+      "hintReason": "C県看護協会から派遣されたナースはどこで、どんな働きをするでしょうか?",
+      "id": "n-itcwqhm",
+      "label": "C県看護協会",
+      "group": "g-unit",
+      "x": 31.54296875,
+      "y": 450.9921875
+    },
+    {
+      "layerId": 3,
+      "layerReason": "地域の医療を担う医師の団体です。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "保健所とは別の組織なので連携協力で直接つながり、医療機関と避難所を支援します。",
+      "hintReason": "医師会の動き(医療機関のバックアップ・避難所巡回相談)は、現場で活動する側・チームの間を調整する側どちらでしょうか?",
+      "id": "n-24f2zfc",
+      "label": "医師会",
+      "group": "g-unit",
+      "x": 318.55859375,
+      "y": 358.37109375
+    },
+    {
+      "layerId": 3,
+      "layerReason": "歯科医療と、亡くなった方の身元確認を担う団体です。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "保健所と連携協力で直接つながり、医療機関と避難所を支援します。",
+      "hintReason": "歯科医師会の動き(歯科医療機関のバックアップ・避難所巡回相談)は、現場で活動する側・チームの間を調整する側どちらでしょうか?",
+      "id": "n-fkzl0ga",
+      "label": "歯科医師会",
+      "group": "g-unit",
+      "x": 452.70703125,
+      "y": 358.82421875
+    },
+    {
+      "layerId": 3,
+      "layerReason": "薬の管理や服薬の支援を担う薬剤師の団体です。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "保健所と連携協力で直接つながり、避難所を支援します。",
+      "hintReason": "AB薬剤師会の動き(災害処方箋の対応・避難所への医薬品提供)は、どの層の働きでしょうか?",
+      "id": "n-59rd4ln",
+      "label": "AB薬剤師会",
+      "group": "g-unit",
+      "x": 584.2578125,
+      "y": 363.2109375
+    },
+    {
+      "layerId": 3,
+      "layerReason": "食事と栄養の管理を担う栄養士の団体です。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "避難所の食事と栄養の管理を支援します。",
+      "hintReason": "C県栄養士会の動き(特殊栄養食品の配布・個別栄養支援)は、どの層の働きでしょうか?",
+      "id": "n-41008rw",
+      "label": "C県栄養士会",
+      "group": "g-unit",
+      "x": 749.359375,
+      "y": 370.9921875
+    },
+    {
+      "layerId": 3,
+      "layerReason": "高齢者の相談や生活支援を担う身近な機関です。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "避難所の高齢者を支援します。",
+      "hintReason": "地域包括支援センターの動き(避難所の運営支援・実態把握)は、どの層の働きでしょうか?",
+      "id": "n-q3a6r8z",
+      "label": "地域包括支援センター",
+      "group": "g-unit",
+      "x": 781.640625,
+      "y": 442.46484375
+    },
+    {
+      "layerId": 3,
+      "layerReason": "行政だけでは手が届かないところを補う民間の団体です。現場で活動する側なので、実働の層に置きます。",
+      "edgeReason": "行政だけでは手が届かない部分を補う団体として、A保健所と連携協力で直接つながり、避難所を支援します。",
+      "hintReason": "W民間団体の動き(避難者の運営支援)は、どの層の働きでしょうか?",
+      "id": "n-szn4qi4",
+      "label": "W民間団体",
+      "group": "g-unit",
+      "x": 650.13671875,
+      "y": 441.6171875
+    },
+    {
+      "layerId": 2,
+      "layerReason": "住民に最も近い場所で保健活動を行う行政機関です。災害時には関係するチームの間の調整を担うため、調整の層に置きます。",
+      "edgeReason": "福祉・生活支援系のチーム（DWAT・JRAT・地域包括支援センター・C県栄養士会）をまとめる役割を持ちます。県の保健所とは別の組織なので、指示命令ではなく連携協力で結びます。",
+      "hintReason": "市町村保健センターは実態把握の「とりまとめ」や支援チームの「受け入れ調整」を行っています。自ら現場で支援する動き・チームの間をつなぐ動きのどちらが適切ですか?",
+      "id": "n-ipr2lia",
+      "label": "市町村保健センター",
+      "group": "g-unit",
+      "x": 872.1015625,
+      "y": 206.98828125
+    },
+    {
+      "layerId": 2,
+      "layerReason": "医療の人手や物資の割り振りについて、専門的な立場から助言し、関係機関の間を調整する役割です。調整の層に置きます。",
+      "edgeReason": "医療系のチーム（DMAT・DPAT・JMAT・C県看護協会）を連携協力でまとめます。",
+      "hintReason": "コーディネーターは医療系チームの活動状況の把握と調整助言を行っています。自ら医療を行う側・チームの間を調整する側どちらが適切ですか?",
+      "id": "n-hi2hs8i",
+      "label": "地域災害医療コーディネーター",
+      "group": "g-command",
+      "x": 118.03515625,
+      "y": 210.22265625
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-tbagxuy",
+      "from": "n-q5rb5n7",
+      "to": "n-uxjlc8r",
+      "label": "指示命令",
+      "bidirectional": false
+    },
+    {
+      "id": "e-gxy8157",
+      "from": "n-uxjlc8r",
+      "to": "n-24f2zfc",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-rf771gq",
+      "from": "n-uxjlc8r",
+      "to": "n-fkzl0ga",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-3g8vfon",
+      "from": "n-uxjlc8r",
+      "to": "n-59rd4ln",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-krvv98t",
+      "from": "n-uxjlc8r",
+      "to": "n-hi2hs8i",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-loylchs",
+      "from": "n-hi2hs8i",
+      "to": "n-wjv45yi",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-t7vqofd",
+      "from": "n-ipr2lia",
+      "to": "n-9ogsp8u",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-xou84ju",
+      "from": "n-ipr2lia",
+      "to": "n-94y59kf",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-s5iqes5",
+      "from": "n-ipr2lia",
+      "to": "n-q3a6r8z",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-x5ksumg",
+      "from": "n-24f2zfc",
+      "to": "n-7kny1d4",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-63fquk3",
+      "from": "n-itcwqhm",
+      "to": "n-7kny1d4",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-c08z9l5",
+      "from": "n-wjv45yi",
+      "to": "n-7kny1d4",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-69kls9w",
+      "from": "n-80rx3s0",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-m0junzk",
+      "from": "n-7kbjanf",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-1igqqjd",
+      "from": "n-41008rw",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-nu6pd8m",
+      "from": "n-szn4qi4",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-inywe7e",
+      "from": "n-q3a6r8z",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-5wj807g",
+      "from": "n-94y59kf",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-liwop1n",
+      "from": "n-9ogsp8u",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-8iymt6l",
+      "from": "n-80rx3s0",
+      "to": "n-7kny1d4",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-360tikk",
+      "from": "n-ipr2lia",
+      "to": "n-41008rw",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-9eib0vs",
+      "from": "n-hi2hs8i",
+      "to": "n-80rx3s0",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-7wtmpgm",
+      "from": "n-hi2hs8i",
+      "to": "n-itcwqhm",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-2jazsgk",
+      "from": "n-hi2hs8i",
+      "to": "n-7kbjanf",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-botzn8t",
+      "from": "n-uxjlc8r",
+      "to": "n-lktnlns",
+      "label": "指示命令",
+      "bidirectional": false
+    },
+    {
+      "id": "e-m4gskly",
+      "from": "n-59rd4ln",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-rhhf15g",
+      "from": "n-24f2zfc",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-at8qqh3",
+      "from": "n-fkzl0ga",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-tx5zjz7",
+      "from": "n-uxjlc8r",
+      "to": "n-szn4qi4",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-vkt8kem",
+      "from": "n-uxjlc8r",
+      "to": "n-ipr2lia",
+      "label": "連携協力",
+      "bidirectional": true
+    },
+    {
+      "id": "e-wn65raf",
+      "from": "n-itcwqhm",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-w337sir",
+      "from": "n-wjv45yi",
+      "to": "n-rb8efqk",
+      "label": "支援",
+      "bidirectional": false
+    },
+    {
+      "id": "e-dm7itfy",
+      "from": "n-uxjlc8r",
+      "to": "n-q5rb5n7",
+      "label": "情報伝達",
+      "bidirectional": false
+    },
+    {
+      "id": "e-ec0d8gh",
+      "from": "n-lktnlns",
+      "to": "n-uxjlc8r",
+      "label": "情報伝達",
+      "bidirectional": false
+    },
+    {
+      "id": "e-shk2med",
+      "from": "n-fkzl0ga",
+      "to": "n-7kny1d4",
+      "label": "支援",
+      "bidirectional": false
+    }
+  ]
+}

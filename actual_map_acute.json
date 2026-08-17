@@ -1,0 +1,6313 @@
+{
+  "version": 8,
+  "logSchemaVersion": 1,
+  "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+  "exportedAt": "2026-08-14T12:41:49.783Z",
+  "scenarioId": "s1-1",
+  "operationLog": [
+    {
+      "ts": "2026-03-22T09:45:02.248Z",
+      "type": "INIT",
+      "detail": {
+        "scenarioId": "s1-1"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:46:54.616Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "県庁",
+        "group": "g-command"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:46:56.031Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "C県A保健所",
+        "group": "g-command"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:46:57.114Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "地域災害医療コーディネーター",
+        "group": "g-command"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:46:58.066Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "DMAT",
+        "group": "g-section"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:46:58.982Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "DHEAT",
+        "group": "g-section"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:01.714Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:04.915Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:06.279Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:08.747Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:12.181Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-pd06uet",
+        "label": "県庁",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:13.864Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:17.429Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "県庁",
+        "to": "C県A保健所",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:20.313Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "県庁",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:22.313Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:25.279Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "地域災害医療コーディネーター",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:28.296Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "地域災害医療コーディネーター",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:30.231Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:33.380Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DHEAT",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:36.763Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DHEAT",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:41.346Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-frj1omn",
+        "label": "DMAT",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:42.746Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-frj1omn",
+        "label": "DMAT",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:46.496Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DMAT",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:49.263Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DMAT",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:52.714Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:47:55.767Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "DPAT",
+        "group": "g-section"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:12.079Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DHEAT",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:15.262Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DHEAT",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:21.129Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DMAT",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:24.296Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DMAT",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:33.367Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "避難所",
+        "group": "g-team"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:35.212Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-h5zix45",
+        "label": "避難所",
+        "layerId": 4
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:39.962Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DHEAT",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:41.847Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-47hdwag",
+        "label": "DPAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:43.968Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "医療機関",
+        "group": "g-team"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:46.112Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-j99q0a3",
+        "label": "医療機関",
+        "layerId": 4
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:48.962Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DMAT",
+        "to": "医療機関",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:52.501Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "医師会",
+        "group": "g-unit"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:48:55.846Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-q24h85w",
+        "label": "医師会",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:01.995Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "医師会",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:12.730Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-q24h85w",
+        "label": "医師会",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:14.663Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-q24h85w",
+        "label": "医師会",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:19.929Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "医師会",
+        "label": "連携協力"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:23.945Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "医師会",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:35.012Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "医師会",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:39.329Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:42.753Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "市町村保健センター",
+        "group": "g-team"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:45.629Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-nhnoixh",
+        "label": "市町村保健センター",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:49:50.579Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-nhnoixh",
+        "label": "市町村保健センター",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:00.183Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "DPAT",
+        "group": "g-section"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:03.979Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-94s4fsu",
+        "label": "DPAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:06.312Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DPAT",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:09.112Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DPAT",
+        "to": "医療機関",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:15.529Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-94s4fsu",
+        "label": "DPAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:19.895Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DPAT",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:24.345Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DPAT",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:31.784Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "C県看護協会",
+        "group": "g-section"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:36.662Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:38.829Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:43.445Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県看護協会",
+        "to": "医療機関",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:50:47.063Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T09:51:04.451Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "W民間団体",
+        "group": "g-unit"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:51:09.512Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-i04ekzi",
+        "label": "W民間団体",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:51:11.611Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "W民間団体",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:51:16.411Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "W民間団体",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:51:22.411Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "W民間団体",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:51:44.968Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "DMAT",
+        "group": "g-section"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:51:47.311Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-b468lju",
+        "label": "DMAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:51:51.911Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "DMAT",
+        "to": "医療機関",
+        "label": "支援"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:51:55.944Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DMAT",
+        "to": "DMAT",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:51:59.594Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DMAT",
+        "to": "DMAT",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:02.994Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DMAT",
+        "to": "医療機関",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:07.027Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DMAT",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:28.718Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "JMAT",
+        "group": "g-section"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:32.878Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:40.111Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-47hdwag",
+        "label": "DPAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:41.944Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-47hdwag",
+        "label": "DPAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:46.660Z",
+      "type": "DELETE_NODE",
+      "detail": {
+        "id": "n-47hdwag",
+        "label": "DPAT"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:50.984Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "JRAT",
+        "group": "g-section"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:55.243Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:56.644Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:52:58.911Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:53:01.161Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:53:21.493Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:53:25.094Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:53:30.476Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DMAT",
+        "to": "地域災害医療コーディネーター",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T09:53:58.551Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "歯科医師会",
+        "group": "g-unit"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:54:01.344Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:54:33.534Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "AB薬剤師会",
+        "group": "g-unit"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:54:36.927Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-sdxuu20",
+        "label": "AB薬剤師会",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T09:54:44.069Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "C県栄養士会",
+        "group": "g-unit"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:54:46.660Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-vab1t0k",
+        "label": "C県栄養士会",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T09:54:52.167Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "地域包括支援センター",
+        "group": "g-unit"
+      }
+    },
+    {
+      "ts": "2026-03-22T09:54:57.860Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:07:39.542Z",
+      "type": "IMPORT",
+      "detail": {
+        "nodeCount": 19
+      }
+    },
+    {
+      "ts": "2026-03-22T12:07:58.055Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-nhnoixh",
+        "label": "市町村保健センター",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:00.855Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "市町村保健センター",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:06.754Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "市町村保健センター",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:14.670Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "市町村保健センター",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:25.221Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県栄養士会",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:30.938Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:33.021Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "JMAT",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:35.270Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:37.104Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "JRAT",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:41.830Z",
+      "type": "ADD_NODE",
+      "detail": {
+        "label": "DWAT",
+        "group": "g-section"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:45.805Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:48.588Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DWAT",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:53.270Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "県庁",
+        "to": "DWAT",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:08:57.770Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DWAT",
+        "to": "県庁",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:09:05.803Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "JRAT",
+        "to": "県庁",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:09:12.388Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:09:20.653Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "県庁",
+        "to": "JRAT",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:09:32.788Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:19:54.147Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "医師会",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:19:58.947Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:20:03.263Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:20:07.697Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "医師会",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:20:17.014Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "歯科医師会",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:20:19.131Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:20:31.347Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "医師会",
+        "to": "DMAT",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:20:47.880Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "医師会",
+        "to": "医療機関",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:20:54.847Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "医師会",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:20:59.447Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "歯科医師会",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:21:02.797Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "歯科医師会",
+        "to": "医療機関",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:21:22.063Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T12:21:31.546Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "医師会",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:21:47.396Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:21:53.663Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DMAT",
+        "label": "連携協力"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:22:02.746Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DMAT",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:22:15.512Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DHEAT",
+        "label": "連携協力"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:22:24.779Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DHEAT",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:22:39.330Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:22:44.030Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:22:54.164Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:23:31.331Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "AB薬剤師会",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:23:38.997Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "AB薬剤師会",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:24:03.364Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:26:20.962Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "JMAT",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:26:25.046Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "JMAT",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:26:29.531Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:29:56.594Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "地域包括支援センター",
+        "to": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:30:03.094Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "地域包括支援センター",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:30:51.743Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "C県栄養士会",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:30:55.560Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県栄養士会",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:31:07.426Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "C県看護協会",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:31:10.910Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県看護協会",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:31:38.827Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:35:25.559Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:37:41.242Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:42:10.987Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T12:42:12.288Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T12:42:15.770Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:42:30.904Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:42:34.437Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "地域災害医療コーディネーター",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:42:36.604Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T12:42:47.921Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:42:53.187Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "地域災害医療コーディネーター",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:42:56.820Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "地域災害医療コーディネーター",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:42:58.538Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T12:43:19.254Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-frj1omn",
+        "label": "DMAT",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:43:23.220Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DMAT",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:43:34.537Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-frj1omn",
+        "label": "DMAT",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:43:40.954Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-frj1omn",
+        "label": "DMAT",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T12:43:44.503Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "DMAT",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:43:48.302Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DMAT",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:43:52.971Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:44:36.886Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "DPAT",
+        "to": "医療機関",
+        "label": "支援"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:44:42.769Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DPAT",
+        "to": "市町村保健センター",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:44:49.452Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DPAT",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:44:52.802Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "DPAT",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:44:57.185Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "DPAT",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:45:19.369Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:45:23.035Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "JMAT",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:45:26.702Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "JMAT",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:45:31.935Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "JMAT",
+        "to": "C県A保健所",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:45:40.503Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:46:03.952Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:46:07.385Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "C県看護協会",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:46:10.835Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県看護協会",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:46:15.884Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "C県看護協会",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:46:22.151Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "県庁",
+        "to": "C県看護協会",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:46:28.151Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県看護協会",
+        "to": "県庁",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:46:31.202Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:46:37.086Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:46:52.502Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-vab1t0k",
+        "label": "C県栄養士会",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:46:56.834Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "C県栄養士会",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:47:01.818Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県栄養士会",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:47:06.584Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県栄養士会",
+        "to": "C県A保健所",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:47:11.384Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "県庁",
+        "to": "C県栄養士会",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:47:15.467Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県栄養士会",
+        "to": "県庁",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:47:18.419Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:47:45.852Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-i04ekzi",
+        "label": "W民間団体",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:47:50.284Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "W民間団体",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:47:54.767Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "W民間団体",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:47:59.867Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "W民間団体",
+        "to": "C県A保健所",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:48:36.436Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:49:55.117Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "W民間団体",
+        "to": "C県A保健所",
+        "label": "連携協力"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:49:59.251Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "W民間団体",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:50:02.617Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "W民間団体",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:50:58.667Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DWAT",
+        "to": "C県A保健所",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:51:01.827Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T12:51:05.785Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:51:53.834Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:51:55.499Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:51:57.468Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T12:52:01.583Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "DWAT",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T12:52:06.083Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DWAT",
+        "to": "C県A保健所",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:52:08.184Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:52:33.366Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "JRAT",
+        "to": "C県A保健所",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T12:52:37.535Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T12:59:11.463Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T12:59:16.345Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "DHEAT",
+        "to": "県庁",
+        "label": "情報伝達",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T12:59:20.931Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T12:59:35.847Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T12:59:39.562Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "DHEAT",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T13:00:08.712Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "DPAT",
+        "to": "市町村保健センター",
+        "label": "連携協力"
+      }
+    },
+    {
+      "ts": "2026-03-22T13:00:11.413Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T13:00:44.578Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-i04ekzi",
+        "label": "W民間団体",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T13:00:48.296Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T13:00:56.778Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "地域包括支援センター",
+        "label": "指示命令",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-03-22T13:01:00.480Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T13:01:07.312Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T13:01:11.412Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "地域包括支援センター",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-03-22T13:01:15.927Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T13:01:18.028Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T13:01:27.997Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "layerId": 1
+      }
+    },
+    {
+      "ts": "2026-03-22T13:01:31.111Z",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "from": "地域包括支援センター",
+        "to": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-03-22T13:01:40.561Z",
+      "type": "ADD_EDGE",
+      "detail": {
+        "from": "C県A保健所",
+        "to": "地域包括支援センター",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-03-22T13:01:42.829Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "layerId": 3
+      }
+    },
+    {
+      "ts": "2026-03-22T13:01:45.430Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-03-22T13:11:31.540Z",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-frj1omn",
+        "label": "DMAT",
+        "layerId": 2
+      }
+    },
+    {
+      "ts": "2026-03-22T13:16:23.156Z",
+      "type": "EXPORT",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:52:05.725Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "IMPORT",
+      "detail": {
+        "importedVersion": null,
+        "importedSessionId": null,
+        "importedLogCount": 232,
+        "hasAcute": false,
+        "hasRecovery": false,
+        "hasConflict": false
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:12.555Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-pd06uet",
+        "label": "県庁",
+        "from": {
+          "x": 476.44921875,
+          "y": 14.375,
+          "layerId": 1
+        },
+        "to": {
+          "x": 693.5078125,
+          "y": 19.63671875,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:14.772Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 410.50390625,
+          "y": 119.5625,
+          "layerId": 1
+        },
+        "to": {
+          "x": 389.87109375,
+          "y": 89.36328125,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:27.621Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 389.87109375,
+          "y": 89.36328125,
+          "layerId": 1
+        },
+        "to": {
+          "x": 393.3125,
+          "y": 42.71875,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:30.022Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 393.3125,
+          "y": 42.71875,
+          "layerId": 1
+        },
+        "to": {
+          "x": 393.3125,
+          "y": 10.81640625,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:37.455Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 393.3125,
+          "y": 10.81640625,
+          "layerId": 1
+        },
+        "to": {
+          "x": 309.96875,
+          "y": 126.9609375,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:44.803Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 309.96875,
+          "y": 126.9609375,
+          "layerId": 1
+        },
+        "to": {
+          "x": 300.2578125,
+          "y": 58.984375,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:49.304Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-b5lhtb2",
+        "fromId": "n-wxy4a06",
+        "toId": "n-nhnoixh",
+        "fromLabel": "C県A保健所",
+        "toLabel": "市町村保健センター",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:49.319Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:52:49.504Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:52:53.604Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 300.2578125,
+          "y": 58.984375,
+          "layerId": 1
+        },
+        "to": {
+          "x": 300.1328125,
+          "y": 58.859375,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:56.338Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "START_ARROW",
+      "detail": {
+        "fromId": "n-wxy4a06",
+        "fromLabel": "C県A保健所"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:52:58.704Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VALIDATION_ERROR",
+      "detail": {
+        "type": "EDGE_ADD_DENIED",
+        "fromId": "n-wxy4a06",
+        "toId": "n-nhnoixh",
+        "label": "連携協力",
+        "reason": "指示命令または情報伝達が設定済みのペアには連携協力を追加できません"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:07.087Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 300.1328125,
+          "y": 58.859375,
+          "layerId": 1
+        },
+        "to": {
+          "x": 304.1484375,
+          "y": 250.62109375,
+          "layerId": 2
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:07.087Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "SET_LAYER",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "fromLayerId": 1,
+        "toLayerId": 2
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:10.704Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-mppbu81",
+        "fromId": "n-nhnoixh",
+        "toId": "n-wxy4a06",
+        "fromLabel": "市町村保健センター",
+        "toLabel": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:10.717Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:53:10.901Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:53:13.074Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 304.1484375,
+          "y": 250.62109375,
+          "layerId": 2
+        },
+        "to": {
+          "x": 306.27734375,
+          "y": 72.0078125,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:13.075Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "SET_LAYER",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "fromLayerId": 2,
+        "toLayerId": 1
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:19.036Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 306.27734375,
+          "y": 72.0078125,
+          "layerId": 1
+        },
+        "to": {
+          "x": 303.69921875,
+          "y": 37.74609375,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:32.071Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "START_ARROW",
+      "detail": {
+        "fromId": "n-wxy4a06",
+        "fromLabel": "C県A保健所"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:34.653Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "ADD_EDGE",
+      "detail": {
+        "id": "e-q25rnfl",
+        "fromId": "n-wxy4a06",
+        "toId": "n-nhnoixh",
+        "fromLabel": "C県A保健所",
+        "toLabel": "市町村保健センター",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:36.637Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "EXPORT",
+      "detail": {
+        "currentPhase": 1,
+        "currentPhaseName": "acute_map",
+        "operationLogCount": 255
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:41.588Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-frj1omn",
+        "label": "DMAT",
+        "from": {
+          "x": 862.44921875,
+          "y": 216.515625,
+          "layerId": 2
+        },
+        "to": {
+          "x": 926.34765625,
+          "y": 195.609375,
+          "layerId": 2
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:44.753Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 962,
+          "y": 405.83203125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 962,
+          "y": 405.94921875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:53:52.986Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-94s4fsu",
+        "label": "DPAT",
+        "from": {
+          "x": 669.140625,
+          "y": 444.7890625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 669.01953125,
+          "y": 444.7890625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:54:02.603Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 303.69921875,
+          "y": 37.74609375,
+          "layerId": 1
+        },
+        "to": {
+          "x": 368.83203125,
+          "y": 38.0546875,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:54:04.421Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-pd06uet",
+        "label": "県庁",
+        "from": {
+          "x": 693.5078125,
+          "y": 19.63671875,
+          "layerId": 1
+        },
+        "to": {
+          "x": 736.8046875,
+          "y": 21.11328125,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:54:07.736Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 368.83203125,
+          "y": 38.0546875,
+          "layerId": 1
+        },
+        "to": {
+          "x": 374.70703125,
+          "y": 69.85546875,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:54:12.421Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:54:14.307Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:54:15.525Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:54:16.132Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:54:17.787Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:54:17.788Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:54:51.009Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:54:51.010Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:54:57.686Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-flz1q2b",
+        "fromId": "n-wxy4a06",
+        "toId": "n-i04ekzi",
+        "fromLabel": "C県A保健所",
+        "toLabel": "W民間団体",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:54:57.701Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:54:57.878Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:55:00.736Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-m9odcfb",
+        "fromId": "n-i04ekzi",
+        "toId": "n-wxy4a06",
+        "fromLabel": "W民間団体",
+        "toLabel": "C県A保健所",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:00.750Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:55:00.937Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:55:03.602Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-i04ekzi",
+        "label": "W民間団体",
+        "from": {
+          "x": 107.60546875,
+          "y": 479.9296875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 107.48046875,
+          "y": 479.9296875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:04.653Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "START_ARROW",
+      "detail": {
+        "fromId": "n-i04ekzi",
+        "fromLabel": "W民間団体"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:07.236Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "ADD_EDGE",
+      "detail": {
+        "id": "e-c9hi1q4",
+        "fromId": "n-i04ekzi",
+        "toId": "n-wxy4a06",
+        "fromLabel": "W民間団体",
+        "toLabel": "C県A保健所",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:08.501Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:55:09.290Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:09.546Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:11.373Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:12.841Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:13.437Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:55:14.548Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:55:15.323Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:15.896Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:55:16.438Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:55:17.987Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:55:17.987Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:56:37.508Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:56:37.509Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:56:44.284Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "from": {
+          "x": 962,
+          "y": 477.12109375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 970,
+          "y": 218.74609375,
+          "layerId": 2
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:56:44.284Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "SET_LAYER",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "fromLayerId": 3,
+        "toLayerId": 2
+      }
+    },
+    {
+      "ts": "2026-08-14T11:56:47.785Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-qf7qmae",
+        "fromId": "n-aowh2ll",
+        "toId": "n-pd06uet",
+        "fromLabel": "C県看護協会",
+        "toLabel": "県庁",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:56:47.797Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:56:47.981Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:56:50.751Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-kgm9qu7",
+        "fromId": "n-pd06uet",
+        "toId": "n-aowh2ll",
+        "fromLabel": "県庁",
+        "toLabel": "C県看護協会",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:56:50.764Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:56:50.947Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:56:51.652Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "START_ARROW",
+      "detail": {
+        "fromId": "n-pd06uet",
+        "fromLabel": "県庁"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:56:54.051Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "ADD_EDGE",
+      "detail": {
+        "id": "e-bg3rp40",
+        "fromId": "n-pd06uet",
+        "toId": "n-aowh2ll",
+        "fromLabel": "県庁",
+        "toLabel": "C県看護協会",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-08-14T11:56:57.884Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "from": {
+          "x": 970,
+          "y": 218.74609375,
+          "layerId": 2
+        },
+        "to": {
+          "x": 970,
+          "y": 471.76171875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:56:57.884Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "SET_LAYER",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "fromLayerId": 2,
+        "toLayerId": 3
+      }
+    },
+    {
+      "ts": "2026-08-14T11:57:02.519Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 962,
+          "y": 405.94921875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 970,
+          "y": 391.60546875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:57:05.468Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "EXPORT",
+      "detail": {
+        "currentPhase": 1,
+        "currentPhaseName": "acute_map",
+        "operationLogCount": 306
+      }
+    },
+    {
+      "ts": "2026-08-14T11:57:07.176Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:57:07.849Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:57:09.901Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-i04ekzi",
+        "label": "W民間団体",
+        "from": {
+          "x": 107.48046875,
+          "y": 479.9296875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 123.20703125,
+          "y": 471.94140625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T11:57:13.275Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:57:13.982Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:57:14.768Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "EXPORT",
+      "detail": {
+        "currentPhase": 1,
+        "currentPhaseName": "acute_map",
+        "operationLogCount": 312
+      }
+    },
+    {
+      "ts": "2026-08-14T11:57:16.092Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:57:16.857Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:57:18.911Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T11:57:19.483Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:57:20.485Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T11:57:20.486Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:15:29.848Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:15:29.874Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:15:32.746Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:15:37.092Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:15:37.676Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:15:37.677Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:17:29.980Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:17:29.982Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:18:15.262Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-nhnoixh",
+        "label": "市町村保健センター",
+        "from": {
+          "x": 305.7890625,
+          "y": 422.61328125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 272.94921875,
+          "y": 431.67578125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:27.523Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 146.80078125,
+          "y": 282.50390625,
+          "layerId": 2
+        },
+        "to": {
+          "x": 275.3203125,
+          "y": 368.70703125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:27.523Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "SET_LAYER",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "fromLayerId": 2,
+        "toLayerId": 3
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:39.591Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-frj1omn",
+        "label": "DMAT",
+        "from": {
+          "x": 926.34765625,
+          "y": 195.609375,
+          "layerId": 2
+        },
+        "to": {
+          "x": 755.7421875,
+          "y": 241.28515625,
+          "layerId": 2
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:41.808Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "from": {
+          "x": 374.70703125,
+          "y": 69.85546875,
+          "layerId": 1
+        },
+        "to": {
+          "x": 220.8515625,
+          "y": 74.546875,
+          "layerId": 1
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:48.958Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "from": {
+          "x": 38.55859375,
+          "y": 401.8515625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 0,
+          "y": 382.30859375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:51.006Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-vab1t0k",
+        "label": "C県栄養士会",
+        "from": {
+          "x": 0,
+          "y": 509.640625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 0,
+          "y": 466.69140625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:52.741Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-i04ekzi",
+        "label": "W民間団体",
+        "from": {
+          "x": 123.20703125,
+          "y": 471.94140625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 144.390625,
+          "y": 461.92578125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:55.591Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 275.3203125,
+          "y": 368.70703125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 231.08984375,
+          "y": 370.97265625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:57.340Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-nhnoixh",
+        "label": "市町村保健センター",
+        "from": {
+          "x": 272.94921875,
+          "y": 431.67578125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 283.95703125,
+          "y": 458.06640625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:18:59.541Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "from": {
+          "x": 424.90234375,
+          "y": 388.0703125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 388.58203125,
+          "y": 378.73046875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:01.242Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "from": {
+          "x": 550.88671875,
+          "y": 410.8125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 507.39453125,
+          "y": 445.81640625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:04.741Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-q24h85w",
+        "label": "医師会",
+        "from": {
+          "x": 50.37109375,
+          "y": 230.671875,
+          "layerId": 2
+        },
+        "to": {
+          "x": 522.609375,
+          "y": 368.70703125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:04.741Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "SET_LAYER",
+      "detail": {
+        "id": "n-q24h85w",
+        "label": "医師会",
+        "fromLayerId": 2,
+        "toLayerId": 3
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:07.307Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-sdxuu20",
+        "label": "AB薬剤師会",
+        "from": {
+          "x": 1.703125,
+          "y": 292.2890625,
+          "layerId": 2
+        },
+        "to": {
+          "x": 613.7421875,
+          "y": 373.92578125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:07.307Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "SET_LAYER",
+      "detail": {
+        "id": "n-sdxuu20",
+        "label": "AB薬剤師会",
+        "fromLayerId": 2,
+        "toLayerId": 3
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:09.475Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 714.95703125,
+          "y": 382.60546875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 757.52734375,
+          "y": 374.4921875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:10.977Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-b468lju",
+        "label": "DMAT",
+        "from": {
+          "x": 814.61328125,
+          "y": 433.59375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 845.5703125,
+          "y": 451.75,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:12.358Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-94s4fsu",
+        "label": "DPAT",
+        "from": {
+          "x": 669.01953125,
+          "y": 444.7890625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 694.11328125,
+          "y": 448.17578125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:14.941Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 970,
+          "y": 391.60546875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 970,
+          "y": 380.26171875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:32.640Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "EXPORT",
+      "detail": {
+        "currentPhase": 1,
+        "currentPhaseName": "acute_map",
+        "operationLogCount": 347
+      }
+    },
+    {
+      "ts": "2026-08-14T12:19:33.936Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:19:35.876Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:19:36.475Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:19:36.475Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:24:24.443Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:24:24.471Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:24:30.305Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-58491zp",
+        "fromId": "n-ns8gc00",
+        "toId": "n-wxy4a06",
+        "fromLabel": "DWAT",
+        "toLabel": "C県A保健所",
+        "label": "連携協力"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:24:30.319Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:24:30.503Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:24:34.438Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 757.52734375,
+          "y": 374.4921875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 757.6484375,
+          "y": 374.4921875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:24:38.388Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-ftp4iep",
+        "fromId": "n-g9y7ull",
+        "toId": "n-wxy4a06",
+        "fromLabel": "JRAT",
+        "toLabel": "C県A保健所",
+        "label": "連携協力"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:24:38.402Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:24:38.582Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:24:45.055Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "from": {
+          "x": 507.39453125,
+          "y": 445.81640625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 518.9453125,
+          "y": 455.63671875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:24:48.572Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 757.6484375,
+          "y": 374.4921875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 766.34765625,
+          "y": 369.18359375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:07.188Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-vab1t0k",
+        "label": "C県栄養士会",
+        "from": {
+          "x": 0,
+          "y": 466.69140625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 11.8203125,
+          "y": 464.43359375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:15.524Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:25:17.458Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:22.175Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:23.100Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:25:30.455Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-b468lju",
+        "label": "DMAT",
+        "from": {
+          "x": 845.5703125,
+          "y": 451.75,
+          "layerId": 3
+        },
+        "to": {
+          "x": 865.078125,
+          "y": 454.2890625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:38.873Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 766.34765625,
+          "y": 369.18359375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 535.015625,
+          "y": 415.91796875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:42.039Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-sdxuu20",
+        "label": "AB薬剤師会",
+        "from": {
+          "x": 613.7421875,
+          "y": 373.92578125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 863.88671875,
+          "y": 377.25,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:45.322Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-q24h85w",
+        "label": "医師会",
+        "from": {
+          "x": 522.609375,
+          "y": 368.70703125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 754.19921875,
+          "y": 396.5703125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:48.740Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-94s4fsu",
+        "label": "DPAT",
+        "from": {
+          "x": 694.11328125,
+          "y": 448.17578125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 698.35546875,
+          "y": 465.10546875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:50.455Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-b468lju",
+        "label": "DMAT",
+        "from": {
+          "x": 865.078125,
+          "y": 454.2890625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 970,
+          "y": 396.640625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:53.437Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-sdxuu20",
+        "label": "AB薬剤師会",
+        "from": {
+          "x": 863.88671875,
+          "y": 377.25,
+          "layerId": 3
+        },
+        "to": {
+          "x": 694.29296875,
+          "y": 388.01953125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:55.539Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-q24h85w",
+        "label": "医師会",
+        "from": {
+          "x": 754.19921875,
+          "y": 396.5703125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 829.9453125,
+          "y": 399.875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:25:56.889Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "from": {
+          "x": 970,
+          "y": 471.76171875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 954.10546875,
+          "y": 471.76171875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:01.455Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-94s4fsu",
+        "label": "DPAT",
+        "from": {
+          "x": 698.35546875,
+          "y": 465.10546875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 764.96875,
+          "y": 479.984375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:02.921Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-sdxuu20",
+        "label": "AB薬剤師会",
+        "from": {
+          "x": 694.29296875,
+          "y": 388.01953125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 692.125,
+          "y": 371.5703125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:05.621Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 970,
+          "y": 380.26171875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 449.21484375,
+          "y": 451.51171875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:07.522Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "from": {
+          "x": 518.9453125,
+          "y": 455.63671875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 645.09375,
+          "y": 441.1171875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:14.608Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 231.08984375,
+          "y": 370.97265625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 451.8125,
+          "y": 366.171875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:15.071Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 451.8125,
+          "y": 366.171875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 471.5390625,
+          "y": 366.171875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:17.255Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "from": {
+          "x": 388.58203125,
+          "y": 378.73046875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 342.86328125,
+          "y": 384.24609375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:20.622Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "from": {
+          "x": 0,
+          "y": 382.30859375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 36.04296875,
+          "y": 369.09765625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:22.422Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-i04ekzi",
+        "label": "W民間団体",
+        "from": {
+          "x": 144.390625,
+          "y": 461.92578125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 143.23828125,
+          "y": 461.92578125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:24.387Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-nhnoixh",
+        "label": "市町村保健センター",
+        "from": {
+          "x": 283.95703125,
+          "y": 458.06640625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 192.10546875,
+          "y": 402.54296875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:26.021Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "from": {
+          "x": 342.86328125,
+          "y": 384.24609375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 357.484375,
+          "y": 374.6328125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:29.905Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 449.21484375,
+          "y": 451.51171875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 379.82421875,
+          "y": 471.34375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:32.005Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 535.015625,
+          "y": 415.91796875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 503.41015625,
+          "y": 461.33203125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:36.088Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-nhnoixh",
+        "label": "市町村保健センター",
+        "from": {
+          "x": 192.10546875,
+          "y": 402.54296875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 200.7890625,
+          "y": 414.5234375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:37.571Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "from": {
+          "x": 36.04296875,
+          "y": 369.09765625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 0,
+          "y": 387.55078125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:39.755Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-nhnoixh",
+        "label": "市町村保健センター",
+        "from": {
+          "x": 200.7890625,
+          "y": 414.5234375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 199.97265625,
+          "y": 381.046875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:41.670Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "from": {
+          "x": 357.484375,
+          "y": 374.6328125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 356.1328125,
+          "y": 405.05859375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:45.072Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 379.82421875,
+          "y": 471.34375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 375.76953125,
+          "y": 466.2109375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:47.505Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "from": {
+          "x": 645.09375,
+          "y": 441.1171875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 661.03515625,
+          "y": 427.08984375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:55.972Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 471.5390625,
+          "y": 366.171875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 252.92578125,
+          "y": 499.390625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:57.588Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 503.41015625,
+          "y": 461.33203125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 539.19140625,
+          "y": 386.8125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:26:58.771Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 539.19140625,
+          "y": 386.8125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 519.79296875,
+          "y": 430.08203125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:01.541Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 375.76953125,
+          "y": 466.2109375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 458.20703125,
+          "y": 379.7578125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:03.638Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "from": {
+          "x": 356.1328125,
+          "y": 405.05859375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 342.22265625,
+          "y": 437.4453125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:08.471Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 252.92578125,
+          "y": 499.390625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 615.15625,
+          "y": 384.05859375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:10.187Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "from": {
+          "x": 342.22265625,
+          "y": 437.4453125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 319.76171875,
+          "y": 452.125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:11.521Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 458.20703125,
+          "y": 379.7578125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 410.80078125,
+          "y": 394.1640625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:13.205Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 519.79296875,
+          "y": 430.08203125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 478.3125,
+          "y": 457.57421875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:16.255Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 615.15625,
+          "y": 384.05859375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 547.84375,
+          "y": 378.32421875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:20.188Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "from": {
+          "x": 661.03515625,
+          "y": 427.08984375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 646.9609375,
+          "y": 446.7109375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:22.788Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-94s4fsu",
+        "label": "DPAT",
+        "from": {
+          "x": 764.96875,
+          "y": 479.984375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 802.98828125,
+          "y": 474.4453125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:25.438Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-i04ekzi",
+        "label": "W民間団体",
+        "from": {
+          "x": 143.23828125,
+          "y": 461.92578125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 178.78125,
+          "y": 461.60546875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:30.187Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "EXPORT",
+      "detail": {
+        "currentPhase": 1,
+        "currentPhaseName": "acute_map",
+        "operationLogCount": 409
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:35.833Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:27:36.547Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:27:37.821Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-b468lju",
+        "label": "DMAT",
+        "from": {
+          "x": 970,
+          "y": 396.640625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 970,
+          "y": 396.640625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:39.799Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:27:40.574Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:41.845Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:42.419Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:27:46.038Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "from": {
+          "x": 953.9140625,
+          "y": 270.51171875,
+          "layerId": 2
+        },
+        "to": {
+          "x": 959.8515625,
+          "y": 197.96875,
+          "layerId": 2
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:48.570Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "EXPORT",
+      "detail": {
+        "currentPhase": 1,
+        "currentPhaseName": "acute_map",
+        "operationLogCount": 418
+      }
+    },
+    {
+      "ts": "2026-08-14T12:27:50.400Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:27:52.583Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:27:53.388Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:27:53.389Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:29:27.091Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:29:27.110Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:29:34.820Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-rmjpuq7",
+        "fromId": "n-pd06uet",
+        "toId": "n-vab1t0k",
+        "fromLabel": "県庁",
+        "toLabel": "C県栄養士会",
+        "label": "指示命令"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:29:34.833Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:29:35.017Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:29:37.686Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-tdfhy7g",
+        "fromId": "n-vab1t0k",
+        "toId": "n-pd06uet",
+        "fromLabel": "C県栄養士会",
+        "toLabel": "県庁",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:29:37.699Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:29:37.884Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:29:39.203Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "START_ARROW",
+      "detail": {
+        "fromId": "n-pd06uet",
+        "fromLabel": "県庁"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:29:41.619Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "ADD_EDGE",
+      "detail": {
+        "id": "e-a8jj2f9",
+        "fromId": "n-pd06uet",
+        "toId": "n-vab1t0k",
+        "fromLabel": "県庁",
+        "toLabel": "C県栄養士会",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-08-14T12:29:46.137Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 410.80078125,
+          "y": 394.1640625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 399.2265625,
+          "y": 373.58203125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:30:15.670Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 399.2265625,
+          "y": 373.58203125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 399.07421875,
+          "y": 375.921875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:30:17.354Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 399.07421875,
+          "y": 375.921875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 408.68359375,
+          "y": 379.75390625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:30:20.270Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 478.3125,
+          "y": 457.57421875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 452.67578125,
+          "y": 457.28515625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:30:22.587Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 547.84375,
+          "y": 378.32421875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 555.09375,
+          "y": 399.578125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:30:26.403Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "from": {
+          "x": 646.9609375,
+          "y": 446.7109375,
+          "layerId": 3
+        },
+        "to": {
+          "x": 668.16796875,
+          "y": 453.92578125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:30:29.269Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "EXPORT",
+      "detail": {
+        "currentPhase": 1,
+        "currentPhaseName": "acute_map",
+        "operationLogCount": 439
+      }
+    },
+    {
+      "ts": "2026-08-14T12:30:34.357Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:30:35.141Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:30:35.278Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:30:35.855Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:30:53.406Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:30:54.129Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:30:56.573Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:30:57.341Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:31:00.093Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:31:00.663Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:31:02.520Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:31:02.520Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:36:35.609Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:36:35.637Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:36:38.983Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "from": {
+          "x": 954.10546875,
+          "y": 471.76171875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 970,
+          "y": 471.87890625,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:36:40.151Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "START_ARROW",
+      "detail": {
+        "fromId": "n-aowh2ll",
+        "fromLabel": "C県看護協会"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:36:41.150Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "ADD_EDGE",
+      "detail": {
+        "id": "e-ekxdqfp",
+        "fromId": "n-aowh2ll",
+        "toId": "n-h5zix45",
+        "fromLabel": "C県看護協会",
+        "toLabel": "避難所",
+        "label": "支援",
+        "bidirectional": false
+      }
+    },
+    {
+      "ts": "2026-08-14T12:36:43.178Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:36:43.817Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:36:44.518Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:36:44.519Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:41:20.956Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:41:20.986Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:41:28.398Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "DELETE_EDGE",
+      "detail": {
+        "id": "e-z1tjbw3",
+        "fromId": "n-d3x4msu",
+        "toId": "n-pd06uet",
+        "fromLabel": "DHEAT",
+        "toLabel": "県庁",
+        "label": "情報伝達"
+      }
+    },
+    {
+      "ts": "2026-08-14T12:41:28.412Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:41:28.596Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-14T12:41:30.531Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "from": {
+          "x": 319.76171875,
+          "y": 452.125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 327.49609375,
+          "y": 438.5859375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:41:31.849Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "from": {
+          "x": 408.68359375,
+          "y": 379.75390625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 382.3828125,
+          "y": 369.35546875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:41:34.614Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 555.09375,
+          "y": 399.578125,
+          "layerId": 3
+        },
+        "to": {
+          "x": 476.84375,
+          "y": 498.23046875,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:41:37.081Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "from": {
+          "x": 452.67578125,
+          "y": 457.28515625,
+          "layerId": 3
+        },
+        "to": {
+          "x": 524.75390625,
+          "y": 372.62109375,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:41:40.749Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "from": {
+          "x": 476.84375,
+          "y": 498.23046875,
+          "layerId": 3
+        },
+        "to": {
+          "x": 493.32421875,
+          "y": 454.828125,
+          "layerId": 3
+        }
+      }
+    },
+    {
+      "ts": "2026-08-14T12:41:49.782Z",
+      "sessionId": "a54b48ed-c53a-474d-a5cf-d59c69c81180",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "EXPORT",
+      "detail": {
+        "currentPhase": 1,
+        "currentPhaseName": "acute_map",
+        "operationLogCount": 471
+      }
+    }
+  ],
+  "acute": {
+    "nodes": [
+      {
+        "layerId": 1,
+        "layerReason": "",
+        "id": "n-pd06uet",
+        "label": "県庁",
+        "group": "g-command",
+        "x": 736.8046875,
+        "y": 21.11328125
+      },
+      {
+        "layerId": 1,
+        "layerReason": "",
+        "id": "n-wxy4a06",
+        "label": "C県A保健所",
+        "group": "g-command",
+        "x": 220.8515625,
+        "y": 74.546875
+      },
+      {
+        "layerId": 2,
+        "layerReason": "",
+        "id": "n-615ppvs",
+        "label": "地域災害医療コーディネーター",
+        "group": "g-command",
+        "x": 959.8515625,
+        "y": 197.96875
+      },
+      {
+        "layerId": 2,
+        "layerReason": "",
+        "id": "n-frj1omn",
+        "label": "DMAT",
+        "group": "g-section",
+        "x": 755.7421875,
+        "y": 241.28515625
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-d3x4msu",
+        "label": "DHEAT",
+        "group": "g-section",
+        "x": 327.49609375,
+        "y": 438.5859375
+      },
+      {
+        "layerId": 4,
+        "layerReason": "",
+        "id": "n-h5zix45",
+        "label": "避難所",
+        "group": "g-team",
+        "x": 343.43359375,
+        "y": 614.8203125
+      },
+      {
+        "layerId": 4,
+        "layerReason": "",
+        "id": "n-j99q0a3",
+        "label": "医療機関",
+        "group": "g-team",
+        "x": 771.453125,
+        "y": 635.21484375
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-q24h85w",
+        "label": "医師会",
+        "group": "g-unit",
+        "x": 829.9453125,
+        "y": 399.875
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-nhnoixh",
+        "label": "市町村保健センター",
+        "group": "g-team",
+        "x": 199.97265625,
+        "y": 381.046875
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-94s4fsu",
+        "label": "DPAT",
+        "group": "g-section",
+        "x": 802.98828125,
+        "y": 474.4453125
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-aowh2ll",
+        "label": "C県看護協会",
+        "group": "g-section",
+        "x": 970,
+        "y": 471.87890625
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-i04ekzi",
+        "label": "W民間団体",
+        "group": "g-unit",
+        "x": 178.78125,
+        "y": 461.60546875
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-b468lju",
+        "label": "DMAT",
+        "group": "g-section",
+        "x": 970,
+        "y": 396.640625
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-gp2vmm9",
+        "label": "JMAT",
+        "group": "g-section",
+        "x": 668.16796875,
+        "y": 453.92578125
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-g9y7ull",
+        "label": "JRAT",
+        "group": "g-section",
+        "x": 524.75390625,
+        "y": 372.62109375
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-oxuunl3",
+        "label": "歯科医師会",
+        "group": "g-unit",
+        "x": 493.32421875,
+        "y": 454.828125
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-sdxuu20",
+        "label": "AB薬剤師会",
+        "group": "g-unit",
+        "x": 692.125,
+        "y": 371.5703125
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-vab1t0k",
+        "label": "C県栄養士会",
+        "group": "g-unit",
+        "x": 11.8203125,
+        "y": 464.43359375
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-5uvuptu",
+        "label": "地域包括支援センター",
+        "group": "g-unit",
+        "x": 0,
+        "y": 387.55078125
+      },
+      {
+        "layerId": 3,
+        "layerReason": "",
+        "id": "n-ns8gc00",
+        "label": "DWAT",
+        "group": "g-section",
+        "x": 382.3828125,
+        "y": 369.35546875
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-4xdobpl",
+        "from": "n-pd06uet",
+        "to": "n-wxy4a06",
+        "label": "指示命令",
+        "bidirectional": false
+      },
+      {
+        "id": "e-smeul41",
+        "from": "n-wxy4a06",
+        "to": "n-pd06uet",
+        "label": "情報伝達",
+        "bidirectional": false
+      },
+      {
+        "id": "e-ohj80ie",
+        "from": "n-d3x4msu",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-p852tee",
+        "from": "n-94s4fsu",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-8majmtj",
+        "from": "n-aowh2ll",
+        "to": "n-j99q0a3",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-kg4fn3i",
+        "from": "n-i04ekzi",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-59vrd0v",
+        "from": "n-frj1omn",
+        "to": "n-b468lju",
+        "label": "指示命令",
+        "bidirectional": false
+      },
+      {
+        "id": "e-kb7goir",
+        "from": "n-b468lju",
+        "to": "n-frj1omn",
+        "label": "情報伝達",
+        "bidirectional": false
+      },
+      {
+        "id": "e-68nyg6q",
+        "from": "n-b468lju",
+        "to": "n-j99q0a3",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-rysma7f",
+        "from": "n-b468lju",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-2yfiowg",
+        "from": "n-frj1omn",
+        "to": "n-615ppvs",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-dy5knml",
+        "from": "n-nhnoixh",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-pdpi75q",
+        "from": "n-vab1t0k",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-n18qoox",
+        "from": "n-gp2vmm9",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-dfd641g",
+        "from": "n-g9y7ull",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-6yslg9l",
+        "from": "n-ns8gc00",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-i8n58qm",
+        "from": "n-pd06uet",
+        "to": "n-ns8gc00",
+        "label": "指示命令",
+        "bidirectional": false
+      },
+      {
+        "id": "e-ndt5msy",
+        "from": "n-ns8gc00",
+        "to": "n-pd06uet",
+        "label": "情報伝達",
+        "bidirectional": false
+      },
+      {
+        "id": "e-dwfdqhn",
+        "from": "n-g9y7ull",
+        "to": "n-pd06uet",
+        "label": "情報伝達",
+        "bidirectional": false
+      },
+      {
+        "id": "e-6qt5s36",
+        "from": "n-pd06uet",
+        "to": "n-g9y7ull",
+        "label": "指示命令",
+        "bidirectional": false
+      },
+      {
+        "id": "e-s27hffq",
+        "from": "n-wxy4a06",
+        "to": "n-q24h85w",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-32xv2f5",
+        "from": "n-wxy4a06",
+        "to": "n-oxuunl3",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-cpljw72",
+        "from": "n-q24h85w",
+        "to": "n-frj1omn",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-ssxm0se",
+        "from": "n-q24h85w",
+        "to": "n-j99q0a3",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-zxvrdyi",
+        "from": "n-q24h85w",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-518hj1v",
+        "from": "n-oxuunl3",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-z6zykte",
+        "from": "n-oxuunl3",
+        "to": "n-j99q0a3",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-r736a2k",
+        "from": "n-wxy4a06",
+        "to": "n-d3x4msu",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-lny7z44",
+        "from": "n-sdxuu20",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-f842qdy",
+        "from": "n-wxy4a06",
+        "to": "n-sdxuu20",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-ktk287i",
+        "from": "n-5uvuptu",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      },
+      {
+        "id": "e-bogtyz1",
+        "from": "n-wxy4a06",
+        "to": "n-615ppvs",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-2snq0yz",
+        "from": "n-wxy4a06",
+        "to": "n-frj1omn",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-07xj1zs",
+        "from": "n-wxy4a06",
+        "to": "n-94s4fsu",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-cc4c7lg",
+        "from": "n-gp2vmm9",
+        "to": "n-wxy4a06",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-tynkss5",
+        "from": "n-wxy4a06",
+        "to": "n-aowh2ll",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-32t5pin",
+        "from": "n-vab1t0k",
+        "to": "n-wxy4a06",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-008ds8p",
+        "from": "n-wxy4a06",
+        "to": "n-5uvuptu",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-q25rnfl",
+        "from": "n-wxy4a06",
+        "to": "n-nhnoixh",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-c9hi1q4",
+        "from": "n-i04ekzi",
+        "to": "n-wxy4a06",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-bg3rp40",
+        "from": "n-pd06uet",
+        "to": "n-aowh2ll",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-a8jj2f9",
+        "from": "n-pd06uet",
+        "to": "n-vab1t0k",
+        "label": "連携協力",
+        "bidirectional": true
+      },
+      {
+        "id": "e-ekxdqfp",
+        "from": "n-aowh2ll",
+        "to": "n-h5zix45",
+        "label": "支援",
+        "bidirectional": false
+      }
+    ],
+    "answers": {
+      "q1": "",
+      "q2": "",
+      "p3q1": "",
+      "p3q2": ""
+    }
+  },
+  "recovery": {
+    "nodes": [],
+    "edges": [],
+    "answers": {
+      "q1": "",
+      "q2": ""
+    }
+  },
+  "phase5Data": {
+    "removals": [],
+    "policyRationale": ""
+  },
+  "acuteRecord": {
+    "answers": {
+      "q4": "",
+      "q5": ""
+    }
+  },
+  "transitionCompare": {
+    "answers": {
+      "q6": ""
+    }
+  },
+  "recoveryCompare": {
+    "answers": {
+      "q6": "",
+      "q7": "",
+      "q7sel": ""
+    }
+  },
+  "recoveryRecord": {
+    "answers": {
+      "q9": ""
+    }
+  }
+}
