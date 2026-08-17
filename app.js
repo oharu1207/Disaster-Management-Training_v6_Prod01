@@ -1094,10 +1094,9 @@
         // 右カラム：復旧期実際マップ
         const rcActualCanvas = $("canvas-rcActual");
         if (mapLoadStatus.actualRecovery === "ready") {
-          const rcNodes = window.actualMapRecovery.recovery?.nodes || [];
-          const rcEdges = window.actualMapRecovery.recovery?.edges || [];
           renderReadOnlyMap(
-            rcNodes, rcEdges,
+            window.actualMapRecovery.nodes,
+            window.actualMapRecovery.edges,
             rcActualCanvas,
             $("svgLayer-rcActual"),
             $("canvasWrap-rcActual"),
@@ -5696,6 +5695,47 @@
   // ================================================================
   // MAP LOADERS
   // ================================================================
+
+  // 実際マップJSONから、指定フェーズ（"acute" / "recovery"）のマップ本体を
+  // 抽出・検証する共通関数。表示用の統一形式 { nodes, edges } を返す。
+  // 新形式（json[phaseKey].nodes/edges）を優先し、見つからない場合のみ
+  // 旧形式（ルート直下 json.nodes/edges）に後方互換フォールバックする。
+  // 検証に失敗した場合は ok:false と理由を返す（例外は投げない）。
+  function extractActualPhaseMap(json, phaseKey) {
+    if (!json || typeof json !== "object") {
+      return { ok: false, reason: "JSON のルートがオブジェクトではありません" };
+    }
+
+    let container = null;
+    let source = null;
+    const phaseSection = json[phaseKey];
+    if (phaseSection && typeof phaseSection === "object" && !Array.isArray(phaseSection)) {
+      container = phaseSection;
+      source = `${phaseKey}`;
+    } else if (Array.isArray(json.nodes) && Array.isArray(json.edges)) {
+      // 後方互換：ルート直下 nodes/edges 形式
+      container = json;
+      source = "root (legacy)";
+    }
+
+    if (!container) {
+      return {
+        ok: false,
+        reason: `"${phaseKey}" セクションが見つからず、ルート直下の nodes/edges も見つかりません`,
+      };
+    }
+
+    const { nodes, edges } = container;
+    if (!Array.isArray(nodes) || !Array.isArray(edges)) {
+      return {
+        ok: false,
+        reason: `"${source}" 内の nodes/edges が配列ではありません（nodes: ${typeof nodes}, edges: ${typeof edges}）`,
+      };
+    }
+
+    return { ok: true, map: { nodes, edges } };
+  }
+
   async function loadIdealMapAcute() {
     mapLoadStatus.idealAcute = "loading";
     try {
@@ -5753,13 +5793,22 @@
     try {
       const resp = await fetch('./actual_map_acute.json');
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      window.actualMapAcute = await resp.json();
+      const json = await resp.json();
+      const result = extractActualPhaseMap(json, "acute");
+      if (!result.ok) throw new Error(result.reason);
+      window.actualMapAcute = result.map;
       mapLoadStatus.actualAcute = "ready";
     } catch (e) {
-      console.error('[ICS] actual_map_acute.json の読み込みに失敗:', e);
+      console.error(`[ICS] actual_map_acute.json の読み込みに失敗（対象: acute）:`, e && e.message || e);
       if (window.ACTUAL_MAP_ACUTE_FALLBACK) {
-        window.actualMapAcute = window.ACTUAL_MAP_ACUTE_FALLBACK;
-        mapLoadStatus.actualAcute = "ready";
+        const fbResult = extractActualPhaseMap(window.ACTUAL_MAP_ACUTE_FALLBACK, "acute");
+        if (fbResult.ok) {
+          window.actualMapAcute = fbResult.map;
+          mapLoadStatus.actualAcute = "ready";
+        } else {
+          console.error('[ICS] actual_map_acute.json のフォールバックデータも不正です（対象: acute）:', fbResult.reason);
+          mapLoadStatus.actualAcute = "error";
+        }
       } else {
         mapLoadStatus.actualAcute = "error";
       }
@@ -5775,10 +5824,13 @@
     try {
       const resp = await fetch('./actual_map_recovery.json');
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-      window.actualMapRecovery = await resp.json();
+      const json = await resp.json();
+      const result = extractActualPhaseMap(json, "recovery");
+      if (!result.ok) throw new Error(result.reason);
+      window.actualMapRecovery = result.map;
       mapLoadStatus.actualRecovery = "ready";
     } catch (e) {
-      console.error('[ICS] actual_map_recovery.json の読み込みに失敗:', e);
+      console.error(`[ICS] actual_map_recovery.json の読み込みに失敗（対象: recovery）:`, e && e.message || e);
       mapLoadStatus.actualRecovery = "error";
     }
     // RECOVERY_COMPARE に滞在中なら自動再描画
