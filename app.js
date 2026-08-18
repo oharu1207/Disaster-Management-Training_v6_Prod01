@@ -421,6 +421,11 @@
   // loadIdealMapAcute() の Promise。localStorage 復元フローが規範マップのロード完了を
   // 待つために参照する（restoreFromStorage 内）。
   let idealAcuteLoadPromise = null;
+  // loadIdealMapRecovery() の Promise。現段階では restoreFromStorage() の待機処理には
+  // 組み込まない（フェーズ15/16の差分提示フェーズはまだ存在しないため）。
+  // 用途：後続段階でフェーズ15（レイヤー差分）・フェーズ16（関係差分）を追加する際、
+  // リロード復元時に規範マップのロード完了を待つために使用する予定。
+  let idealRecoveryLoadPromise = null;
   // phase5Data の構造：
   //   removals: 削除候補ノード（reason フィールドは後方互換のため残すが UI からは入力されない）
   //   policyRationale: 削除候補選定の判断方針（150字以内・全削除に対して1つのみ）
@@ -5792,7 +5797,9 @@
 
   // 復旧期正解マップ（ideal_map_recovery.json）の読み込み。
   // json.recovery.nodes/edges を優先し、後方互換でルート直下 json.nodes/edges にも対応する
-  // （extractActualPhaseMap を流用。検証に失敗した場合は ready にしない）。
+  // （extractActualPhaseMap を流用・無変更。検証に失敗した場合は ready にしない）。
+  // 追加検証（nodes/edges が空でないこと）と、recovery-scoring.js の原則参照監査
+  // （auditRecoveryIdealConsistency）はこの関数側で行う。
   // 復旧期の差分表示フェーズ（後続作業）はまだ存在しないため、読み込み後の自動再描画は行わない。
   async function loadIdealMapRecovery() {
     mapLoadStatus.idealRecovery = "loading";
@@ -5803,21 +5810,61 @@
       const result = extractActualPhaseMap(json, "recovery");
       if (!result.ok) throw new Error(result.reason);
 
+      // ready 条件の追加検証：nodes/edges が配列であることに加え、空でないことを要求する。
+      // recovery.nodes = [] のような壊れたJSONがそのまま ready になると、差分提示フェーズで
+      // 19件の node_missing が「差分」として学習者に提示されてしまうため。
+      if (!(result.map.nodes.length > 0 && result.map.edges.length > 0)) {
+        throw new Error(
+          `"recovery" のノード/エッジが空です（nodeCount=${result.map.nodes.length}, edgeCount=${result.map.edges.length}）`
+        );
+      }
+
       const mapVersion = json?.recovery?.mapVersion ?? json?.mapVersion ?? null;
-      window.idealMapRecovery = { nodes: result.map.nodes, edges: result.map.edges, mapVersion };
+      if (mapVersion === null) {
+        console.warn('[ICS] ideal_map_recovery.json（対象: recovery）に mapVersion がありません。');
+      }
+
+      const candidate = { nodes: result.map.nodes, edges: result.map.edges, mapVersion };
+
+      // 原則参照監査（auditRecoveryIdealConsistency）を一度だけ実行する。純粋関数のため
+      // 副作用はなく、結果のログ記録はこの呼び出し側（app.js）の責務。
+      const RS = window.__ICS_RECOVERY_SCORING__;
+      if (!RS || !RS.normalizeRecoveryMap || !RS.auditRecoveryIdealConsistency) {
+        throw new Error('window.__ICS_RECOVERY_SCORING__ が見つかりません（recovery-scoring.js の読み込み順を確認してください）');
+      }
+      const idealNorm = RS.normalizeRecoveryMap(candidate);
+      const audit = RS.auditRecoveryIdealConsistency(idealNorm);
+
+      console.log('[ICS] ideal_map_recovery.json（対象: recovery）監査結果:', audit);
+      logOp("IDEAL_MAP_RECOVERY_AUDIT", {
+        ok: audit.ok,
+        errors: audit.errors,
+        warnings: audit.warnings,
+      });
+
+      if (!audit.ok) {
+        // エラー項目が1つでもあれば ready にしない（採点定数と理想JSONの不整合を検出）
+        console.error('[ICS] ideal_map_recovery.json の監査でエラーを検出したため ready にしません:', audit.errors);
+        mapLoadStatus.idealRecovery = "error";
+        logOp("IDEAL_MAP_RECOVERY_LOAD_FAILED", { message: "audit failed", errors: audit.errors });
+        return;
+      }
+      if (audit.warnings.length > 0) {
+        // 警告項目（件数の期待値ずれ等）は ready を維持し、警告のみ出す
+        console.warn('[ICS] ideal_map_recovery.json の監査で警告があります（readyは維持します）:', audit.warnings);
+      }
+
+      window.idealMapRecovery = candidate;
       mapLoadStatus.idealRecovery = "ready";
 
-      if (mapVersion === null) {
-        console.warn('[ICS] ideal_map_recovery.json（対象: recovery）に mapVersion がありません。後続段階のエクスポート contentVersions には null で記録されます。');
-      }
       console.log(
-        `[ICS] ideal_map_recovery.json（対象: recovery）を読み込みました: nodeCount=${window.idealMapRecovery.nodes.length}, edgeCount=${window.idealMapRecovery.edges.length}, mapVersion=${mapVersion}`
+        `[ICS] ideal_map_recovery.json（対象: recovery）を読み込みました: nodeCount=${candidate.nodes.length}, edgeCount=${candidate.edges.length}, mapVersion=${mapVersion}`
       );
       logOp("IDEAL_MAP_RECOVERY_LOADED", {
         source: "fetch",
-        nodeCount: window.idealMapRecovery.nodes.length,
-        edgeCount: window.idealMapRecovery.edges.length,
-        mapVersion: window.idealMapRecovery.mapVersion,
+        nodeCount: candidate.nodes.length,
+        edgeCount: candidate.edges.length,
+        mapVersion: candidate.mapVersion,
       });
     } catch (e) {
       console.error(`[ICS] ideal_map_recovery.json の読み込みに失敗（対象: recovery）:`, e && e.message || e);
@@ -6795,7 +6842,7 @@
       scoringRuleVersion: window.__ICS_SCORING__?.version ?? null, // [ADDED axis4]
     });
     idealAcuteLoadPromise = loadIdealMapAcute();
-    loadIdealMapRecovery();
+    idealRecoveryLoadPromise = loadIdealMapRecovery();
     loadActualMapAcute();
     loadActualMapRecovery();
   }
