@@ -322,6 +322,7 @@
       { id: 'e-watph5q', from: 'n-heiewrt', to: 'n-6zqseus', label: '支援', bidirectional: false },
       { id: 'e-yp2ixbt', from: 'n-heiewrt', to: 'n-kkuqhw1', label: '支援', bidirectional: false },
       { id: 'e-onwh6pk', from: 'n-tid8usx', to: 'n-h018kmy', label: '支援', bidirectional: false },
+      { id: 'e-n9fy2qw', from: 'n-heiewrt', to: 'n-jxpjmz9', label: '連携協力', bidirectional: true },
     ],
     mapVersion: 'recovery-test-fixture-v1',
   };
@@ -363,7 +364,7 @@
     // ─── Test 1: normalizeRecoveryMap の抽出件数 ────────────
     {
       check('T1: nodes.length = 19', IDEAL_NORM.nodes.length === 19, 19, IDEAL_NORM.nodes.length);
-      check('T1: edges.length = 31', IDEAL_NORM.edges.length === 31, 31, IDEAL_NORM.edges.length);
+      check('T1: edges.length = 32', IDEAL_NORM.edges.length === 32, 32, IDEAL_NORM.edges.length);
       check('T1: unresolvedEdges.length = 0', IDEAL_NORM.unresolvedEdges.length === 0, 0, IDEAL_NORM.unresolvedEdges.length);
       check('T1: mapVersion 抽出', IDEAL_NORM.mapVersion === 'recovery-test-fixture-v1', 'recovery-test-fixture-v1', IDEAL_NORM.mapVersion);
     }

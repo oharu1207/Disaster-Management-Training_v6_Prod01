@@ -1,9 +1,11 @@
 {
   "version": 8,
   "logSchemaVersion": 1,
-  "sessionId": "9329978b-bff7-40d5-b9bf-78f5466c92b7",
-  "exportedAt": "2026-08-14T15:00:41.684Z",
+  "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+  "exportedAt": "2026-08-18T11:17:44.811Z",
   "scenarioId": "s1-1",
+  "acuteSubPhase": null,
+  "tooltipEnabled": true,
   "operationLog": [
     {
       "ts": "2026-03-31T13:11:57.120Z",
@@ -15078,6 +15080,208 @@
         "currentPhaseName": "recovery_map",
         "operationLogCount": 1176
       }
+    },
+    {
+      "ts": "2026-08-18T11:15:33.280Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 1,
+      "phaseName": "acute_map",
+      "activePhaseKey": "acute",
+      "type": "IMPORT",
+      "detail": {
+        "importedVersion": 8,
+        "importedSessionId": "9329978b-bff7-40d5-b9bf-78f5466c92b7",
+        "importedLogCount": 1177,
+        "hasAcute": true,
+        "hasRecovery": true,
+        "hasConflict": false
+      }
+    },
+    {
+      "ts": "2026-08-18T11:15:35.109Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 6,
+      "phaseName": "transition_compare",
+      "activePhaseKey": "acute",
+      "type": "PHASE_EXIT",
+      "detail": {
+        "from": 1,
+        "fromName": "acute_map",
+        "to": 6,
+        "toName": "transition_compare"
+      }
+    },
+    {
+      "ts": "2026-08-18T11:15:35.109Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 6,
+      "phaseName": "transition_compare",
+      "activePhaseKey": "acute",
+      "type": "PHASE_DURATION",
+      "detail": {
+        "phase": 1,
+        "phaseName": "acute_map",
+        "ms": 1829
+      }
+    },
+    {
+      "ts": "2026-08-18T11:15:35.109Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 6,
+      "phaseName": "transition_compare",
+      "activePhaseKey": "acute",
+      "type": "PHASE_ENTER",
+      "detail": {
+        "from": 1,
+        "fromName": "acute_map",
+        "to": 6,
+        "toName": "transition_compare"
+      }
+    },
+    {
+      "ts": "2026-08-18T11:15:36.433Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "PHASE_EXIT",
+      "detail": {
+        "from": 6,
+        "fromName": "transition_compare",
+        "to": 5,
+        "toName": "recovery_map"
+      }
+    },
+    {
+      "ts": "2026-08-18T11:15:36.433Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "PHASE_DURATION",
+      "detail": {
+        "phase": 6,
+        "phaseName": "transition_compare",
+        "ms": 1324
+      }
+    },
+    {
+      "ts": "2026-08-18T11:15:36.433Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "PHASE_ENTER",
+      "detail": {
+        "from": 6,
+        "fromName": "transition_compare",
+        "to": 5,
+        "toName": "recovery_map"
+      }
+    },
+    {
+      "ts": "2026-08-18T11:15:51.711Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "WINDOW_BLUR",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-18T11:15:52.060Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "hidden"
+      }
+    },
+    {
+      "ts": "2026-08-18T11:16:31.048Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "VISIBILITY_CHANGE",
+      "detail": {
+        "state": "visible"
+      }
+    },
+    {
+      "ts": "2026-08-18T11:16:31.602Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "WINDOW_FOCUS",
+      "detail": {}
+    },
+    {
+      "ts": "2026-08-18T11:17:14.077Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "START_ARROW",
+      "detail": {
+        "fromId": "n-heiewrt",
+        "fromLabel": "市町村保健センター"
+      }
+    },
+    {
+      "ts": "2026-08-18T11:17:16.877Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "ADD_EDGE",
+      "detail": {
+        "id": "e-n9fy2qw",
+        "fromId": "n-heiewrt",
+        "toId": "n-jxpjmz9",
+        "fromLabel": "市町村保健センター",
+        "toLabel": "地域支え合いセンター",
+        "label": "連携協力",
+        "bidirectional": true
+      }
+    },
+    {
+      "ts": "2026-08-18T11:17:24.193Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "MOVE_NODE",
+      "detail": {
+        "id": "n-heiewrt",
+        "label": "市町村保健センター",
+        "from": {
+          "x": 566.43359375,
+          "y": 226.0390625,
+          "layerId": 2
+        },
+        "to": {
+          "x": 566.55078125,
+          "y": 226.0390625,
+          "layerId": 2
+        }
+      }
+    },
+    {
+      "ts": "2026-08-18T11:17:44.810Z",
+      "sessionId": "79e3dd91-3412-4ae9-9445-6b70f16ea688",
+      "phase": 5,
+      "phaseName": "recovery_map",
+      "activePhaseKey": "p6",
+      "type": "EXPORT",
+      "detail": {
+        "currentPhase": 5,
+        "currentPhaseName": "recovery_map",
+        "operationLogCount": 1191
+      }
     }
   ],
   "acute": {
@@ -15094,187 +15298,194 @@
   "recovery": {
     "nodes": [
       {
+        "layerId": 1,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-e5u03zv",
         "label": "県庁",
         "group": "g-command",
         "x": 677.35546875,
-        "y": 3.53125,
-        "layerId": 1,
-        "layerReason": "",
-        "isInitial": true
+        "y": 3.53125
       },
       {
+        "layerId": 1,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-1b51ttm",
         "label": "C県A保健所",
         "group": "g-command",
         "x": 477.68359375,
-        "y": 118.515625,
-        "layerId": 1,
-        "layerReason": "",
-        "isInitial": true
+        "y": 118.515625
       },
       {
+        "layerId": 2,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-952758i",
         "label": "地域災害医療コーディネーター",
         "group": "g-command",
         "x": 85.13671875,
-        "y": 201.765625,
-        "layerId": 2,
-        "layerReason": "",
-        "isInitial": true
+        "y": 201.765625
       },
       {
+        "layerId": 4,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-2q8mbab",
         "label": "避難所",
         "group": "g-team",
         "x": 289.11328125,
-        "y": 619.5,
-        "layerId": 4,
-        "layerReason": "",
-        "isInitial": true
+        "y": 619.5
       },
       {
+        "layerId": 4,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-1wk7j82",
         "label": "医療機関",
         "group": "g-team",
         "x": 54.18359375,
-        "y": 621.35546875,
-        "layerId": 4,
-        "layerReason": "",
-        "isInitial": true
+        "y": 621.35546875
       },
       {
+        "layerId": 2,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-heiewrt",
         "label": "市町村保健センター",
         "group": "g-unit",
-        "x": 566.43359375,
-        "y": 226.0390625,
-        "layerId": 2,
-        "layerReason": "",
-        "isInitial": true
+        "x": 566.55078125,
+        "y": 226.0390625
       },
       {
+        "layerId": 2,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-tid8usx",
         "label": "地域包括支援センター",
         "group": "g-unit",
         "x": 893.3984375,
-        "y": 226.23828125,
-        "layerId": 2,
-        "layerReason": "",
-        "isInitial": true
+        "y": 226.23828125
       },
       {
+        "layerId": 3,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-t71pa8w",
         "label": "JRAT",
         "group": "g-section",
         "x": 599.109375,
-        "y": 454.6171875,
-        "layerId": 3,
-        "layerReason": "",
-        "isInitial": true
+        "y": 454.6171875
       },
       {
+        "layerId": 3,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-b52j592",
         "label": "DWAT",
         "group": "g-section",
         "x": 448.19921875,
-        "y": 448.4921875,
-        "layerId": 3,
-        "layerReason": "",
-        "isInitial": true
+        "y": 448.4921875
       },
       {
+        "layerId": 3,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-6yp25ia",
         "label": "歯科医師会",
         "group": "g-unit",
         "x": 167.34765625,
-        "y": 392.69921875,
-        "layerId": 3,
-        "layerReason": "",
-        "isInitial": true
+        "y": 392.69921875
       },
       {
+        "layerId": 3,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-fhgc1xc",
         "label": "医師会",
         "group": "g-unit",
         "x": 26.1796875,
-        "y": 403.83984375,
-        "layerId": 3,
-        "layerReason": "",
-        "isInitial": true
+        "y": 403.83984375
       },
       {
+        "layerId": 3,
+        "layerReason": "",
+        "isInitial": true,
         "id": "n-uxp6llj",
         "label": "W民間団体",
         "group": "g-unit",
         "x": 275.96484375,
-        "y": 437.578125,
-        "layerId": 3,
-        "layerReason": "",
-        "isInitial": true
+        "y": 437.578125
       },
       {
+        "layerId": 3,
+        "layerReason": "",
+        "isInitial": false,
         "id": "n-vfhnw62",
         "label": "DCAT",
         "group": "g-unit",
         "x": 399.0703125,
-        "y": 379.33203125,
-        "layerId": 3,
-        "layerReason": ""
+        "y": 379.33203125
       },
       {
+        "layerId": 4,
+        "layerReason": "",
+        "isInitial": false,
         "id": "n-h018kmy",
         "label": "福祉避難所",
         "group": "g-team",
         "x": 553.0625,
-        "y": 616.84375,
-        "layerId": 4,
-        "layerReason": ""
+        "y": 616.84375
       },
       {
+        "layerId": 4,
+        "layerReason": "",
+        "isInitial": false,
         "id": "n-kkuqhw1",
         "label": "在宅避難者",
         "group": "g-team",
         "x": 941.40234375,
-        "y": 615.35546875,
-        "layerId": 4,
-        "layerReason": ""
+        "y": 615.35546875
       },
       {
+        "layerId": 4,
+        "layerReason": "",
+        "isInitial": false,
         "id": "n-6zqseus",
         "label": "仮設住宅",
         "group": "g-team",
         "x": 732.18359375,
-        "y": 610.96484375,
-        "layerId": 4,
-        "layerReason": ""
+        "y": 610.96484375
       },
       {
+        "layerId": 3,
+        "layerReason": "",
+        "isInitial": false,
         "id": "n-dwcsgs9",
         "label": "介護支援専門員協会",
         "group": "g-unit",
         "x": 970,
-        "y": 471.04296875,
-        "layerId": 3,
-        "layerReason": ""
+        "y": 471.04296875
       },
       {
+        "layerId": 3,
+        "layerReason": "",
+        "isInitial": false,
         "id": "n-jxpjmz9",
         "label": "地域支え合いセンター",
         "group": "g-unit",
         "x": 741.58203125,
-        "y": 366.53515625,
-        "layerId": 3,
-        "layerReason": ""
+        "y": 366.53515625
       },
       {
+        "layerId": 3,
+        "layerReason": "",
+        "isInitial": false,
         "id": "n-emi9jdl",
         "label": "社会福祉士会",
         "group": "g-unit",
         "x": 924.99609375,
-        "y": 389.7890625,
-        "layerId": 3,
-        "layerReason": ""
+        "y": 389.7890625
       }
     ],
     "edges": [
@@ -15494,11 +15705,21 @@
         "to": "n-h018kmy",
         "label": "支援",
         "bidirectional": false
+      },
+      {
+        "id": "e-n9fy2qw",
+        "from": "n-heiewrt",
+        "to": "n-jxpjmz9",
+        "label": "連携協力",
+        "bidirectional": true
       }
     ],
     "answers": {
       "q1": "",
-      "q2": ""
+      "q2": "",
+      "p3q1": "",
+      "p3q2": "",
+      "p3q2sel": ""
     }
   },
   "phase5Data": {
