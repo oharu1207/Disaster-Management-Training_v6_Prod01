@@ -156,15 +156,10 @@
     '地域包括支援センター|避難所', // 復旧期は福祉避難所へ
   ]);
 
-  // §B5.1 welfare_hub_allocation 判定用。各組織の正しい接続先ハブ
-  const WELFARE_HUB_CORRECT_R = {
-    '社会福祉士会': '地域包括支援センター',
-    '介護支援専門員協会': '地域包括支援センター',
-    'DWAT': '市町村保健センター',
-    'DCAT': '市町村保健センター',
-    'JRAT': '市町村保健センター',
-    '地域支え合いセンター': '市町村保健センター',
-  };
+  // §B5.1 rev B-2：welfare_hub_allocation 判定用（type:"swap" の下位分類）。
+  // 「福祉系の周辺組織」と「福祉ハブ2つ」の集合。両方に該当するスワップにのみ付与する。
+  const WELFARE_ORGS_R = new Set(['社会福祉士会', '介護支援専門員協会', '地域支え合いセンター', 'DWAT', 'DCAT', 'JRAT']);
+  const WELFARE_HUBS_R = new Set(['市町村保健センター', '地域包括支援センター']);
 
   // ═══════════════════════════════════════════════════════════
   // カテゴリ → principleGroup（§B3。急性期と共通の9種＋復旧期追加の2種＝計11種。新設禁止）
@@ -275,58 +270,117 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // 軸2：ハブ接続
+  // 軸2：ハブ接続（rev B-2：急性期 scoring.js の gradeAxis2() と同一アルゴリズム。
+  // 定数のみ復旧期用（HUBS_R／IDEAL_HUB_MAP_R）に差し替える。scoring.js からは
+  // import・共有化せず、本ファイル内に複製する：§B0.2）
   // ═══════════════════════════════════════════════════════════
 
-  // 欠落した理想ハブペアの org 側が、別の（正しくない）ハブへ連携協力で接続されているかを検査する。
-  // welfare_hub_allocation は主要指標には算入せず、既存 hub_misassignment 1件への注記（サブタイプ）にすぎない。
-  function detectWelfareHubAllocation(org, learnerNorm) {
-    const correctHub = WELFARE_HUB_CORRECT_R[org];
-    if (!correctHub) return null;
-    for (const e of learnerNorm.edges) {
-      if (e.label !== '連携協力') continue;
-      let other = null;
-      if (e.fromLabel === org) other = e.toLabel;
-      else if (e.toLabel === org) other = e.fromLabel;
-      if (other && other !== correctHub && HUBS_R.has(other)) return 'welfare_hub_allocation';
-    }
+  // ハブペアから周辺ノード（非ハブ端）を返す。両端ハブまたは両端非ハブなら null。
+  // （scoring.js の getPeripheral と同一ロジックの複製）
+  function getPeripheralR(a, b) {
+    const aHub = HUBS_R.has(a), bHub = HUBS_R.has(b);
+    if (aHub && !bHub) return b;
+    if (bHub && !aHub) return a;
     return null;
   }
 
   function computeAxis2(learnerNorm) {
     const errors = [];
 
-    // 理想ハブペア上のエッジだけを抽出（支援は軸3管轄／理想指揮ペアは軸1管轄：J2-R）
-    const learnerEdgesByPair = new Map();
+    // J1例外判定用：学習者の連携協力（無向ペアキー）。軸1と独立に再計算する
+    // （scoring.js の gradeAxis2 と同じ設計。軸1の集合を共有しない）。
+    const learnerCoopPairsA2 = new Set();
     for (const e of learnerNorm.edges) {
-      if (e.label === '支援') continue;
-      const pk = pairKey(e.fromLabel, e.toLabel);
-      if (IDEAL_COMMAND_PAIRS_R.has(pk)) continue;
-      if (!learnerEdgesByPair.has(pk)) learnerEdgesByPair.set(pk, []);
-      learnerEdgesByPair.get(pk).push(e);
+      if (e.label === '連携協力') learnerCoopPairsA2.add(pairKey(e.fromLabel, e.toLabel));
     }
 
-    for (const [hub, org] of IDEAL_HUB_PAIRS_RAW_R) {
-      const pk = pairKey(hub, org);
-      const edgesHere = learnerEdgesByPair.get(pk) || [];
-
-      if (edgesHere.length === 0) {
-        // 欠落（R4）。理想外のハブ接続（片端がハブの連携協力）は誤りとしないため、
-        // 「余剰側」を別途計上することはない（差分方式の欠落＋余剰2件計上は構造的に発生しない）。
-        const detail = { hub, org };
-        const subtype = detectWelfareHubAllocation(org, learnerNorm);
-        if (subtype) detail.subtype = subtype;
-        errors.push(makeError('hub_misassignment', 2, detail));
-        continue;
+    // R4-1：対象エッジの抽出（管轄規則 J1〜J3）
+    const learnerHubEdges = [];
+    for (const e of learnerNorm.edges) {
+      if (e.label === '支援') continue;                                    // 支援は軸3管轄
+      const key = pairKey(e.fromLabel, e.toLabel);
+      if (IDEAL_COMMAND_PAIRS_R.has(key)) continue;                        // J2：理想指揮ペアは軸1管轄
+      if (!HUBS_R.has(e.fromLabel) && !HUBS_R.has(e.toLabel)) continue;    // 少なくとも一端がハブ
+      if (e.label === '情報伝達' && !IDEAL_HUB_MAP_R.has(key)) continue;   // J3：ハブペア外の情報伝達は対象外
+      if (e.label === '指示命令') {
+        if (!IDEAL_HUB_MAP_R.has(key)) continue;                           // J1：ハブペア外の指示命令は軸1管轄
+        if (learnerCoopPairsA2.has(key)) continue;                         // J1例外：連携協力併存 → 軸1管轄
       }
+      learnerHubEdges.push({ fromLabel: e.fromLabel, toLabel: e.toLabel, label: e.label, key });
+    }
 
-      // 一致（ラベルが連携協力の学習者エッジが1本でもあれば正答。他の重複エッジは無誤り）
-      const hasCorrectLabel = edgesHere.some(e => e.label === '連携協力');
-      if (!hasCorrectLabel) {
-        // J1／J3：理想ハブペア上のラベル違い（指示命令・情報伝達）
-        const e0 = edgesHere[0];
-        errors.push(makeError('edge_label_error', 2,
-          { fromLabel: e0.fromLabel, toLabel: e0.toLabel, expectedLabel: '連携協力', gotLabel: e0.label }));
+    // R4-2：第1パス（理想ペアと一致する学習者エッジを照合し、ラベルチェック）。
+    // 理想ペアは1回だけ消費する。同一ペア上に複数の学習者エッジがあっても「無罪」にはせず、
+    // 未照合分は第2パス（スワップ or 過剰）へ送る。
+    const usedIdealPairs   = new Set();
+    const learnerAccounted = new Set();
+
+    for (let i = 0; i < learnerHubEdges.length; i++) {
+      const le = learnerHubEdges[i];
+      if (IDEAL_HUB_MAP_R.has(le.key) && !usedIdealPairs.has(le.key)) {
+        usedIdealPairs.add(le.key);
+        learnerAccounted.add(i);
+        if (le.label !== '連携協力') {
+          errors.push(makeError('edge_label_error', 2, {
+            fromLabel: le.fromLabel, toLabel: le.toLabel,
+            expectedLabel: '連携協力', gotLabel: le.label,
+          }));
+        }
+      }
+    }
+
+    // 未消費の理想ペア = missing候補
+    const missingPairKeys = [...IDEAL_HUB_MAP_R.keys()].filter(k => !usedIdealPairs.has(k));
+
+    // peripheral → missing ペアキー配列（スワップ検出用）
+    const peripheralToMissing = new Map();
+    for (const k of missingPairKeys) {
+      const [a, b] = IDEAL_HUB_MAP_R.get(k);
+      const peripheral = getPeripheralR(a, b);
+      if (peripheral) {
+        if (!peripheralToMissing.has(peripheral)) peripheralToMissing.set(peripheral, []);
+        peripheralToMissing.get(peripheral).push(k);
+      }
+    }
+
+    const consumedMissing = new Set();
+
+    // R4-3：第2パス（未照合の学習者エッジをスワップ or 過剰として処理）
+    for (let i = 0; i < learnerHubEdges.length; i++) {
+      if (learnerAccounted.has(i)) continue;
+      const le = learnerHubEdges[i];
+      const peripheral = getPeripheralR(le.fromLabel, le.toLabel);
+
+      if (peripheral && peripheralToMissing.has(peripheral)) {
+        const candidates = peripheralToMissing.get(peripheral).filter(k => !consumedMissing.has(k));
+        if (candidates.length > 0) {
+          // スワップ確定：missing 1件を消費し、1誤りに正規化
+          consumedMissing.add(candidates[0]);
+          const [a, b] = IDEAL_HUB_MAP_R.get(candidates[0]);
+          const correctHub = HUBS_R.has(a) ? a : b;
+          const wrongHub   = HUBS_R.has(le.fromLabel) ? le.fromLabel : le.toLabel;
+          // §B5.1 rev B-2：福祉ハブ間（市町村保健センター⇔地域包括支援センター）の
+          // 取り違えで、かつ周辺組織が福祉系のときのみ welfareHubAllocation を付与する。
+          const welfareHubAllocation =
+            WELFARE_HUBS_R.has(correctHub) && WELFARE_HUBS_R.has(wrongHub) && WELFARE_ORGS_R.has(peripheral);
+          errors.push(makeError('hub_misassignment', 2, {
+            type: 'swap', peripheral, correctHub, wrongHub, welfareHubAllocation,
+          }));
+          continue;
+        }
+      }
+      // スワップ非該当 → 過剰（理想外のハブ接続。§B5.1 rev B-2により誤りとして計上する）
+      errors.push(makeError('hub_misassignment', 2, {
+        type: 'overuse', fromLabel: le.fromLabel, toLabel: le.toLabel,
+      }));
+    }
+
+    // R4-4：残存 missing（スワップで消費されなかったもの。ハブ同士のペアは peripheral が
+    // null のため常にここに残る：R4-5）
+    for (const k of missingPairKeys) {
+      if (!consumedMissing.has(k)) {
+        const [a, b] = IDEAL_HUB_MAP_R.get(k);
+        errors.push(makeError('hub_misassignment', 2, { type: 'missing', fromLabel: a, toLabel: b }));
       }
     }
 
@@ -411,8 +465,8 @@
   // ═══════════════════════════════════════════════════════════
 
   function detailSortKey(detail) {
-    const primary   = detail.label || detail.fromLabel || detail.hub || '';
-    const secondary = detail.toLabel || detail.org || detail.expectedLayerId || '';
+    const primary   = detail.label || detail.fromLabel || detail.peripheral || '';
+    const secondary = detail.toLabel || detail.wrongHub || detail.expectedLayerId || '';
     return `${primary}|||${secondary}`;
   }
 
@@ -447,6 +501,12 @@
     for (const e of errors) {
       const st = e.detail && e.detail.subtype;
       if (st && Object.prototype.hasOwnProperty.call(subtypeCounts, st)) subtypeCounts[st]++;
+      // hub_misassignment（type:"swap"）は subtype 文字列ではなく detail.welfareHubAllocation
+      // という真偽値で福祉ハブ振り分けを表す（rev B-2 §B5.1）。ここで subtypeCounts の
+      // welfare_hub_allocation バケットへ合流させる。
+      if (e.category === 'hub_misassignment' && e.detail && e.detail.type === 'swap' && e.detail.welfareHubAllocation === true) {
+        subtypeCounts.welfare_hub_allocation++;
+      }
     }
 
     const flagCounts = { phaseCarryover: 0 };
@@ -818,28 +878,85 @@
       check('RT13: 理想ハブペア上に情報伝達 → edge_label_error 1（J3例外）', r.counts.edge_label_error === 1, 1, r.counts.edge_label_error);
     }
     {
+      // rev B-2：理想外のハブ接続（片端がハブの連携協力）は無罪ではなく hub_misassignment
+      // type:"overuse" として計上される（急性期 gradeAxis2() と同一挙動）。
       const learner = buildLearner({ addEdges: [{ fromLabel: 'C県A保健所', toLabel: 'JRAT', label: '連携協力', bidirectional: true }] });
       const r = gradeRecoveryMap(learner, IDEAL_NORM);
-      check('RT14: 理想外のハブ接続（片端がハブ）を追加 → 0誤り', r.errors.length === 0, 0, r.errors.length);
+      const err = r.errors.find(e => e.category === 'hub_misassignment');
+      check('RT14: 理想外のハブ接続（片端がハブ）を追加 → hub_misassignment 1・overuse（急性期と同一挙動）',
+        r.counts.hub_misassignment === 1 && err?.detail.type === 'overuse', true,
+        { count: r.counts.hub_misassignment, type: err?.detail.type });
     }
     {
+      // RT15 rev B-2 差し替え：スワップ正規化により2件（欠落＋余剰）にならないことの証明。
       const learner = buildLearner({
         removeEdges: [{ fromLabel: '地域包括支援センター', toLabel: '社会福祉士会', label: '連携協力' }],
         addEdges:    [{ fromLabel: '市町村保健センター', toLabel: '社会福祉士会', label: '連携協力', bidirectional: true }],
       });
       const r = gradeRecoveryMap(learner, IDEAL_NORM);
       const err = r.errors.find(e => e.category === 'hub_misassignment');
-      check('RT15: 社会福祉士会が地域包括ではなく保健センターに接続 → hub_misassignment 1のみ・welfare_hub_allocation',
-        r.counts.hub_misassignment === 1 && err?.detail.subtype === 'welfare_hub_allocation' && r.errors.length === 1,
-        true, { count: r.counts.hub_misassignment, subtype: err?.detail.subtype, total: r.errors.length });
+      check('RT15: 社会福祉士会を保健センターに接続 → hub_misassignment 1件・swap・welfareHubAllocation',
+        r.counts.hub_misassignment === 1 &&
+        err?.detail.type === 'swap' &&
+        err?.detail.peripheral === '社会福祉士会' &&
+        err?.detail.correctHub === '地域包括支援センター' &&
+        err?.detail.wrongHub === '市町村保健センター' &&
+        err?.detail.welfareHubAllocation === true,
+        true, err && err.detail);
     }
     {
       const learner = buildLearner({ removeEdges: [{ fromLabel: '地域包括支援センター', toLabel: '社会福祉士会', label: '連携協力' }] });
       const r = gradeRecoveryMap(learner, IDEAL_NORM);
       const err = r.errors.find(e => e.category === 'hub_misassignment');
-      check('RT16: 社会福祉士会がどこにも接続しない → hub_misassignment 1、subtypeなし',
-        r.counts.hub_misassignment === 1 && err?.detail.subtype === undefined,
-        true, { count: r.counts.hub_misassignment, subtype: err?.detail.subtype });
+      check('RT16: 社会福祉士会がどこにも接続しない → hub_misassignment 1・missing（サブタイプなし）',
+        r.counts.hub_misassignment === 1 && err?.detail.type === 'missing' && err?.detail.welfareHubAllocation === undefined,
+        true, { count: r.counts.hub_misassignment, type: err?.detail.type, welfareHubAllocation: err?.detail.welfareHubAllocation });
+    }
+    {
+      // RT37（新設）：理想外のハブ接続を1本追加 → hub_misassignment 1件・overuse
+      const learner = buildLearner({ addEdges: [{ fromLabel: 'C県A保健所', toLabel: 'DWAT', label: '連携協力', bidirectional: true }] });
+      const r = gradeRecoveryMap(learner, IDEAL_NORM);
+      const err = r.errors.find(e => e.category === 'hub_misassignment');
+      check('RT37: 理想外のハブ接続を追加（A保健所↔DWAT） → hub_misassignment 1件・overuse',
+        r.counts.hub_misassignment === 1 && err?.detail.type === 'overuse', true, err && err.detail);
+    }
+    {
+      // RT38（新設）：理想ハブペア上に正しい連携協力と指示命令を併存 → J1例外で軸1のcommand_overuse
+      const learner = buildLearner({
+        addEdges: [{ fromLabel: '地域包括支援センター', toLabel: '社会福祉士会', label: '指示命令', bidirectional: false }],
+      });
+      const r = gradeRecoveryMap(learner, IDEAL_NORM);
+      check('RT38: 理想ハブペア上に連携協力と指示命令が併存 → edge_label_error 0・command_overuse 1（J1例外）',
+        r.counts.edge_label_error === 0 && r.counts.command_overuse === 1,
+        [0, 1], [r.counts.edge_label_error, r.counts.command_overuse]);
+    }
+    {
+      // RT39（新設）：ハブ間の理想ペアを削除 → peripheral なしのためスワップ正規化されず missing のまま
+      // （元データは 市町村保健センター→C県A保健所 の向きで登録されている）
+      const learner = buildLearner({
+        removeEdges: [{ fromLabel: '市町村保健センター', toLabel: 'C県A保健所', label: '連携協力' }],
+      });
+      const r = gradeRecoveryMap(learner, IDEAL_NORM);
+      const err = r.errors.find(e => e.category === 'hub_misassignment');
+      check('RT39: ハブ間ペア（A保健所↔保健センター）を削除 → hub_misassignment 1件・missing',
+        r.counts.hub_misassignment === 1 && err?.detail.type === 'missing', true, err && err.detail);
+    }
+    {
+      // RT40（新設）：DWATを保健センターではなく地域包括支援センターに接続（福祉ハブ振り分けの逆方向）
+      const learner = buildLearner({
+        removeEdges: [{ fromLabel: '市町村保健センター', toLabel: 'DWAT', label: '連携協力' }],
+        addEdges:    [{ fromLabel: '地域包括支援センター', toLabel: 'DWAT', label: '連携協力', bidirectional: true }],
+      });
+      const r = gradeRecoveryMap(learner, IDEAL_NORM);
+      const err = r.errors.find(e => e.category === 'hub_misassignment');
+      check('RT40: DWATを地域包括支援センターに接続 → hub_misassignment 1件・swap・welfareHubAllocation',
+        r.counts.hub_misassignment === 1 &&
+        err?.detail.type === 'swap' &&
+        err?.detail.peripheral === 'DWAT' &&
+        err?.detail.correctHub === '市町村保健センター' &&
+        err?.detail.wrongHub === '地域包括支援センター' &&
+        err?.detail.welfareHubAllocation === true,
+        true, err && err.detail);
     }
 
     // ─── 軸3 ───────────────────────────────────────────────
