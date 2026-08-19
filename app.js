@@ -47,7 +47,7 @@
     RECOVERY_RECORD:    8,   // [CHANGED] 7 → 8
     SEQUENCE:           9,   // [CHANGED] 8 → 9
     ACUTE_DIFF:         10,  // [NEW] 差分提示（急性期）
-    ACUTE_REVISE:       11,  // [NEW] 理想マップ修正（急性期）
+    ACUTE_REVISE:       11,  // [NEW] 基準マップ修正（急性期）
     ACUTE_LAYER_DIFF:   12,  // [NEW] レイヤー差分提示（急性期）
     ACUTE_LAYER_REVISE: 13,  // [NEW] レイヤー修正（急性期）
     ACUTE_EDGE_MAP:     14,  // [NEW] エッジ付与（急性期 1B を分離）
@@ -231,7 +231,7 @@
                 wrap:"canvasWrap-p6", stat:"canvasStat-p6", hint:"arrowModeHint-p6" },
       markerSuffix: "-p6",
     },
-    [PHASE.ACUTE_REVISE]: {           // [NEW] 理想マップ修正フェーズ
+    [PHASE.ACUTE_REVISE]: {           // [NEW] 基準マップ修正フェーズ
       key: "acuteRevised",
       paletteNodes: PALETTE_NODES,
       beneficiaries: new Set(["避難所", "医療機関"]),
@@ -351,8 +351,8 @@
       {
         id: "q6",
         kind: "textarea",
-        label: "問6． 復旧期の理想マップと実際マップを比較し、最も重要と思う構造的差異を1つ挙げて説明せよ。（100字以内）",
-        placeholder: "例）理想マップでは…が存在するが、実際マップでは…",
+        label: "問6． 復旧期の基準となる組織構造と実際の対応をもとに整理した組織構造を比較し、最も重要と思う構造的差異を1つ挙げて説明せよ。（100字以内）",
+        placeholder: "例）基準となる組織構造では…が存在するが、実際の対応をもとに整理した組織構造では…",
         maxLength: 100,
       },
       {
@@ -989,7 +989,7 @@
     if (p === PHASE.ACUTE_COMPARE) {
       // 未作成チェック
       if (phaseData.acute.nodes.length === 0) {
-        showToast("先に急性期の理想マップを作成してください", 3000);
+        showToast("先に急性期の基準マップを作成してください", 3000);
         logOp("VALIDATION_ERROR", { type: "ACUTE_MAP_EMPTY", attemptedPhase: p });
         state.phase = prevPhase;
         activatePhaseView(prevPhase);
@@ -1024,7 +1024,7 @@
 
       // 描画はグリッドレイアウト確定後に実行
       requestAnimationFrame(() => {
-        // 左カラム：学習者の理想マップを描画
+        // 左カラム：学習者の基準マップを描画
         renderReadOnlyMap(
           phaseData.acute.nodes,
           phaseData.acute.edges,
@@ -1053,7 +1053,7 @@
           );
         } else if (mapLoadStatus.actualAcute === "error") {
           actualCanvas.innerHTML =
-            '<div style="color:var(--red);padding:20px;font-size:14px;">⚠ 実際マップの読み込みに失敗しました</div>';
+            '<div style="color:var(--red);padding:20px;font-size:14px;">⚠ の読み込みに失敗しました</div>';
         } else {
           actualCanvas.innerHTML =
             '<div style="color:var(--text-dim);padding:20px;font-size:14px;">読み込み中…</div>';
@@ -1124,7 +1124,7 @@
           null, true,
           () => clearHighlightRO($("canvas-tcAcute"), $("svgLayer-tcAcute"))
         );
-        // 右カラム：急性期理想マップ（ideal_map_acute.json）
+        // 右カラム：急性期基準マップ（ideal_map_acute.json）
         const tcAcuteCanvas = $("canvas-tcAcute");
         if (mapLoadStatus.idealAcute === "ready") {
           renderReadOnlyMap(
@@ -1194,7 +1194,7 @@
       BENEFICIARY_LABELS = PHASE6_BENEFICIARY_LABELS;
 
       requestAnimationFrame(() => {
-        // 左カラム：学習者の復旧期理想マップ
+        // 左カラム：学習者の復旧期基準マップ
         renderReadOnlyMap(
           phaseData.p6.nodes,
           phaseData.p6.edges,
@@ -1614,7 +1614,7 @@
   function deleteNode(id) {
     const n = state.nodes.find(x => x.id === id);
     if (n?.isInitial) {
-      showToast("急性期理想マップ由来のノードは削除できません");
+      showToast("急性期の基準マップ由来のノードは削除できません");
       return;
     }
     // レイヤー配置／関係付与／マップ修正（層・関係）／差分bundleループの各フェーズではノード削除不可
@@ -4029,7 +4029,7 @@
   }
 
   // buildHintContent: bundle のヒントステージ用テキストを組み立てる。正解（層・接続・ラベル）は
-  // 一切含めない。layer_mismatch は HINT_TEXTS.layer_mismatch ＋ 各ノードの hintReason（理想マップ
+  // 一切含めない。layer_mismatch は HINT_TEXTS.layer_mismatch ＋ 各ノードの hintReason（基準マップ
   // JSON由来）を合成する。それ以外は HINT_TEXTS[category] を {from}/{to} 置換し、hub_misassignment は
   // correctHub が「C県A保健所」のケースを含む場合に hub_direct_supplement を続けて追記する。
   // splitTemplateToSegments: HINT_TEXTS のテンプレート文字列を {from}/{to} プレースホルダで
@@ -4874,8 +4874,8 @@
     return { hintReason: node?.hintReason || "", layerReason: node?.layerReason || "" };
   }
 
-  // 軸1〜4の正解開示（relationReason）はエッジ由来。理想マップ中の該当ペアを無向に探索する
-  // （overuse系など理想マップに対応エッジが存在しないカテゴリでは自然に "" を返す＝理由欄非表示）。
+  // 軸1〜4の正解開示（relationReason）はエッジ由来。基準マップ中の該当ペアを無向に探索する
+  // （overuse系など基準マップに対応エッジが存在しないカテゴリでは自然に "" を返す＝理由欄非表示）。
   function findIdealRecoveryRelationReason(fromLabel, toLabel) {
     const edges = window.idealMapRecovery?.edges || [];
     const nodes = window.idealMapRecovery?.nodes || [];
@@ -5686,7 +5686,7 @@
   function renderPhase5Map() {
     if (mapLoadStatus.idealAcute !== "ready") {
       if (canvasEl) canvasEl.innerHTML = mapLoadStatus.idealAcute === "error"
-        ? '<div style="color:var(--red);padding:20px;font-size:14px;">⚠ 理想マップの読み込みに失敗しました</div>'
+        ? '<div style="color:var(--red);padding:20px;font-size:14px;">⚠ 基準マップの読み込みに失敗しました</div>'
         : '<div style="color:var(--text-dim);padding:20px;font-size:14px;">読み込み中…</div>';
       return;
     }
@@ -5829,7 +5829,7 @@
       .filter(n => !removedIds.has(n.id))
       .map(n => {
         const isBenef = PHASE6_BENEFICIARY_LABELS.has(n.label);
-        // 被支援者の引き継ぎ y が層外なら第4層中央に補正（理想マップ作成者の意図を尊重する保守的実装）
+        // 被支援者の引き継ぎ y が層外なら第4層中央に補正（基準マップ作成者の意図を尊重する保守的実装）
         const y = (isBenef && getLayerIdFromY(n.y) !== 4)
           ? getCenterYForLayer(4)
           : n.y;
@@ -5845,7 +5845,7 @@
         };
       });
 
-    // 急性期理想マップから継承されなかった復旧期固有の被支援者ノードを補完配置
+    // 急性期基準マップから継承されなかった復旧期固有の被支援者ノードを補完配置
     const placedLabels = new Set(phaseData.p6.nodes.map(n => n.label));
     const missingBeneficiaries = [...PHASE6_BENEFICIARY_LABELS]
       .filter(label => !placedLabels.has(label));
@@ -6905,14 +6905,14 @@
         mapVersion: window.idealMapAcute?.mapVersion ?? null,
       });
       // 採点定数（IDEAL_COMMAND_EDGES / IDEAL_HUB_MAP / IDEAL_SUPPORT_EDGES）と
-      // 配信中の理想マップJSONの整合性を検査する。配信ファイル差し替え事故の早期検出用。
+      // 配信中の基準マップJSONの整合性を検査する。配信ファイル差し替え事故の早期検出用。
       // 監査失敗時も学習フローは止めない（記録と警告のみ）。
       try {
         const S = window.__ICS_SCORING__;
         if (S?.auditIdealConsistency && S?.normalizeMap) {
           const audit = S.auditIdealConsistency(S.normalizeMap(window.idealMapAcute));
           if (!audit.ok) {
-            console.error('[ICS] 採点定数と理想マップJSONが不一致:', audit.mismatches);
+            console.error('[ICS] 採点定数と基準マップJSONが不一致:', audit.mismatches);
             logOp("SCORING_IDEAL_MISMATCH", { mismatches: audit.mismatches });
           } else {
             logOp("SCORING_IDEAL_CONSISTENT", {});
@@ -6991,7 +6991,7 @@
       });
 
       if (!audit.ok) {
-        // エラー項目が1つでもあれば ready にしない（採点定数と理想JSONの不整合を検出）
+        // エラー項目が1つでもあれば ready にしない（採点定数とidealJSONの不整合を検出）
         console.error('[ICS] ideal_map_recovery.json の監査でエラーを検出したため ready にしません:', audit.errors);
         mapLoadStatus.idealRecovery = "error";
         logOp("IDEAL_MAP_RECOVERY_LOAD_FAILED", { message: "audit failed", errors: audit.errors });

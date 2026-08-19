@@ -331,10 +331,10 @@
 <!-- PHASE 2: 比較・分析（急性期） -->
 <div id="phase-2" class="phase-view">
 
-  <!-- 左カラム：学習者の理想マップ -->
+  <!-- 左カラム：学習者の基準マップ -->
   <div class="compare-col" id="compareColIdeal">
     <div class="compare-col-header">
-      <span class="compare-col-title">📐 あなたの理想マップ</span>
+      <span class="compare-col-title">📐 あなたの基準マップ</span>
       <span class="compare-col-stat" id="canvasStat-ideal">ノード: 0 ／ 矢印: 0</span>
     </div>
     <div class="canvasWrap" id="canvasWrap-ideal">
@@ -410,10 +410,10 @@
     <div class="compare-qa-inner">
       <div class="compare-qa-block">
         <label class="compare-qa-label">
-          問1．	報告書から作成した実際の組織構造のコンセプトマップを見て，あなたの理想マップと実際マップの最も重要と思う構造的差異を1つ挙げて説明せよ．（100字以内）
+          問1．	報告書から作成した「実際の対応をもとに整理した組織構造」を見て，提示された「基準となる組織構造」と「実際の対応をもとに整理した組織構造」の最も重要と思う構造的差異を1つ挙げて説明せよ．
         </label>
         <textarea id="p3q1Answer" rows="2"
-          placeholder="例）理想マップは…が存在するが，実際マップでは…"></textarea>
+          placeholder="例）基準となる組織構造は…が存在するが，実際の対応をもとに整理した組織構造では…"></textarea>
         <div class="char-count"><span id="p3q1CharCount">0</span> / 100 字</div>
       </div>
       <div class="compare-qa-block">
@@ -494,7 +494,7 @@
     <div class="sb-block">
       <div class="scenario-badge">復旧期 準備</div>
       <div style="font-size:13px;line-height:1.6;margin-top:8px;color:#fff;">
-       急性期の理想的な組織体制から，<strong style="color:#fff;">復旧期には不要になるノード</strong>をクリックして選んでください。
+       急性期の基準となる組織体制から，<strong style="color:#fff;">復旧期には不要になるノード</strong>をクリックして選んでください。
       </div>
     </div>
     <div class="sb-block" id="p5RemovalBlock" style="flex:1;min-height:0;overflow-y:auto;">
@@ -557,7 +557,7 @@
   <div class="map-sidebar">
     <div class="sb-block">
       <div class="scenario-badge">復旧期</div>
-      <div style="font-weight:700;font-size:14px;line-height:1.5;margin-top:7px;">復旧期の理想的な組織構造を<br>完成させてください</div>
+      <div style="font-weight:700;font-size:14px;line-height:1.5;margin-top:7px;">復旧期の基準となる組織構造を<br>完成させてください</div>
       <div style="font-size:12px;color:#fff;margin-top:6px;">急性期のマップから不要なノードを除いた状態が初期配置です。パレットから新たなノードを追加し、矢印で関係を構築してください。</div>
     </div>
     <div class="sb-block" style="flex:1;min-height:0;display:flex;flex-direction:column;">
@@ -731,10 +731,10 @@
     </div>
   </div>
 
-  <!-- 右カラム：急性期理想マップ（ideal_map_acute.json） -->
+  <!-- 右カラム：急性期基準マップ（ideal_map_acute.json） -->
   <div class="compare-col" id="tcCompareColAcute">
     <div class="compare-col-header">
-      <span class="compare-col-title">📐 急性期 理想マップ</span>
+      <span class="compare-col-title">📐 急性期 基準マップ</span>
       <span class="compare-col-stat" id="canvasStat-tcAcute">ノード: 0 ／ 矢印: 0</span>
     </div>
     <div class="canvasWrap" id="canvasWrap-tcAcute">
@@ -761,7 +761,7 @@
     <div class="compare-qa-inner">
       <div class="compare-qa-block">
         <label class="compare-qa-label">
-          問5． あなたが作成した復旧期の理想マップと急性期の理想マップを比較し、急性期と復旧期では、組織全体として支援体制の中心がどのように変化したか説明せよ。（100字以内）
+          問5． 復旧期の基準となる組織構造と急性期の基準となる組織構造を比較し，急性期と復旧期では，組織全体として支援体制の中心がどのように変化したか一言で説明せよ．
         </label>
         <textarea id="tcQ6Answer" rows="2"
           placeholder="例）急性期は…を中心とした体制であったが、復旧期では…が中心となる体制へと…"
@@ -779,7 +779,7 @@
 <!-- ===== PHASE 8 (now Phase 8): 比較・分析（復旧期） ===== -->
 <div id="phase-recoveryCompare" class="phase-view">
 
-  <!-- 左カラム：学習者の復旧期理想マップ -->
+  <!-- 左カラム：学習者の復旧期基準マップ -->
   <div class="compare-col" id="rcCompareColIdeal">
     <div class="compare-col-header">
       <span class="compare-col-title">📐 あなたの復旧期マップ</span>
@@ -858,10 +858,10 @@
     <div class="compare-qa-inner">
       <div class="compare-qa-block">
         <label class="compare-qa-label">
-          問6． 復旧期の理想マップと実際マップを比較し、最も重要と思う構造的差異を1つ挙げて説明せよ。（100字以内）
+          問6． 復旧期の基準となる組織構造と実際の対応をもとに整理した組織構造を比較し、最も重要と思う構造的差異を1つ挙げて一言で説明せよ。
         </label>
         <textarea id="rcQ6Answer" rows="2"
-          placeholder="例）理想マップでは…が存在するが、実際マップでは…"></textarea>
+          placeholder="例）基準となる組織構造では…が存在するが、実際の対応をもとに整理した組織構造では…"></textarea>
         <div class="char-count"><span id="rcQ6CharCount">0</span> / 100 字</div>
       </div>
       <div class="compare-qa-block">
