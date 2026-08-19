@@ -23,7 +23,7 @@
   // 版識別子
   // ═══════════════════════════════════════════════════════════
 
-  const RECOVERY_SCORING_RULE_VERSION = 'recovery-grade-v1';
+  const RECOVERY_SCORING_RULE_VERSION = 'recovery-grade-v2';
 
   // ═══════════════════════════════════════════════════════════
   // ローカルヘルパ（scoring.js から意図的に複製。共通モジュール化しない：§B0.2）
@@ -398,7 +398,13 @@
     for (const e of learnerNorm.edges) {
       if (e.label !== '支援') continue;
 
-      // 第1段階a：起点レイヤーは L2 または L3（急性期はL3のみ。復旧期固有規則）
+      // J2-R（B-5で軸3にも徹底）：理想指揮ペア上はラベルを問わず軸1のみが管轄する。
+      // 支援を置いても support_layer_violation/support_overuse へは流さない（RT41）。
+      if (IDEAL_COMMAND_PAIRS_R.has(pairKey(e.fromLabel, e.toLabel))) continue;
+
+      // 第1段階a：起点レイヤーは L2 または L3（急性期はL3のみ。復旧期固有規則）。
+      // 参照するのは学習者の現在配置ではなく IDEAL_NODE_LAYERS_R の規範層（R5・B-5で明確化）。
+      // 配置誤り自体は軸0Lで独立評価するため、同じ誤りを軸3へ波及させない（RT44）。
       const fromLayerId = IDEAL_NODE_LAYERS_R[e.fromLabel];
       if (fromLayerId !== 2 && fromLayerId !== 3) {
         errors.push(makeError('support_layer_violation', 3, {
@@ -444,14 +450,21 @@
   // 軸4：調整経路（両端ともハブでない連携協力）
   // ═══════════════════════════════════════════════════════════
 
+  // J4-R（B-5で適用範囲を明確化）：両端とも非ハブの理想支援ペア上の連携協力のみが軸3管轄。
+  // ハブが関与する理想支援ペア（例：市町村保健センター|避難所）に連携協力を引いた場合は、
+  // この関数の対象から外れる（下の HUBS_R チェックで先に弾かれる）。その連携協力自体は
+  // 軸2 computeAxis2 が理想外ハブ接続として hub_misassignment(type:"overuse") を計上し、
+  // 本来あるべき支援の欠落は computeAxis3 が学習者エッジに支援が存在しないことから
+  // support_missing として独立に計上する。両者は互いを参照せず、それぞれの走査が
+  // 自然に導く独立した2誤りである（RT43）。
   function computeAxis4(learnerNorm) {
     const errors = [];
     for (const e of learnerNorm.edges) {
       if (e.label !== '連携協力') continue;
-      if (HUBS_R.has(e.fromLabel) || HUBS_R.has(e.toLabel)) continue; // 片端でもハブなら軸2管轄
+      if (HUBS_R.has(e.fromLabel) || HUBS_R.has(e.toLabel)) continue; // 片端でもハブなら軸2管轄（J4-R範囲外）
       const pk = pairKey(e.fromLabel, e.toLabel);
       if (IDEAL_COMMAND_PAIRS_R.has(pk)) continue;              // J2（防御的。県庁側は非ハブだが念のため）
-      if (IDEAL_SUPPORT_PAIRS_UNDIRECTED_R.has(pk)) continue;   // J4：理想支援ペア上は軸3で捕捉済み
+      if (IDEAL_SUPPORT_PAIRS_UNDIRECTED_R.has(pk)) continue;   // J4-R：両端非ハブの理想支援ペア上は軸3で捕捉済み
       const subtype = (e.fromLabel === '県庁' || e.toLabel === '県庁')
         ? 'command_layer_as_hub'
         : 'lateral_coordination';
@@ -495,12 +508,18 @@
     for (const e of errors) groupCounts[e.principleGroup]++;
 
     const subtypeCounts = {
-      welfare_hub_allocation: 0, lateral_coordination: 0, command_layer_as_hub: 0,
+      swap: 0, overuse: 0, missing: 0, welfare_hub_allocation: 0,
+      lateral_coordination: 0, command_layer_as_hub: 0,
       origin_layer: 0, target_not_beneficiary: 0,
     };
     for (const e of errors) {
       const st = e.detail && e.detail.subtype;
       if (st && Object.prototype.hasOwnProperty.call(subtypeCounts, st)) subtypeCounts[st]++;
+      // hub_misassignment は detail.subtype ではなく detail.type（swap/overuse/missing）で
+      // 分類する（rev B-5 §B8.2）。swap/overuse/missing はここで detail.type から直接集計する。
+      if (e.category === 'hub_misassignment' && e.detail && Object.prototype.hasOwnProperty.call(subtypeCounts, e.detail.type)) {
+        subtypeCounts[e.detail.type]++;
+      }
       // hub_misassignment（type:"swap"）は subtype 文字列ではなく detail.welfareHubAllocation
       // という真偽値で福祉ハブ振り分けを表す（rev B-2 §B5.1）。ここで subtypeCounts の
       // welfare_hub_allocation バケットへ合流させる。
@@ -621,10 +640,10 @@
       errors.push(`未解決エッジが${idealNorm.unresolvedEdgeCount}件あります（端点IDがノード一覧に無い）`);
     }
 
-    // A9：理想マップの自己採点が0誤り（宣言定数と理想JSONの整合を一括保証。最重要検査）
+    // A9：基準マップの自己採点が0誤り（宣言定数と理想JSONの整合を一括保証。最重要検査）
     const selfResult = gradeRecoveryMap(idealNorm, idealNorm);
     if (selfResult.errors.length > 0) {
-      errors.push(`理想マップの自己採点が0誤りではありません: ${selfResult.errors.length}件`);
+      errors.push(`基準マップの自己採点が0誤りではありません: ${selfResult.errors.length}件`);
     }
 
     // A10：情報伝達エッジは検査しない（J3-Rにより採点対象外。監査対象にも含めない）
@@ -653,7 +672,7 @@
   }
 
   // ═══════════════════════════════════════════════════════════
-  // テストハーネス（addendum B §B9 RT1〜RT36）
+  // テストハーネス（addendum B §B9 RT1〜RT44）
   // ブラウザ: window.__RECOVERY_SCORING_TEST__() を呼ぶ
   // Node:    node recovery-scoring.js で自動実行
   // ═══════════════════════════════════════════════════════════
@@ -958,6 +977,71 @@
         err?.detail.welfareHubAllocation === true,
         true, err && err.detail);
     }
+    {
+      // RT41（B-5新設）：理想指揮ペア上で指示命令を削除し、同じ向きに支援を置く
+      // → command_missing 1のみ。support_layer_violation/support_overuse は0（J2-Rが
+      // ラベルを問わず軸1のみを管轄する証明。B-5で軸3にも徹底）
+      const learner = buildLearner({
+        removeEdges: [{ fromLabel: '県庁', toLabel: 'C県A保健所', label: '指示命令' }],
+        addEdges:    [{ fromLabel: '県庁', toLabel: 'C県A保健所', label: '支援', bidirectional: false }],
+      });
+      const r = gradeRecoveryMap(learner, IDEAL_NORM);
+      check('RT41: 理想指揮ペア上に支援を置く → command_missing 1のみ、support系は0（J2-R）',
+        r.counts.command_missing === 1 && r.counts.support_layer_violation === 0 && r.counts.support_overuse === 0,
+        [1, 0, 0], [r.counts.command_missing, r.counts.support_layer_violation, r.counts.support_overuse]);
+    }
+    {
+      // RT42（B-5新設）：swap/overuse/missing を各1ケース生成し、subtypeCounts が
+      // detail.type から正しく集計されることを確認する。counts.hub_misassignment との整合も見る。
+      // swap：社会福祉士会を市町村保健センターに接続（地域包括支援センター|社会福祉士会が欠落）
+      // overuse：理想外のハブ接続（C県A保健所↔DWAT）
+      // missing：ハブ間の理想ペア（C県A保健所↔市町村保健センター）を削除（peripheralなし）
+      const learner = buildLearner({
+        removeEdges: [
+          { fromLabel: '地域包括支援センター', toLabel: '社会福祉士会', label: '連携協力' },
+          { fromLabel: '市町村保健センター', toLabel: 'C県A保健所', label: '連携協力' },
+        ],
+        addEdges: [
+          { fromLabel: '市町村保健センター', toLabel: '社会福祉士会', label: '連携協力', bidirectional: true },
+          { fromLabel: 'C県A保健所', toLabel: 'DWAT', label: '連携協力', bidirectional: true },
+        ],
+      });
+      const r = gradeRecoveryMap(learner, IDEAL_NORM);
+      check('RT42: swap/overuse/missing 各1件 → subtypeCounts.swap/overuse/missing が各1、counts.hub_misassignmentと整合',
+        r.subtypeCounts.swap === 1 && r.subtypeCounts.overuse === 1 && r.subtypeCounts.missing === 1 &&
+        r.counts.hub_misassignment === 3,
+        [1, 1, 1, 3],
+        [r.subtypeCounts.swap, r.subtypeCounts.overuse, r.subtypeCounts.missing, r.counts.hub_misassignment]);
+    }
+    {
+      // RT43（B-5新設）：理想支援「市町村保健センター→避難所」を削除し同ペアに連携協力を置く
+      // → hub_misassignment(overuse) 1 ＋ support_missing 1（ハブ関与理想支援ペアにはJ4-Rを
+      // 適用しない証明。軸2の過剰と軸3の欠落が独立に計上される）
+      const learner = buildLearner({
+        removeEdges: [{ fromLabel: '市町村保健センター', toLabel: '避難所', label: '支援' }],
+        addEdges:    [{ fromLabel: '市町村保健センター', toLabel: '避難所', label: '連携協力', bidirectional: true }],
+      });
+      const r = gradeRecoveryMap(learner, IDEAL_NORM);
+      const hubErr = r.errors.find(e => e.category === 'hub_misassignment' &&
+        ((e.detail.fromLabel === '市町村保健センター' && e.detail.toLabel === '避難所') ||
+         (e.detail.fromLabel === '避難所' && e.detail.toLabel === '市町村保健センター')));
+      const supErr = r.errors.find(e => e.category === 'support_missing' &&
+        e.detail.fromLabel === '市町村保健センター' && e.detail.toLabel === '避難所');
+      check('RT43: ハブ関与の理想支援ペアに連携協力 → hub_misassignment(overuse) 1 ＋ support_missing 1（J4-R非適用）',
+        !!hubErr && hubErr.detail.type === 'overuse' && !!supErr,
+        true, { hubErr: hubErr && hubErr.detail, supErr: supErr && supErr.detail });
+    }
+    {
+      // RT44（B-5新設）：JRATをL1に誤配置したまま、理想どおり JRAT→避難所 の支援を保持
+      // → layer_mismatch 1、当該支援に support_layer_violation は立たない（R5が学習者の
+      // 現在層ではなく規範層を参照する証明）
+      const learner = buildLearner({ changeNodes: [{ label: 'JRAT', layerId: 1 }] });
+      const r = gradeRecoveryMap(learner, IDEAL_NORM);
+      const violation = r.errors.some(e => e.category === 'support_layer_violation' &&
+        e.detail.fromLabel === 'JRAT' && e.detail.toLabel === '避難所');
+      check('RT44: JRATをL1に誤配置したまま理想の支援を保持 → layer_mismatch 1、当該支援にsupport_layer_violationなし',
+        r.counts.layer_mismatch === 1 && !violation, true, { layerMismatch: r.counts.layer_mismatch, violation });
+    }
 
     // ─── 軸3 ───────────────────────────────────────────────
     {
@@ -1107,7 +1191,7 @@
     }
     {
       const audit = auditRecoveryIdealConsistency(IDEAL_NORM);
-      check('RT33: 監査 A1〜A9 が理想マップに対して全て通る', audit.ok === true, true, audit);
+      check('RT33: 監査 A1〜A9 が基準マップに対して全て通る', audit.ok === true, true, audit);
     }
     {
       const corrupted = normalizeRecoveryMap({

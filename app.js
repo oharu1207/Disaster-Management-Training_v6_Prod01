@@ -15,9 +15,12 @@
   // シナリオ本体（docx）はシステム外の教材だが、実験で使用する版の識別子を
   // コード側に持たせる。シナリオを改訂したらこの定数を更新する運用とする。
   const CONTENT_VERSIONS = { scenario: "s1-1_v3" };
-  // [ADDED flow-v2] 修正フェーズ（Phase 11/13）廃止・測定点移設のフロー版識別子。
+  // [CHANGED flow-v3] 修正フェーズ（Phase 11/13）廃止・測定点移設のフロー版識別子。
   // ログ・エクスポートJSONの分析側でどちらのフロー仕様のログか機械的に判別するために使う。
-  const FLOW_VERSION = "flow-v2-no-revision-phase";
+  // flow-v3：⑨（RECOVERY_MAP）→RECOVERY_LAYER_DIFF(15)→RECOVERY_DIFF(16)→TRANSITION_COMPARE(6)
+  // の差分提示チェーンを追加（addendum B 第4段階 §5）。既存フェーズ番号・既存リダイレクト規則は
+  // 変更しない。
+  const FLOW_VERSION = "flow-v3-recovery-diff";
 
   // ================================================================
   // FEATURE FLAGS
@@ -907,14 +910,9 @@
     // ── 差分提示（復旧期レイヤー） ─────────────────────────────────── [NEW]
     // recoveryRevised を編集させるため、共通マップハンドラに fall-through する。
     if (p === PHASE.RECOVERY_LAYER_DIFF) {
-      if (phaseData.p6.nodes.length === 0) {
-        showToast("先に復旧期マップを作成してください", 3000);
-        logOp("VALIDATION_ERROR", { type: "RECOVERY_MAP_EMPTY", attemptedPhase: p });
-        state.phase = prevPhase;
-        activatePhaseView(prevPhase);
-        updatePhaseSteps(prevPhase);
-        return;
-      }
+      // ⑨（RECOVERY_MAP）から実際に離脱するときの統一検証（空／未配置／層未設定）。
+      // 16→15 の戻り再入場時（prevPhase=RECOVERY_DIFF）は phaseData.p6 が不変のため常に通過する（§1）。
+      if (!validatePhase6Leaving(p, prevPhase)) return;
       // ベースラインは phaseData.p6 から一度だけ凍結（測定固定点）。作業コピーは
       // recoveryBaseline ではなく phaseData.p6 から作る（⑨戻り規則対応：addendum B §2-4）。
       snapshotRecoveryBaseline();
@@ -1112,10 +1110,11 @@
       if (!validatePhase6Leaving(p, prevPhase)) return;
       BENEFICIARY_LABELS = PHASE6_BENEFICIARY_LABELS;
       requestAnimationFrame(() => {
-        // 左カラム：学習者の復旧期マップ（⑧と同様）
+        // 左カラム：学習者の復旧期マップ（修正後があればそちらを優先。§2）
+        const _tcSrc = phaseData.recoveryRevised ?? phaseData.p6;
         renderReadOnlyMap(
-          phaseData.p6.nodes,
-          phaseData.p6.edges,
+          _tcSrc.nodes,
+          _tcSrc.edges,
           $("canvas-tcRecovery"),
           $("svgLayer-tcRecovery"),
           $("canvasWrap-tcRecovery"),
@@ -1194,10 +1193,11 @@
       BENEFICIARY_LABELS = PHASE6_BENEFICIARY_LABELS;
 
       requestAnimationFrame(() => {
-        // 左カラム：学習者の復旧期基準マップ
+        // 左カラム：学習者の復旧期マップ（修正後があればそちらを優先。§2）
+        const _rcSrc = phaseData.recoveryRevised ?? phaseData.p6;
         renderReadOnlyMap(
-          phaseData.p6.nodes,
-          phaseData.p6.edges,
+          _rcSrc.nodes,
+          _rcSrc.edges,
           $("canvas-rcIdeal"),
           $("svgLayer-rcIdeal"),
           $("canvasWrap-rcIdeal"),
@@ -2343,22 +2343,33 @@
   // ================================================================
   // JSON / EXPORT
   // ================================================================
+  // 復旧期採点結果からエクスポート用に errors 配列を除いた集計のみを抜き出す（§3）。
+  // errors はノード/エッジの断片を含み肥大化するため、分析用途では counts 系だけで足りる。
+  function trimRecoveryScoreForExport(result) {
+    if (!result) return null;
+    const { counts, axisCounts, groupCounts, subtypeCounts, flagCounts, meta } = result;
+    return { counts, axisCounts, groupCounts, subtypeCounts, flagCounts, meta };
+  }
+
   function buildExportObject() {
     // 現フェーズの状態を一時保存（読み取り専用フェーズは保存不要）
     if (activePhaseKey && !MAP_PHASE_CONFIG[state.phase]?.isReadOnly)
       savePhaseData(activePhaseKey);
     return {
-      version: 9,
+      version: 10, // [CHANGED] 9→10：recoveryBaseline/recoveryRevised/recoveryScore 追加（§3）
       logSchemaVersion: 1,
       sessionId: state.sessionId,
       exportedAt: new Date().toISOString(),
       scenarioId: SCENARIO.id,
       flowVersion: FLOW_VERSION, // [ADDED flow-v2]
       contentVersions: {
-        scenario:      CONTENT_VERSIONS.scenario,
-        idealMapAcute: window.idealMapAcute?.mapVersion ?? null,
-        hintTexts:     HINT_TEXTS_VERSION, // [ADDED] ヒント文面の版識別
-        scoringRule:   window.__ICS_SCORING__?.version ?? null, // [ADDED axis4] 採点規則の版識別
+        scenario:          CONTENT_VERSIONS.scenario,
+        idealMapAcute:     window.idealMapAcute?.mapVersion ?? null,
+        hintTexts:         HINT_TEXTS_VERSION, // [ADDED] ヒント文面の版識別
+        scoringRule:       window.__ICS_SCORING__?.version ?? null, // [ADDED axis4] 採点規則の版識別
+        idealMapRecovery:  window.idealMapRecovery?.mapVersion ?? null, // [NEW] §3
+        recoveryRule:      window.__ICS_RECOVERY_SCORING__?.version ?? null, // [NEW] §3
+        recoveryHintTexts: RECOVERY_HINT_TEXTS_VERSION, // [NEW] §3
       },
       acuteSubPhase:  state.acuteSubPhase,
       tooltipEnabled: state.tooltipEnabled,
@@ -2368,6 +2379,7 @@
         edges:   phaseData.acute.edges,
         answers: phaseData.acute.answers,
       },
+      // [NOTE] recovery セクションの意味は変更しない（＝phaseData.p6。§3）。
       recovery: {
         nodes:   phaseData.p6.nodes,
         edges:   phaseData.p6.edges,
@@ -2378,6 +2390,14 @@
       acuteLayerBaseline: phaseData.acuteLayerBaseline || null,  // [NEW]
       acuteBaseline:     phaseData.acuteBaseline  || null,  // [NEW]
       acuteRevised:      phaseData.acuteRevised   || null,  // [NEW]
+      recoveryBaseline:  phaseData.recoveryBaseline || null, // [NEW] §3：修正前測定の固定点
+      recoveryRevised:   phaseData.recoveryRevised  || null, // [NEW] §3：修正後の作業コピー
+      recoveryScore: { // [NEW] §3：errors配列を除いた集計のみ（counts/axisCounts/groupCounts/subtypeCounts/flagCounts/meta）
+        layerBaseline: trimRecoveryScoreForExport(state.recoveryLayerScore),
+        edgeBaseline:  trimRecoveryScoreForExport(state.recoveryScore),
+        layerRevised:  trimRecoveryScoreForExport(state.recoveryLayerScoreRevised),
+        edgeRevised:   trimRecoveryScoreForExport(state.recoveryScoreRevised),
+      },
       transitionCompare: phaseData.transitionCompare,
       recoveryCompare:   phaseData.recoveryCompare,
       recoveryRecord:    phaseData.recoveryRecord,
@@ -2448,7 +2468,7 @@
           const importedLogs = migrateLegacyLogs(obj);
           const oldSessionId = obj.sessionId || null;
 
-          if ((obj.version === 9 || obj.version === 8 || obj.version === 7 || obj.version === 6 || obj.version === 5 || obj.version === 4 || obj.version === 3) && obj.acute && obj.recovery) { // v9/v8/v7/v6/v5/v4/v3
+          if ((obj.version === 10 || obj.version === 9 || obj.version === 8 || obj.version === 7 || obj.version === 6 || obj.version === 5 || obj.version === 4 || obj.version === 3) && obj.acute && obj.recovery) { // v10/v9/v8/v7/v6/v5/v4/v3
             // v3/v4: 全フェーズを復元
             const loadPhase = (src) => ({
               nodes: (src.nodes || []).map(n => ({ layerId: null, layerReason: "", isInitial: false, ...n })),
@@ -2490,6 +2510,9 @@
             phaseData.acuteLayerBaseline = obj.acuteLayerBaseline || null;
             phaseData.acuteBaseline = obj.acuteBaseline || null;
             phaseData.acuteRevised  = obj.acuteRevised  || null;
+            // recoveryBaseline / recoveryRevised の復元（v10未満は null で補完。§4）
+            phaseData.recoveryBaseline = obj.recoveryBaseline || null;
+            phaseData.recoveryRevised  = obj.recoveryRevised  || null;
             // phase5Data の復元（同一ラベルのノードを補完）
             if (obj.phase5Data?.removals) {
               const restoredRemovals = [];
@@ -4874,17 +4897,36 @@
     return { hintReason: node?.hintReason || "", layerReason: node?.layerReason || "" };
   }
 
-  // 軸1〜4の正解開示（relationReason）はエッジ由来。基準マップ中の該当ペアを無向に探索する
-  // （overuse系など基準マップに対応エッジが存在しないカテゴリでは自然に "" を返す＝理由欄非表示）。
-  function findIdealRecoveryRelationReason(fromLabel, toLabel) {
+  // カテゴリ→基準マップ上で探すべきエッジラベル（§0-1）。1つのノードペアに複数ラベルの
+  // エッジが併存しうるため（例：県庁|C県A保健所 は 指示命令 と 情報伝達 の両方を持つ）、
+  // ラベルを指定せずに無向探索すると誤ったエッジの relationReason を返すことがある。
+  const RECOVERY_RELATION_LABEL_BY_CATEGORY = {
+    command_missing:         "指示命令",
+    command_overuse:         "指示命令",
+    edge_label_error:        "連携協力",
+    hub_misassignment:       "連携協力",
+    support_layer_violation: "支援",
+    support_missing:         "支援",
+    support_overuse:         "支援",
+    coordination_path_error: "連携協力",
+  };
+
+  // 軸1〜4の正解開示（relationReason）はエッジ由来。基準マップ中の該当ペア×ラベルを探索する。
+  // label === "連携協力" のときのみ無向照合（急性期同様、連携協力は双方向の関係のため）。
+  // それ以外（指示命令／情報伝達／支援）は from・to・label が全て厳密一致する場合のみ照合する
+  // （有向、swap不可。同一ペア上に複数ラベルが併存するケースでの誤照合を防ぐ）。
+  // 一致なしなら "" を返す（呼び出し側で理由欄を非表示にする既存の空文字フォールバック）。
+  function findIdealRecoveryRelationReason(fromLabel, toLabel, label) {
+    if (!label) return "";
     const edges = window.idealMapRecovery?.edges || [];
     const nodes = window.idealMapRecovery?.nodes || [];
     const idToLabel = new Map(nodes.map(n => [n.id, n.label]));
+    const undirected = label === "連携協力";
     for (const e of edges) {
+      if (e.label !== label) continue;
       const ef = idToLabel.get(e.from), et = idToLabel.get(e.to);
-      if ((ef === fromLabel && et === toLabel) || (ef === toLabel && et === fromLabel)) {
-        return e.relationReason || "";
-      }
+      if (ef === fromLabel && et === toLabel) return e.relationReason || "";
+      if (undirected && ef === toLabel && et === fromLabel) return e.relationReason || "";
     }
     return "";
   }
@@ -5105,9 +5147,12 @@
     }
     const seen = new Set();
     const lines = [];
+    const relationLabel = RECOVERY_RELATION_LABEL_BY_CATEGORY[bundle.category] || null;
     for (const e of bundle.errors) {
       const d = e.detail || {};
-      const reason = findIdealRecoveryRelationReason(d.fromLabel || d.peripheral, d.toLabel || d.correctHub);
+      const reason = relationLabel
+        ? findIdealRecoveryRelationReason(d.fromLabel || d.peripheral, d.toLabel || d.correctHub, relationLabel)
+        : "";
       if (!reason || seen.has(reason)) continue;
       seen.add(reason);
       lines.push(reason);
@@ -6574,6 +6619,13 @@
       logOp("RECOVERY_REVISED_RESET", {
         fromPhase: state.phase, discardedNodeCount, discardedEdgeCount, discardedEdgeDiffCount,
       });
+      // [FIX §1] 破棄（null化）は switchPhase() の後に行う。switchPhase() 冒頭の汎用ガードは
+      // 離脱前フェーズがマップ編集系なら savePhaseData(activePhaseKey) を実行するが、この時点の
+      // activePhaseKey はまだ "recoveryRevised"（15入場時に設定されたまま）であるため、ここで
+      // 先に null化してもこの直後の savePhaseData がライブキャンバス内容で即座に再構築してしまい、
+      // 破棄が無効化される（第4段階の検証で発見）。switchPhase() 完了後は activePhaseKey が "p6" に
+      // 切り替わっており savePhaseData がこのキーに触れないため、ここで null化すれば確実に効く。
+      switchPhase(PHASE.RECOVERY_MAP);
       // recoveryBaseline は測定固定点のため絶対に null 化・上書きしない（§7-4）。
       phaseData.recoveryRevised = null;
       state.recoveryLayerScoreRevised = null;
@@ -6581,7 +6633,6 @@
       _rdwBundles = []; _rdwBundleIndex = -1; _rdwStageInBundle = "hint"; _rdwReachedComplete = false;
       _rdwCtx = null; _rdwErrors = []; _rdwSteps = []; _rdwBundleBefore = {};
       saveToLocalStorage();
-      switchPhase(PHASE.RECOVERY_MAP);
     });
     $("btnRecoveryDiffNext")?.addEventListener("click", () => {
       if (!_rdwReachedComplete) {
@@ -6603,10 +6654,7 @@
         return;
       }
       gradeRecoveryEdgeRevisedPhase();
-      // [NOTE] この段階では⑨の既存ボタン（btnFromP6ToTransition）からの遷移先をまだ変更しない
-      // （addendum B §11-3）。フェーズ16から先はまだ配線されていないため、ここでは遷移せず
-      // 完了を通知するのみ（開発コンソールから switchPhase() で任意のフェーズへ移動して検証する）。
-      showToast("復旧期の差分確認が完了しました。", 3000);
+      switchPhase(PHASE.TRANSITION_COMPARE);
     });
     $("rdwPrev")?.addEventListener("click", () => {
       if (_rdwBundleIndex <= -1) return;
@@ -6734,10 +6782,16 @@
       });
     });
 
-    // 「対応検証記録（復旧期）へ進む」ボタン（問6 入力チェック付き）
-    // Phase 6 → TRANSITION_COMPARE [NEW]
+    // ⑨（RECOVERY_MAP）→ 差分提示（復旧期レイヤー） [CHANGED]
+    // 旧: TRANSITION_COMPARE へ直結。新: RECOVERY_LAYER_DIFF を経由させる（addendum B §1）。
+    // 実際の離脱検証（validatePhase6Leaving）は switchPhase(RECOVERY_LAYER_DIFF) 側で行う。
     $("btnFromP6ToTransition")?.addEventListener("click", () => {
-      switchPhase(PHASE.TRANSITION_COMPARE);
+      switchPhase(PHASE.RECOVERY_LAYER_DIFF);
+    });
+
+    // TRANSITION_COMPARE → RECOVERY_DIFF（戻る。confirm不要：recoveryRevisedは破棄しない）[NEW]
+    $("btnTransitionCompareBack")?.addEventListener("click", () => {
+      switchPhase(PHASE.RECOVERY_DIFF);
     });
 
     // TRANSITION_COMPARE → RECOVERY_COMPARE [NEW]
@@ -8033,6 +8087,15 @@
           const redirectedTo = FLOW_V2_REDIRECT[restorePhase];
           logOp("FLOW_REDIRECT", { from: restorePhase, to: redirectedTo, reason: "flow-v2" });
           restorePhase = redirectedTo;
+        }
+        // [NEW] §4：フェーズ15/16で保存されたのに recoveryBaseline（測定固定点）が無い異常状態は
+        // ⑨（RECOVERY_MAP）へリダイレクトする。recoveryRevised のみが null（back-confirm-accept後の
+        // 正常な状態）はリダイレクト対象外とし、switchPhase(15/16) 側の ensureRecoveryRevisedInitialized()
+        // に phaseData.p6 からの再構築を委ねる（recoveryBaseline は絶対に上書きしない）。
+        if ((restorePhase === PHASE.RECOVERY_LAYER_DIFF || restorePhase === PHASE.RECOVERY_DIFF)
+          && !phaseData.recoveryBaseline) {
+          logOp("FLOW_REDIRECT", { from: restorePhase, to: PHASE.RECOVERY_MAP, reason: "recovery_baseline_missing" });
+          restorePhase = PHASE.RECOVERY_MAP;
         }
         switchPhase(restorePhase);
       } else {
