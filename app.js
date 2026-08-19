@@ -51,6 +51,8 @@
     ACUTE_LAYER_DIFF:   12,  // [NEW] レイヤー差分提示（急性期）
     ACUTE_LAYER_REVISE: 13,  // [NEW] レイヤー修正（急性期）
     ACUTE_EDGE_MAP:     14,  // [NEW] エッジ付与（急性期 1B を分離）
+    RECOVERY_LAYER_DIFF: 15, // [NEW] 差分提示（復旧期レイヤー）
+    RECOVERY_DIFF:       16, // [NEW] 差分提示（復旧期関係）
   };
 
   // ヘッダーステップの表示順（data-phase の数値ではなく配列 index で done/active 判定）
@@ -105,6 +107,8 @@
     [PHASE.ACUTE_LAYER_DIFF]:   "phase-acuteDiff",   // [NEW] 10 とビュー共有
     [PHASE.ACUTE_LAYER_REVISE]: "phase-acuteRevise", // [NEW] 11 とビュー共有
     [PHASE.ACUTE_EDGE_MAP]:     "phase-1",           // [NEW] 1 とビュー共有
+    [PHASE.RECOVERY_LAYER_DIFF]: "phase-recoveryDiff", // [NEW]
+    [PHASE.RECOVERY_DIFF]:       "phase-recoveryDiff", // [NEW] 15 とビュー共有
   };
 
   // === ノード一覧（Excelノート_.xlsx より） ===
@@ -267,6 +271,25 @@
                 wrap:"canvasWrap-diff", stat:"canvasStat-diff", hint:"arrowModeHint-diff" },
       markerSuffix: "-diff",
     },
+    // [NEW] 復旧期差分提示（レイヤー・関係とも同一の作業コピー recoveryRevised を編集する。
+    // 急性期の acute/acuteRevised 分割とは異なり、復旧期は構築フェーズが1回で完結するため
+    // レイヤー段・関係段の両方が同じ recoveryRevised 上で行われる：addendum B §B12.1）。
+    [PHASE.RECOVERY_LAYER_DIFF]: {
+      key: "recoveryRevised",
+      paletteNodes: RECOVERY_PALETTE_NODES,   // 撤退組織を除外しない：addendum B §B12.3
+      beneficiaries: PHASE6_BENEFICIARY_LABELS,
+      domIds: { canvas:"canvas-rdiff", svg:"svgLayer-rdiff", palette:"palette-rdiff",
+                wrap:"canvasWrap-rdiff", stat:"canvasStat-rdiff", hint:"arrowModeHint-rdiff" },
+      markerSuffix: "-rdiff",
+    },
+    [PHASE.RECOVERY_DIFF]: {
+      key: "recoveryRevised",
+      paletteNodes: [],                        // 関係差分ではノード追加不可（表示のみ確保）
+      beneficiaries: PHASE6_BENEFICIARY_LABELS,
+      domIds: { canvas:"canvas-rdiff", svg:"svgLayer-rdiff", palette:"palette-rdiff",
+                wrap:"canvasWrap-rdiff", stat:"canvasStat-rdiff", hint:"arrowModeHint-rdiff" },
+      markerSuffix: "-rdiff",
+    },
   };
 
   // ================================================================
@@ -406,6 +429,14 @@
     acuteLayerScore: null,
     // レイヤー修正後採点結果（ACUTE_LAYER_REVISE 離脱時に gradeAcuteLayerRevisedPhase() が設定） [NEW]
     acuteLayerScoreRevised: null,
+    // 復旧期採点結果（すべて recoveryBaseline / recoveryRevised を入力とする。§3参照） [NEW]
+    // 修正前（recoveryBaseline を入力。RECOVERY_LAYER_DIFF/RECOVERY_DIFF 入場のたびに再計算されるが、
+    // 入力が固定されているため常に同値になる）
+    recoveryLayerScore: null,
+    recoveryScore: null,
+    // 修正後（live状態＝recoveryRevised を入力。ウォークスルー退出時に確定計測）
+    recoveryLayerScoreRevised: null,
+    recoveryScoreRevised: null,
   };
 
   window.idealMapAcute     = null;
@@ -473,6 +504,9 @@
     acuteLayerBaseline: null,  // [NEW] レイヤー配置（1A）完了時点の不変スナップショット（NEVER overwritten）
     acuteBaseline:     null,  // [NEW] phaseData.acute の不変スナップショット（NEVER overwritten）
     acuteRevised:      null,  // [NEW] 修正フェーズ用の作業コピー
+    // [NEW] 復旧期差分提示（フェーズ15/16）用。phaseData.p6（⑨の元回答）は絶対に書き換えない。
+    recoveryBaseline:  null,  // phaseData.p6 の不変スナップショット（測定固定点。NEVER overwritten）
+    recoveryRevised:   null,  // 差分提示フェーズでの作業コピー（MAP_PHASE_CONFIG key:"recoveryRevised"）
     transitionCompare: { answers: { q6: "" } },  // [NEW] 急性期・復旧期構造比較
     recoveryCompare:   { answers: { q6: "", q7: "", q7sel: "" } },  // 内部キーは q6/q7 を保持
     recoveryRecord:    { answers: { q9: "" } },
@@ -868,6 +902,81 @@
       const _dTitle = $("diffTitle");
       if (_dTitle) _dTitle.textContent = "関係（矢印）の確認";
       // fall-through → 共通 MAP_PHASE_CONFIG ハンドラが loadPhaseData("acuteRevised") / renderAll / _logPhaseTransition を実行
+    }
+
+    // ── 差分提示（復旧期レイヤー） ─────────────────────────────────── [NEW]
+    // recoveryRevised を編集させるため、共通マップハンドラに fall-through する。
+    if (p === PHASE.RECOVERY_LAYER_DIFF) {
+      if (phaseData.p6.nodes.length === 0) {
+        showToast("先に復旧期マップを作成してください", 3000);
+        logOp("VALIDATION_ERROR", { type: "RECOVERY_MAP_EMPTY", attemptedPhase: p });
+        state.phase = prevPhase;
+        activatePhaseView(prevPhase);
+        updatePhaseSteps(prevPhase);
+        return;
+      }
+      // ベースラインは phaseData.p6 から一度だけ凍結（測定固定点）。作業コピーは
+      // recoveryBaseline ではなく phaseData.p6 から作る（⑨戻り規則対応：addendum B §2-4）。
+      snapshotRecoveryBaseline();
+      ensureRecoveryRevisedInitialized();
+
+      const _rLayerResult = gradeRecoveryLayerBaselinePhase();
+      if (!_rLayerResult) {
+        showToast("採点データを準備できませんでした。もう一度お試しください", 3000);
+        logOp("VALIDATION_ERROR", { type: "RECOVERY_SCORING_UNAVAILABLE", attemptedPhase: p });
+        state.phase = prevPhase;
+        activatePhaseView(prevPhase);
+        updatePhaseSteps(prevPhase);
+        return;
+      }
+
+      const _rlBackBtn = $("btnRecoveryDiffBack");
+      const _rlNextBtn = $("btnRecoveryDiffNext");
+      if (_rlBackBtn) _rlBackBtn.textContent = "← 復旧期マップに戻る";
+      if (_rlNextBtn) _rlNextBtn.textContent = "確認完了 → 関係差分へ";
+
+      const _rlTitle = $("recoveryDiffTitle");
+      if (_rlTitle) _rlTitle.textContent = "レイヤー配置の確認（復旧期）";
+      // fall-through → 共通 MAP_PHASE_CONFIG ハンドラが loadPhaseData("recoveryRevised") / renderAll / _logPhaseTransition を実行
+    }
+
+    // ── 差分提示（復旧期関係） ───────────────────────────────────────── [NEW]
+    if (p === PHASE.RECOVERY_DIFF) {
+      if (phaseData.p6.nodes.length === 0) {
+        showToast("先に復旧期マップを作成してください", 3000);
+        logOp("VALIDATION_ERROR", { type: "RECOVERY_MAP_EMPTY", attemptedPhase: p });
+        state.phase = prevPhase;
+        activatePhaseView(prevPhase);
+        updatePhaseSteps(prevPhase);
+        return;
+      }
+      // 通常はフェーズ15を経由済みのため no-op。フェーズ15を飛ばして直接入場した場合の保険。
+      snapshotRecoveryBaseline();
+      ensureRecoveryRevisedInitialized();
+
+      // 再入場時は再採点しない（RECOVERY_REVISED_SCORED.before の基準を汚さないため。
+      // 急性期 ACUTE_DIFF の既存ガードと同じ設計）。
+      if (!state.recoveryScore) gradeRecoveryEdgeBaselinePhase();
+      if (!state.recoveryScore) {
+        showToast("採点データを準備できませんでした。もう一度お試しください", 3000);
+        logOp("VALIDATION_ERROR", { type: "RECOVERY_SCORING_UNAVAILABLE", attemptedPhase: p });
+        state.phase = prevPhase;
+        activatePhaseView(prevPhase);
+        updatePhaseSteps(prevPhase);
+        return;
+      }
+
+      const _rdBackBtn = $("btnRecoveryDiffBack");
+      const _rdNextBtn = $("btnRecoveryDiffNext");
+      if (_rdBackBtn) _rdBackBtn.textContent = "← レイヤー差分へ戻る";
+      if (_rdNextBtn) _rdNextBtn.textContent = "確認完了 →";
+
+      const _rdTitle = $("recoveryDiffTitle");
+      if (_rdTitle) _rdTitle.textContent = "関係（矢印）の確認（復旧期）";
+      // フェーズ16へ入場した時点で完走ゲートを再度有効にする（§7-5：15へ戻った場合は
+      // 再度15の入場ブロックで initRecoveryBundleLoop が呼ばれ、ここでもリセットされる）。
+      _rdwReachedComplete = false;
+      // fall-through → 共通 MAP_PHASE_CONFIG ハンドラが loadPhaseData("recoveryRevised") / renderAll / _logPhaseTransition を実行
     }
 
     // [DEPRECATED flow-v2] ACUTE_REVISE(11) / ACUTE_LAYER_REVISE(13) 入場ブロックは削除済み。
@@ -1279,6 +1388,16 @@
         // [DEPRECATED flow-v2] Phase 11 最終確認初期化は削除。残エラー表示はwalkthrough
         // 完了画面（index=N）に統合された（修正プロンプト(b) 2-4）。
 
+        // ── RECOVERY_LAYER_DIFF(15) / RECOVERY_DIFF(16) bundleループ初期化 ── [NEW]
+        // gradeRecoveryLayerPhase / gradeRecoveryEdgePhase は軸で分離済みのため急性期のような
+        // カテゴリ除外フィルタは不要（errors はそのまま渡せる）。
+        if (p === PHASE.RECOVERY_LAYER_DIFF) {
+          requestAnimationFrame(() => initRecoveryBundleLoop(state.recoveryLayerScore?.errors || [], "layer"));
+        }
+        if (p === PHASE.RECOVERY_DIFF) {
+          requestAnimationFrame(() => initRecoveryBundleLoop(state.recoveryScore?.errors || [], "edge"));
+        }
+
         _logPhaseTransition(prevPhase, p, prevStartTime);
       }
     }
@@ -1294,8 +1413,10 @@
   function renderPalette() {
     paletteEl.innerHTML = "";
 
-    // Phase 1 / Phase 6: 配置済みラベルを集合として保持し、重複追加を防ぐ
-    const placedLabels = (activePhaseKey === "p6" || activePhaseKey === "acute")
+    // Phase 1 / Phase 6 / RECOVERY_LAYER_DIFF(recoveryRevised): 配置済みラベルを集合として
+    // 保持し、重複追加を防ぐ [CHANGED] recoveryRevised を追加（フェーズ15のパレットはRECOVERY_MAPと
+    // 同一のRECOVERY_PALETTE_NODESを使う：addendum B §B12.3・§6-3）。
+    const placedLabels = (activePhaseKey === "p6" || activePhaseKey === "acute" || activePhaseKey === "recoveryRevised")
       ? new Set(state.nodes.map(n => n.label))
       : null;
 
@@ -1329,6 +1450,11 @@
         div.addEventListener("click", () => {
           addNode(n.label, n.group);
           logOp("ADD_NODE", { label: n.label, group: n.group });
+          // [NEW] フェーズ15専用ログ（既存 ADD_NODE は改名・削除しない。addendum B §10-1）
+          if (state.phase === PHASE.RECOVERY_LAYER_DIFF) {
+            const added = state.nodes.find(x => x.label === n.label);
+            logOp("RECOVERY_NODE_ADDED", { label: n.label, layerId: added?.layerId ?? null });
+          }
         });
       }
 
@@ -1492,13 +1618,17 @@
       return;
     }
     // レイヤー配置／関係付与／マップ修正（層・関係）／差分bundleループの各フェーズではノード削除不可
+    // [CHANGED] RECOVERY_DIFF（フェーズ16・関係差分）を追加：エッジのみ編集可、ノード操作不可
+    // （addendum B §6-1 編集許可マトリクス）。RECOVERY_LAYER_DIFF（フェーズ15）はノード削除を
+    // 許可するため、意図的にこのブロックリストに含めない。
     const isNodeDeleteBlockedPhase =
       state.phase === PHASE.ACUTE_MAP ||
       state.phase === PHASE.ACUTE_EDGE_MAP ||
       state.phase === PHASE.ACUTE_REVISE ||
       state.phase === PHASE.ACUTE_LAYER_REVISE ||
       state.phase === PHASE.ACUTE_DIFF ||
-      state.phase === PHASE.ACUTE_LAYER_DIFF;
+      state.phase === PHASE.ACUTE_LAYER_DIFF ||
+      state.phase === PHASE.RECOVERY_DIFF;
     if (isNodeDeleteBlockedPhase) {
       showToast("このフェーズではノードを削除できません");
       return;
@@ -1511,6 +1641,10 @@
     state.nodes = state.nodes.filter(n => n.id !== id);
     state.selectedNodeId = null;
     logOp("DELETE_NODE", { id, label: n?.label, deletedEdgeCount, edgeIds });
+    // [NEW] フェーズ15専用ログ（既存 DELETE_NODE は改名・削除しない。addendum B §10-1）
+    if (state.phase === PHASE.RECOVERY_LAYER_DIFF) {
+      logOp("RECOVERY_NODE_DELETED", { label: n?.label, deletedEdgeCount });
+    }
     renderAll();
     saveToLocalStorage();
   }
@@ -1546,15 +1680,21 @@
         // Phase 1A では接続ボタンを非表示（EDGE サブフェーズのみ表示）。
         // フェーズ13・12（レイヤー系）はエッジ操作禁止のため常に非表示。フェーズ10（エッジ差分bundleループ）は表示する。
         // フェーズ11（最終確認のみ）はエッジ編集不可のため非表示（クリックしても no-op になる死んだボタンを防ぐ）。
+        // [CHANGED] RECOVERY_LAYER_DIFF（フェーズ15）もエッジ操作禁止のため非表示に追加
+        // （startArrowDraw() 側のブロックと対にしないと死んだボタンになるため：addendum B §6-1）。
         const showConnectBtn = (!isAcute1 || isEdgeSub)
           && state.phase !== PHASE.ACUTE_LAYER_REVISE
           && state.phase !== PHASE.ACUTE_LAYER_DIFF
-          && state.phase !== PHASE.ACUTE_REVISE;
+          && state.phase !== PHASE.ACUTE_REVISE
+          && state.phase !== PHASE.RECOVERY_LAYER_DIFF;
         div.innerHTML += `<div class="node-connect-btn" data-nid="${n.id}" title="矢印を引く" style="${showConnectBtn ? "" : "display:none"}">→</div>`;
 
         // 削除ボタン: 急性期マップ構築フェーズ（1/14）・修正フェーズ（11/13）・差分bundleループ（10/12）・isInitial ノードは非表示
+        // [CHANGED] RECOVERY_DIFF（フェーズ16）を追加：ノード削除不可のため非表示。RECOVERY_LAYER_DIFF
+        // （フェーズ15）はノード削除を許可するため意図的に含めない（addendum B §6-1・§6-2）。
         const isRevise = state.phase === PHASE.ACUTE_REVISE || state.phase === PHASE.ACUTE_LAYER_REVISE
-          || state.phase === PHASE.ACUTE_DIFF || state.phase === PHASE.ACUTE_LAYER_DIFF;
+          || state.phase === PHASE.ACUTE_DIFF || state.phase === PHASE.ACUTE_LAYER_DIFF
+          || state.phase === PHASE.RECOVERY_DIFF;
         if (!n.isInitial && !isAcute1 && !isRevise) {
           const deleteBtn = document.createElement("div");
           deleteBtn.className = "node-delete-btn";
@@ -1701,7 +1841,11 @@
         // フェーズ14・10: レイヤーロック。ノードは自層の帯内でのみ移動可（y をクランプ）。
         // フェーズ10（エッジ差分bundleループ）でも層は既に確定済みのため、矢印描画の微調整で
         // ドラッグしても層がずれないようにする（layerId は onUp で y から再判定されるため）。
-        if ((state.phase === PHASE.ACUTE_EDGE_MAP || state.phase === PHASE.ACUTE_DIFF) && n.layerId) {
+        // [CHANGED] RECOVERY_DIFF（フェーズ16・関係差分）を追加：エッジのみ編集可のためレイヤー変更不可
+        // （addendum B §6-1・§6-2）。RECOVERY_LAYER_DIFF（フェーズ15）はレイヤー移動を許可するため
+        // 意図的に含めない。
+        if ((state.phase === PHASE.ACUTE_EDGE_MAP || state.phase === PHASE.ACUTE_DIFF
+          || state.phase === PHASE.RECOVERY_DIFF) && n.layerId) {
           const bandTop    = rect.height * (n.layerId - 1) * 0.25;
           const bandBottom = rect.height * n.layerId * 0.25 - 1;
           const clampedY   = clamp(n.y, bandTop, bandBottom);
@@ -1739,6 +1883,7 @@
           }
           saveToLocalStorage();
           maybeRerenderAnswerStageAfterEdit(); // [adaptive_v1] ドロップ確定時のみ（ドラッグ中は再計算しない）
+          maybeRerenderRecoveryAnswerStageAfterEdit(); // [NEW] 復旧期専用フック（急性期フェーズでは内部で no-op）
         }
       };
       div.addEventListener("pointermove", onMove);
@@ -1781,9 +1926,12 @@
   // ================================================================
   function startArrowDraw(fromId) {
     // フェーズ13・12（レイヤー系）とフェーズ11（最終確認のみ）はエッジ操作禁止
+    // [CHANGED] RECOVERY_LAYER_DIFF（フェーズ15・レイヤー差分）を追加：ノード操作のみ許可、
+    // エッジ操作不可（addendum B §6-1・§6-2）。
     if (state.phase === PHASE.ACUTE_LAYER_REVISE
       || state.phase === PHASE.ACUTE_LAYER_DIFF
-      || state.phase === PHASE.ACUTE_REVISE) return;
+      || state.phase === PHASE.ACUTE_REVISE
+      || state.phase === PHASE.RECOVERY_LAYER_DIFF) return;
     clearHighlight();
     const fromNode = state.nodes.find(n => n.id === fromId);
     if (BENEFICIARY_LABELS.has(fromNode?.label)) return; // 被支援者ノードからは矢印不可
@@ -1971,6 +2119,7 @@
     renderAll();
     saveToLocalStorage();
     maybeRerenderAnswerStageAfterEdit(); // [adaptive_v1] エッジ追加確定時
+    maybeRerenderRecoveryAnswerStageAfterEdit(); // [NEW] 復旧期専用フック
   }
 
   // ================================================================
@@ -1990,7 +2139,9 @@
     if (defs) svgEl.appendChild(defs);
     const isP5 = !!(MAP_PHASE_CONFIG[state.phase]?.isReadOnly);
     // Phase 11（最終確認のみ）はエッジの選択・削除を不可にする（表示専用）
-    const isViewOnlyEdges = isP5 || state.phase === PHASE.ACUTE_REVISE;
+    // [CHANGED] RECOVERY_LAYER_DIFF（フェーズ15）を追加：エッジ操作不可のため選択・削除UIも表示専用にする
+    // （addendum B §6-1・§6-2）。
+    const isViewOnlyEdges = isP5 || state.phase === PHASE.ACUTE_REVISE || state.phase === PHASE.RECOVERY_LAYER_DIFF;
 
     const CURVE_OFFSET  = 50;
     const SAME_DIR_STEP = 22; // 同方向グループ内の間隔（px）
@@ -2176,6 +2327,7 @@
     renderAll();
     saveToLocalStorage();
     maybeRerenderAnswerStageAfterEdit(); // [adaptive_v1] エッジ削除確定時
+    maybeRerenderRecoveryAnswerStageAfterEdit(); // [NEW] 復旧期専用フック
   }
 
   // ================================================================
@@ -4388,6 +4540,932 @@
   }
 
   // ================================================================
+  // RECOVERY_LAYER_DIFF(15) / RECOVERY_DIFF(16) — 復旧期 差分提示・自己修正 [NEW]
+  // 採点は recovery-scoring.js（gradeRecoveryLayerPhase / gradeRecoveryEdgePhase）が行う。
+  // 本セクションは errors を受け取って bundle を構築し、画面に出し、修正を受け付け、
+  // 測定値を記録するだけの層。急性期の _dw* 状態・関数は一切呼ばない（意図的な複製。
+  // addendum B rev B-4 §0）。
+  // ================================================================
+
+  // ── ヒント文（addendum B §B14.6。ht-r1）。急性期の HINT_TEXTS は変更しない ──
+  const RECOVERY_HINT_TEXTS_VERSION = "ht-r1";
+
+  const RECOVERY_HINT_TEXTS = {
+
+    // ── 軸0（組織集合・復旧期のみ）───────────────────────────────
+    node_missing:
+      "シナリオ表2には、復旧期に活動している組織の一覧が書かれています。" +
+      "表2で活動が記載されている組織が、すべて画面に置かれているか確認してみましょう。",
+
+    node_extra:
+      "シナリオ表2をもう一度見てください。表2の「組織」の欄に何と書かれているか、" +
+      "画面に置いた組織がそこにあるかについて確認してみましょう。",
+
+    // ── 軸0L（レイヤー）───────────────────────────────────────
+    // ※ 急性期と同じく、ヒント時に対象ノードの hintReason を併記して表示する
+    layer_mismatch:
+      "ここに集まった組織には、シナリオ表2に展開した復旧期の動きがあります。" +
+      "それぞれの「動き」の記述を見比べてみましょう。",
+
+    // ── 軸1（指揮系統）─────────────────────────────────────────
+    command_missing:
+      "凡例の「指示命令」は、同一の指揮系統の中だけで使います。この2つの組織は同じ指揮系統の中にありますか？ " +
+      "シナリオで、一方が他方の指示を受けて動いている場面を探してみましょう。",
+
+    command_overuse:
+      "「指示命令」は同一の指揮系統の中だけで使います。この2つは同じ組織の中の関係ですか？ " +
+      "凡例の「指示命令」と「連携協力」の定義を見比べてみましょう。",
+
+    // ── 軸2（ハブ接続）─────────────────────────────────────────
+    hub_misassignment:
+      "シナリオの復興連絡会議の場面を参照してください。各チームの活動状況は、誰かが取りまとめて報告されていますか？ " +
+      "A保健所がすべての組織と直接つながると、同時に管理する相手が多くなりすぎます。",
+
+    // hub_misassignment に併記する補助文（detail.welfareHubAllocation === true のとき）
+    hub_welfare_supplement:
+      "復旧期には福祉分野の調整を担う組織が増えています。表2でこの組織が誰と連携協力すると" +
+      "書かれているか、確認してみましょう。",
+
+    edge_label_error:
+      "矢印の種類は「誰が誰に何をするか」で決まります。この組み合わせは、一方がもう一方の活動を現場で支える関係ですか？ " +
+      "それとも別々の組織どうしの対等な協力ですか？ 凡例の定義と、シナリオでの両者のやり取りを見比べてください。",
+
+    // ── 軸3（支援）───────────────────────────────────────────
+    support_missing:
+      "シナリオ表2を参照してください。{from}の支援先がどこと書かれていたか、もう一度確認してください。",
+
+    support_overuse:
+      "シナリオ表2を参照してください。{from}が{to}を支援するという記述はありますか？ 確認してみましょう。",
+
+    support_layer_violation:
+      "凡例の「支援」は、被支援者に対して行う活動を指します。{from}はシナリオの中で、" +
+      "支援対象に直接支援をする役割でしょうか？ それとも全体の方針を決めたり、支援を受ける側だったりしませんか？",
+
+    // ── 軸4（調整経路）─────────────────────────────────────────
+    coordination_path_error:
+      "この2つの組織は、シナリオの中で直接やり取りしていますか？ " +
+      "各組織の活動状況が誰を通じて取りまとめ・調整されていたか、会議の場面をもう一度確認してみましょう。",
+
+    // coordination_path_error の subtype = command_layer_as_hub 専用ヒント
+    coordination_path_error_prefecture:
+      "県庁がシナリオの中でどのような役割を持っているか、表2の記述をもう一度確認してみましょう。" +
+      "県庁は、現場の各組織を直接まとめる立場でしょうか？",
+  };
+
+  // ── ベースライン・作業コピー ──────────────────────────────────────
+
+  // buildRecoverySignature: phaseData.p6 の同一性判定用文字列を返す純粋関数。
+  // ノード "label:layerId" をソートして連結、エッジ "fromLabel>toLabel:label" をソートして連結。
+  // 座標（x/y）は含めない（層が変わらない位置調整で乖離扱いにしないため：§2-3）。
+  function buildRecoverySignature(map) {
+    const nodes = (map && map.nodes) || [];
+    const edges = (map && map.edges) || [];
+    const idToLabel = new Map(nodes.map(n => [n.id, n.label]));
+    const nodePart = nodes
+      .map(n => `${n.label}:${n.layerId ?? "null"}`)
+      .sort()
+      .join("|");
+    const edgePart = edges
+      .map(e => `${idToLabel.get(e.from) ?? "?"}>${idToLabel.get(e.to) ?? "?"}:${e.label}`)
+      .sort()
+      .join("|");
+    return `n(${nodes.length})[${nodePart}]e(${edges.length})[${edgePart}]`;
+  }
+
+  // snapshotRecoveryBaseline: phaseData.p6 を一度だけ deep copy して凍結する（測定固定点）。
+  // 既存 snapshotAcuteBaseline() と同じガード。二度目以降の呼び出しは無視。
+  function snapshotRecoveryBaseline() {
+    if (phaseData.recoveryBaseline) return;
+    const nodes = JSON.parse(JSON.stringify(phaseData.p6.nodes));
+    const edges = JSON.parse(JSON.stringify(phaseData.p6.edges));
+    const signature = buildRecoverySignature(phaseData.p6);
+
+    let layerMismatchCount = null;
+    const RS = window.__ICS_RECOVERY_SCORING__;
+    if (RS && mapLoadStatus.idealRecovery === "ready" && window.idealMapRecovery) {
+      try {
+        const learnerNorm = RS.normalizeRecoveryMap({ nodes, edges });
+        const idealNorm   = RS.normalizeRecoveryMap(window.idealMapRecovery);
+        const result = RS.gradeRecoveryLayerPhase(learnerNorm, idealNorm);
+        layerMismatchCount = result.counts.layer_mismatch;
+      } catch (err) {
+        console.error("[grading] recoveryBaseline のレイヤー採点に失敗:", err);
+        logOp("RECOVERY_GRADING_SKIPPED", {
+          reason: "normalize_error", context: "snapshotRecoveryBaseline",
+          message: String(err && err.message || err),
+        });
+      }
+    } else {
+      logOp("RECOVERY_GRADING_SKIPPED", {
+        reason: RS ? "ideal_map_not_ready" : "scoring_not_loaded",
+        context: "snapshotRecoveryBaseline",
+      });
+    }
+
+    phaseData.recoveryBaseline = { nodes, edges, layerMismatchCount, signature, savedAt: new Date().toISOString() };
+    logOp("RECOVERY_BASELINE_SNAPPED", {
+      nodeCount: nodes.length, edgeCount: edges.length, layerMismatchCount, signature,
+    });
+    saveToLocalStorage();
+  }
+
+  // ensureRecoveryRevisedInitialized: phaseData.recoveryRevised を phaseData.p6 から deep copy で
+  // 一度だけ作成する（冪等）。生成元は recoveryBaseline ではなく phaseData.p6（§2-4：⑨戻り規則で
+  // recoveryRevised を破棄したあとの再入場では、学習者が⑨で行った編集を反映する必要があるため）。
+  function ensureRecoveryRevisedInitialized() {
+    if (phaseData.recoveryRevised && phaseData.recoveryRevised.nodes != null) return;
+
+    const currentSignature = buildRecoverySignature(phaseData.p6);
+    if (phaseData.recoveryBaseline && phaseData.recoveryBaseline.signature !== currentSignature) {
+      const baseNodes = phaseData.recoveryBaseline.nodes || [];
+      const curNodes  = phaseData.p6.nodes || [];
+      const baseLabels = new Set(baseNodes.map(n => n.label));
+      const curLabels  = new Set(curNodes.map(n => n.label));
+      const diffLabels = [];
+      for (const label of new Set([...baseLabels, ...curLabels])) {
+        const inBase = baseLabels.has(label), inCur = curLabels.has(label);
+        if (!inBase || !inCur) { diffLabels.push(label); continue; }
+        const b = baseNodes.find(n => n.label === label);
+        const c = curNodes.find(n => n.label === label);
+        if ((b?.layerId ?? null) !== (c?.layerId ?? null)) diffLabels.push(label);
+      }
+      logOp("RECOVERY_BASELINE_DIVERGED", {
+        baselineSignature: phaseData.recoveryBaseline.signature,
+        currentSignature,
+        baselineNodeCount: baseNodes.length,
+        currentNodeCount:  curNodes.length,
+        nodeCountDiff:     curNodes.length - baseNodes.length,
+        baselineEdgeCount: (phaseData.recoveryBaseline.edges || []).length,
+        currentEdgeCount:  (phaseData.p6.edges || []).length,
+        edgeCountDiff:     (phaseData.p6.edges || []).length - (phaseData.recoveryBaseline.edges || []).length,
+        diffLabels,
+      });
+    }
+
+    phaseData.recoveryRevised = JSON.parse(JSON.stringify({
+      nodes: phaseData.p6.nodes,
+      edges: phaseData.p6.edges,
+      answers: phaseData.p6.answers,
+      selectedNodeId: null,
+      selectedEdgeId: null,
+    }));
+    logOp("RECOVERY_REVISED_INIT", {
+      nodeCount: phaseData.recoveryRevised.nodes.length,
+      edgeCount: phaseData.recoveryRevised.edges.length,
+    });
+    saveToLocalStorage();
+  }
+
+  // ── 採点（§3。修正前＝recoveryBaseline固定入力／修正後＝live状態） ──────────────
+
+  // gradeRecoveryRaw: normalizeRecoveryMap の例外を握る共通ヘルパ（復旧期専用。scoring.js/
+  // recovery-scoring.js は読み取り専用で変更しない）。失敗時は必ず RECOVERY_GRADING_SKIPPED を残す
+  // （既存 gradeAcutePhase() と同形：§3-4）。
+  function gradeRecoveryRaw(rawMap, axis, which) {
+    const RS = window.__ICS_RECOVERY_SCORING__;
+    if (!RS) {
+      console.warn("[grading] recovery-scoring.js 未読み込み。復旧期採点をスキップします。");
+      logOp("RECOVERY_GRADING_SKIPPED", { reason: "scoring_not_loaded", axis, which });
+      return null;
+    }
+    if (mapLoadStatus.idealRecovery !== "ready" || !window.idealMapRecovery) {
+      console.warn("[grading] 復旧期規範マップ未ロード。復旧期採点をスキップします。");
+      logOp("RECOVERY_GRADING_SKIPPED", { reason: "ideal_map_not_ready", axis, which });
+      return null;
+    }
+    try {
+      const learnerNorm = RS.normalizeRecoveryMap(rawMap);
+      const idealNorm   = RS.normalizeRecoveryMap(window.idealMapRecovery);
+      return axis === "layer"
+        ? RS.gradeRecoveryLayerPhase(learnerNorm, idealNorm)
+        : RS.gradeRecoveryEdgePhase(learnerNorm, idealNorm);
+    } catch (err) {
+      console.error("[grading] 復旧期採点に失敗しました:", err);
+      logOp("RECOVERY_GRADING_SKIPPED", { reason: "normalize_error", axis, which, message: String(err && err.message || err) });
+      return null;
+    }
+  }
+
+  function _logRecoveryScore(type, result, extra) {
+    logOp(type, {
+      counts: result.counts, axisCounts: result.axisCounts, groupCounts: result.groupCounts,
+      subtypeCounts: result.subtypeCounts, flagCounts: result.flagCounts, meta: result.meta,
+      ...(extra || {}),
+    });
+  }
+
+  // 修正前採点はベースライン（recoveryBaseline）固定を入力とするため、再入場のたびに
+  // 再計算しても同一入力・同一出力の純粋計算となり、常に同値になる（§3-3）。
+  function gradeRecoveryLayerBaselinePhase() {
+    if (!phaseData.recoveryBaseline) return null;
+    const result = gradeRecoveryRaw(
+      { nodes: phaseData.recoveryBaseline.nodes, edges: phaseData.recoveryBaseline.edges }, "layer", "baseline"
+    );
+    if (!result) return null;
+    state.recoveryLayerScore = result;
+    _logRecoveryScore("RECOVERY_LAYER_SCORED", result);
+    return result;
+  }
+
+  function gradeRecoveryEdgeBaselinePhase() {
+    if (!phaseData.recoveryBaseline) return null;
+    const result = gradeRecoveryRaw(
+      { nodes: phaseData.recoveryBaseline.nodes, edges: phaseData.recoveryBaseline.edges }, "edge", "baseline"
+    );
+    if (!result) return null;
+    state.recoveryScore = result;
+    _logRecoveryScore("RECOVERY_SCORED", result);
+    return result;
+  }
+
+  // 修正後採点：live状態（state.nodes/edges＝recoveryRevised）が入力。ウォークスルー退出時に確定計測する。
+  function gradeRecoveryLayerRevisedPhase() {
+    const result = gradeRecoveryRaw({ nodes: state.nodes, edges: state.edges }, "layer", "revised");
+    if (!result) return null;
+    state.recoveryLayerScoreRevised = result;
+    _logRecoveryScore("RECOVERY_LAYER_REVISED_SCORED", result, {
+      before: phaseData.recoveryBaseline?.layerMismatchCount ?? null,
+      after:  result.counts.layer_mismatch,
+      layerAssignment: Object.fromEntries(state.nodes.map(n => [n.label, n.layerId ?? null])),
+    });
+    return result;
+  }
+
+  function gradeRecoveryEdgeRevisedPhase() {
+    const result = gradeRecoveryRaw({ nodes: state.nodes, edges: state.edges }, "edge", "revised");
+    if (!result) return null;
+    state.recoveryScoreRevised = result;
+    _logRecoveryScore("RECOVERY_REVISED_SCORED", result, {
+      before: state.recoveryScore?.counts ?? null,
+      after:  result.counts,
+    });
+    return result;
+  }
+
+  // ── フェーズ15退出時のスナップ（§8） ──────────────────────────────────
+
+  // RECOVERY_PALETTE_NODES にないラベル（＝被支援者）は g-team として扱う（initPhase6Canvas と同じ規約）
+  const RECOVERY_NODE_GROUP_BY_LABEL = {};
+  for (const _n of RECOVERY_PALETTE_NODES) RECOVERY_NODE_GROUP_BY_LABEL[_n.label] = _n.group;
+  for (const _label of PHASE6_BENEFICIARY_LABELS) {
+    if (!(_label in RECOVERY_NODE_GROUP_BY_LABEL)) RECOVERY_NODE_GROUP_BY_LABEL[_label] = "g-team";
+  }
+
+  // snapRecoveryLayersToIdeal: ①欠落ノードの生成（正解層に配置） ②誤配置ノードを正解層へ移動。
+  // 余剰ノードの自動削除は行わない（§8-2）。作業コピー（recoveryRevised＝state.nodes/edges）に
+  // のみ作用する。recoveryBaseline と phaseData.p6 は不変（§8-4）。
+  function snapRecoveryLayersToIdeal(layerResult) {
+    const createdLabels = [];
+    const movedLabels   = [];
+
+    for (const err of layerResult.errors.filter(e => e.category === "node_missing")) {
+      const label = err.detail.label;
+      const layerId = err.detail.expectedLayerId;
+      if (state.nodes.some(n => n.label === label)) continue; // 二重生成防止
+      const rect = canvasWrap?.getBoundingClientRect();
+      const w = (rect && rect.width) || 1000;
+      state.nodes.push({
+        id: "n-" + uid(),
+        label,
+        group: RECOVERY_NODE_GROUP_BY_LABEL[label] || "g-unit",
+        x: 80 + Math.floor(Math.random() * Math.max(w - 280, 80)),
+        y: getCenterYForLayer(layerId),
+        layerId,
+        layerReason: "",
+      });
+      createdLabels.push(label);
+    }
+
+    for (const err of layerResult.errors.filter(e => e.category === "layer_mismatch")) {
+      const label = err.detail.label;
+      const node = state.nodes.find(n => n.label === label);
+      if (!node) continue;
+      node.layerId = err.detail.expected;
+      node.y = getCenterYForLayer(err.detail.expected); // x は学習者配置を維持
+      movedLabels.push(label);
+    }
+
+    logOp("RECOVERY_LAYER_SNAPPED", {
+      createdLabels, movedLabels,
+      createdCount: createdLabels.length, movedCount: movedLabels.length,
+    });
+    if (createdLabels.length > 0 || movedLabels.length > 0) {
+      showToast(`欠落${createdLabels.length}件を生成し、誤配置${movedLabels.length}件を正解の層に移動しました`, 3500);
+    }
+    return { createdLabels, movedLabels };
+  }
+
+  // ── ヒント／正解開示の文面参照（§5・addendum B §B14） ─────────────────────
+
+  function recoveryLayerName(id) {
+    switch (id) {
+      case 1: return "指揮の層";
+      case 2: return "調整の層";
+      case 3: return "実働の層";
+      case 4: return "被支援者の層";
+      default: return "層未設定";
+    }
+  }
+
+  // layer_mismatch/node_missing のヒント（hintReason）・正解開示（layerReason）はノード由来。
+  // 値が空/未定義なら空文字を返す（呼び出し側で非表示にする。断定的な文面を創作しない：§5-7）。
+  function findIdealRecoveryNodeReasons(label) {
+    const node = (window.idealMapRecovery?.nodes || []).find(n => n.label === label);
+    return { hintReason: node?.hintReason || "", layerReason: node?.layerReason || "" };
+  }
+
+  // 軸1〜4の正解開示（relationReason）はエッジ由来。理想マップ中の該当ペアを無向に探索する
+  // （overuse系など理想マップに対応エッジが存在しないカテゴリでは自然に "" を返す＝理由欄非表示）。
+  function findIdealRecoveryRelationReason(fromLabel, toLabel) {
+    const edges = window.idealMapRecovery?.edges || [];
+    const nodes = window.idealMapRecovery?.nodes || [];
+    const idToLabel = new Map(nodes.map(n => [n.id, n.label]));
+    for (const e of edges) {
+      const ef = idToLabel.get(e.from), et = idToLabel.get(e.to);
+      if ((ef === fromLabel && et === toLabel) || (ef === toLabel && et === fromLabel)) {
+        return e.relationReason || "";
+      }
+    }
+    return "";
+  }
+
+  // {from}/{to} プレースホルダ置換（急性期 splitTemplateToSegments と同じ方式。関数は複製：§5-4）
+  function splitTemplateToSegmentsRecovery(template, d) {
+    return (template || "").split(/(\{from\}|\{to\})/g)
+      .filter(part => part !== "")
+      .map(part => {
+        if (part === "{from}") return { text: d.fromLabel || d.peripheral   || "", isNode: true };
+        if (part === "{to}")   return { text: d.toLabel   || d.correctHub   || "", isNode: true };
+        return { text: part, isNode: false };
+      });
+  }
+
+  // ── bundle 構築（§4。addendum B §B12.2） ─────────────────────────────
+
+  // bundleKeyOfRecovery: node_missing/layer_mismatch は正解層で細分化。node_extra は単一束。
+  // それ以外9カテゴリは category そのまま（hub_misassignment/coordination_path_error はサブタイプ
+  // 混在のまま1束＝急性期と同じ扱い）。
+  function bundleKeyOfRecovery(step) {
+    if (step.category === "layer_mismatch") {
+      return `layer_mismatch#${step.error?.detail?.expected ?? "none"}`;
+    }
+    if (step.category === "node_missing") {
+      return `node_missing#${step.error?.detail?.expectedLayerId ?? "none"}`;
+    }
+    return step.category;
+  }
+
+  // CATEGORY_ORDER_RECOVERY: addendum B §B12.2。フェーズ15の3種 → フェーズ16の8種。
+  const CATEGORY_ORDER_RECOVERY = [
+    "node_missing", "node_extra", "layer_mismatch",
+    "command_missing", "command_overuse", "edge_label_error",
+    "hub_misassignment", "coordination_path_error",
+    "support_layer_violation", "support_missing", "support_overuse",
+  ];
+
+  // buildRecoveryWalkthroughSteps: errors 配列から表示用ステップ配列を生成する純粋関数。
+  // DOM に触れない。急性期 buildWalkthroughSteps と同じ構造だが、ノード名テンプレート文
+  // （what）は本ファイル専用に新規作成（急性期の関数を呼ばない：§4-1）。
+  function buildRecoveryWalkthroughSteps(errors) {
+    const steps = [];
+    for (const err of errors) {
+      const d = err.detail || {};
+      let what = "", involvedLabels = [];
+
+      switch (err.category) {
+        case "node_missing":
+          what = `「${d.label}」がまだ配置されていません（正解では${recoveryLayerName(d.expectedLayerId)}）。`;
+          involvedLabels = [d.label];
+          break;
+        case "node_extra":
+          what = `「${d.label}」が配置されていますが、正解の構成には含まれていません。`;
+          involvedLabels = [d.label];
+          break;
+        case "layer_mismatch": {
+          const gotStr = recoveryLayerName(d.got);
+          const expStr = recoveryLayerName(d.expected);
+          what = (d.got === null || d.got === undefined)
+            ? `「${d.label}」の層が設定されていません。正しくは${expStr}です。`
+            : `「${d.label}」が${gotStr}に置かれています。正しくは${expStr}です。`;
+          involvedLabels = [d.label];
+          break;
+        }
+        case "command_missing":
+          what = `「${d.fromLabel}」から「${d.toLabel}」への指示命令がありません。`;
+          involvedLabels = [d.fromLabel, d.toLabel];
+          break;
+        case "command_overuse":
+          what = `「${d.fromLabel}」から「${d.toLabel}」へ指示命令が引かれていますが、この2つは指示命令の関係ではありません。`;
+          involvedLabels = [d.fromLabel, d.toLabel];
+          break;
+        case "edge_label_error":
+          what = `「${d.fromLabel}」と「${d.toLabel}」をつなぐこと自体は正しいのですが、矢印の種類が「${d.gotLabel}」になっています。`;
+          involvedLabels = [d.fromLabel, d.toLabel];
+          break;
+        case "hub_misassignment": {
+          if (d.type === "swap") {
+            what = `「${d.peripheral}」が「${d.wrongHub}」につながっていますが、正しいまとめ役は「${d.correctHub}」です。`;
+            involvedLabels = [d.peripheral, d.wrongHub, d.correctHub];
+          } else if (d.type === "missing") {
+            what = `「${d.fromLabel}」と「${d.toLabel}」の間に連携協力のつながりがありません。`;
+            involvedLabels = [d.fromLabel, d.toLabel];
+          } else {
+            what = `「${d.fromLabel}」と「${d.toLabel}」の間に、正解の構造にはないつながりがあります。`;
+            involvedLabels = [d.fromLabel, d.toLabel];
+          }
+          break;
+        }
+        case "support_layer_violation":
+          what = (d.subtype === "target_not_beneficiary")
+            ? `「${d.fromLabel}」から「${d.toLabel}」へ支援の矢印がありますが、「${d.toLabel}」は支援の対象ではありません。`
+            : `「${d.fromLabel}」から支援の矢印が出ていますが、この組織のレイヤーからは支援を出せません。`;
+          involvedLabels = [d.fromLabel, d.toLabel];
+          break;
+        case "support_missing":
+          what = `「${d.fromLabel}」から「${d.toLabel}」への支援がありません。`;
+          involvedLabels = [d.fromLabel, d.toLabel];
+          break;
+        case "support_overuse":
+          what = `「${d.fromLabel}」から「${d.toLabel}」へ支援がありますが、正解の構造にはありません。`;
+          involvedLabels = [d.fromLabel, d.toLabel];
+          break;
+        case "coordination_path_error":
+          what = `「${d.fromLabel}」と「${d.toLabel}」が連携協力で直接つながっていますが、正解の構造にはこの直接のつながりはありません。`;
+          involvedLabels = [d.fromLabel, d.toLabel];
+          break;
+        default:
+          what = `不明なエラー (${err.category})`;
+          involvedLabels = [];
+      }
+
+      steps.push({ type: "error", category: err.category, involvedLabels, what, error: err });
+    }
+
+    steps.sort((a, b) => {
+      const catDiff = CATEGORY_ORDER_RECOVERY.indexOf(a.category) - CATEGORY_ORDER_RECOVERY.indexOf(b.category);
+      if (catDiff !== 0) return catDiff;
+      const aExp = a.error?.detail?.expected ?? a.error?.detail?.expectedLayerId ?? 0;
+      const bExp = b.error?.detail?.expected ?? b.error?.detail?.expectedLayerId ?? 0;
+      return aExp - bExp;
+    });
+
+    for (const s of steps) s.bundleKey = bundleKeyOfRecovery(s);
+    return steps;
+  }
+
+  // buildRecoveryBundles: buildRecoveryWalkthroughSteps の出力を bundleKey の初出順に集約する。
+  function buildRecoveryBundles(errorSteps) {
+    const bundles = [];
+    const byKey = {};
+    for (const s of errorSteps) {
+      let bundle = byKey[s.bundleKey];
+      if (!bundle) {
+        bundle = {
+          bundleKey: s.bundleKey,
+          category:  s.category,
+          expectedLayerId: (s.category === "layer_mismatch") ? (s.error?.detail?.expected ?? null)
+                          : (s.category === "node_missing")   ? (s.error?.detail?.expectedLayerId ?? null)
+                          : null,
+          involvedLabels: [],
+          errors: [],
+        };
+        byKey[s.bundleKey] = bundle;
+        bundles.push(bundle);
+      }
+      for (const label of s.involvedLabels) {
+        if (label && !bundle.involvedLabels.includes(label)) bundle.involvedLabels.push(label);
+      }
+      bundle.errors.push(s.error);
+    }
+    return bundles;
+  }
+
+  // buildRecoveryBundleWhat: 束内の "what"（差分の事実）を重複排除して連結する。
+  function buildRecoveryBundleWhat(bundle) {
+    const seen = new Set();
+    const lines = [];
+    for (const e of bundle.errors) {
+      const step = _rdwSteps.find(s => s.error === e);
+      const text = step ? step.what : "";
+      if (!text || seen.has(text)) continue;
+      seen.add(text);
+      lines.push(text);
+    }
+    return lines.join("\n");
+  }
+
+  // buildRecoveryHintContent: ヒント段階の文面。正解（layerReason/relationReason）は含めない（§5-2）。
+  function buildRecoveryHintContent(bundle) {
+    if (bundle.category === "layer_mismatch" || bundle.category === "node_missing") {
+      const lines = bundle.involvedLabels
+        .map(label => findIdealRecoveryNodeReasons(label).hintReason)
+        .filter(Boolean);
+      return { hint: (RECOVERY_HINT_TEXTS[bundle.category] || "") + (lines.length ? "\n" + lines.join("\n") : "") };
+    }
+    if (bundle.category === "node_extra") {
+      return { hint: RECOVERY_HINT_TEXTS.node_extra || "" };
+    }
+
+    let template = RECOVERY_HINT_TEXTS[bundle.category] || "";
+    if (bundle.category === "coordination_path_error"
+      && bundle.errors.some(e => e.detail?.subtype === "command_layer_as_hub")) {
+      template = RECOVERY_HINT_TEXTS.coordination_path_error_prefecture || template;
+    }
+
+    const seen = new Set();
+    const lines = [];
+    for (const e of bundle.errors) {
+      const segs = splitTemplateToSegmentsRecovery(template, e.detail || {});
+      const text = segs.map(s => s.text).join("");
+      if (seen.has(text)) continue;
+      seen.add(text);
+      lines.push(text);
+    }
+    let hint = lines.join("\n");
+
+    if (bundle.category === "hub_misassignment"
+      && bundle.errors.some(e => e.detail?.welfareHubAllocation === true)
+      && RECOVERY_HINT_TEXTS.hub_welfare_supplement) {
+      hint += "\n" + RECOVERY_HINT_TEXTS.hub_welfare_supplement;
+    }
+    return { hint };
+  }
+
+  // buildRecoveryAnswerContent: 正解開示段階の WHY（layerReason/relationReason）。
+  // 値が空/未定義なら "" を返し、呼び出し側で理由欄を非表示にする（断定的な文面を創作しない：§5-7）。
+  function buildRecoveryAnswerContent(bundle) {
+    if (bundle.category === "layer_mismatch" || bundle.category === "node_missing") {
+      const lines = bundle.involvedLabels
+        .map(label => findIdealRecoveryNodeReasons(label).layerReason)
+        .filter(Boolean);
+      return { reason: lines.join("\n") };
+    }
+    if (bundle.category === "node_extra") {
+      return { reason: "" }; // 正解マップに存在しないノードのため WHY 元データがない
+    }
+    const seen = new Set();
+    const lines = [];
+    for (const e of bundle.errors) {
+      const d = e.detail || {};
+      const reason = findIdealRecoveryRelationReason(d.fromLabel || d.peripheral, d.toLabel || d.correctHub);
+      if (!reason || seen.has(reason)) continue;
+      seen.add(reason);
+      lines.push(reason);
+    }
+    return { reason: lines.join("\n") };
+  }
+
+  // buildRecoveryFixText: 直し方（構造的な操作指示のみ。断定的な理由は含めない）。
+  function buildRecoveryFixText(bundle) {
+    switch (bundle.category) {
+      case "node_missing":            return "必要な組織をパレットから追加し、正しい層に配置してください。";
+      case "node_extra":              return "この組織が必要かどうか確認し、不要であれば削除してください。";
+      case "layer_mismatch":          return "対象の組織を正しい層へ移動してください。";
+      case "command_missing":         return "指示命令の矢印を引いてください。";
+      case "command_overuse":         return "この指示命令の矢印を削除してください。つながり自体が必要な場合は連携協力で引き直してください。";
+      case "edge_label_error":        return "この矢印の種類を正しいものに変更してください。";
+      case "hub_misassignment":       return "連携協力の矢印を正しいまとめ役へつなぎ直すか、不足分を追加してください。";
+      case "support_layer_violation": return "この支援の矢印を削除してください。必要なら実働の層のチームから引き直してください。";
+      case "support_missing":         return "支援の矢印を引いてください。";
+      case "support_overuse":         return "この矢印を削除してください。";
+      case "coordination_path_error": return "この矢印を削除してください。必要ならまとめ役を経由する構造を確認してください。";
+      default:                        return "マップを修正してください。";
+    }
+  }
+
+  // ── ウォークスルー状態（§4-5。急性期 _dw* とは完全に分離） ────────────────────
+  let _rdwBundles        = [];
+  let _rdwBundleIndex    = -1;
+  let _rdwStageInBundle  = "hint";
+  let _rdwReachedComplete = false;
+  let _rdwStage          = "layer"; // "layer" | "edge"
+  let _rdwCtx            = null;
+  let _rdwErrors         = [];
+  let _rdwSteps          = [];
+  let _rdwBundleBefore   = {};
+
+  function buildRecoveryLabelToIdMap(learnNodes) {
+    const m = {};
+    for (const n of learnNodes) m[n.label] = n.id;
+    return m;
+  }
+
+  function clearRecoveryWalkthroughHighlights() {
+    const canvasEl = $("canvas-rdiff");
+    const svgEl    = $("svgLayer-rdiff");
+    if (!canvasEl || !svgEl) return;
+    canvasEl.querySelectorAll(".node").forEach(el => el.classList.remove("diff-node-alert", "diff-dimmed"));
+    svgEl.querySelectorAll("g[data-from]").forEach(el => el.classList.remove("diff-dimmed", "diff-edge-alert"));
+  }
+
+  function applyRecoveryBundleDimming(bundle) {
+    if (!_rdwCtx) return;
+    const { canvasEl, svgEl, labelToId } = _rdwCtx;
+    canvasEl?.querySelectorAll(".node").forEach(el => el.classList.add("diff-dimmed"));
+    svgEl?.querySelectorAll("g[data-from]").forEach(el => el.classList.add("diff-dimmed"));
+    for (const label of bundle.involvedLabels) {
+      const id = labelToId[label];
+      if (!id) continue;
+      const el = canvasEl?.querySelector(`.node[data-id="${id}"]`);
+      if (el) el.classList.remove("diff-dimmed");
+    }
+  }
+
+  // computeRecoveryBundleResiduals: live状態を無音で再採点し、当該 bundleKey に属する
+  // 誤りだけを残存分として返す（正解ステージの「修正できたか」判定用）。
+  function computeRecoveryBundleResiduals(bundle) {
+    const RS = window.__ICS_RECOVERY_SCORING__;
+    if (!RS || mapLoadStatus.idealRecovery !== "ready" || !window.idealMapRecovery) return bundle.errors;
+    try {
+      const learnerNorm = RS.normalizeRecoveryMap({ nodes: state.nodes, edges: state.edges });
+      const idealNorm   = RS.normalizeRecoveryMap(window.idealMapRecovery);
+      const result = (_rdwStage === "layer")
+        ? RS.gradeRecoveryLayerPhase(learnerNorm, idealNorm)
+        : RS.gradeRecoveryEdgePhase(learnerNorm, idealNorm);
+      const steps = buildRecoveryWalkthroughSteps(result.errors);
+      return steps.filter(s => s.bundleKey === bundle.bundleKey).map(s => s.error);
+    } catch (err) {
+      console.error("[grading] 復旧期束の残存計算に失敗:", err);
+      return bundle.errors;
+    }
+  }
+
+  // maybeRerenderRecoveryAnswerStageAfterEdit: 急性期 maybeRerenderAnswerStageAfterEdit() の
+  // 復旧期専用版（§4-6：急性期のフックは書き換えない）。復旧期フェーズ以外・正解ステージ以外では no-op。
+  function maybeRerenderRecoveryAnswerStageAfterEdit() {
+    if (state.phase !== PHASE.RECOVERY_LAYER_DIFF && state.phase !== PHASE.RECOVERY_DIFF) return;
+    if (_rdwBundleIndex < 0 || _rdwBundleIndex >= _rdwBundles.length) return;
+    if (_rdwStageInBundle !== "answer") return;
+    renderRecoveryBundleStage({ silent: true });
+  }
+
+  // initRecoveryBundleLoop: RECOVERY_LAYER_DIFF / RECOVERY_DIFF 入場時に呼ぶ。
+  function initRecoveryBundleLoop(errors, stage) {
+    _rdwStage = stage;
+    const canvasEl     = $("canvas-rdiff");
+    const svgEl        = $("svgLayer-rdiff");
+    const canvasWrapEl = $("canvasWrap-rdiff");
+    const labelToId    = buildRecoveryLabelToIdMap(state.nodes);
+
+    _rdwCtx = { canvasEl, svgEl, labelToId, learnNodes: state.nodes, learnEdges: state.edges, canvasWrapEl };
+    _rdwErrors = errors || [];
+    _rdwSteps  = buildRecoveryWalkthroughSteps(_rdwErrors);
+    _rdwBundles = buildRecoveryBundles(_rdwSteps);
+    _rdwBundleIndex = -1;
+    _rdwStageInBundle = "hint";
+    _rdwBundleBefore = {};
+    _rdwReachedComplete = false;
+    $("btnRecoveryDiffNext")?.classList.add("btn-gated");
+
+    logOp("RECOVERY_DIFF_WALKTHROUGH_INIT", {
+      stage: _rdwStage,
+      stepCount: _rdwSteps.length,
+      errorCount: _rdwSteps.length,
+      bundleCount: _rdwBundles.length,
+    });
+    saveToLocalStorage();
+
+    showRecoveryBundleStep(-1, "next");
+  }
+
+  // showRecoveryBundleStep: ナビゲーション。index: -1=概要, 0..N-1=bundle, N=完了。
+  // 測定の抽出規約（bundleKeyごとの初回出現）を意識し、10-3 の項目を毎回記録する（§10-4）。
+  function showRecoveryBundleStep(index, direction) {
+    const N = _rdwBundles.length;
+    const safeIdx = Math.max(-1, Math.min(N, index));
+    _rdwBundleIndex = safeIdx;
+    _rdwStageInBundle = "hint";
+
+    const b = (safeIdx >= 0 && safeIdx < N) ? _rdwBundles[safeIdx] : null;
+    const d = b?.errors?.[0]?.detail || {};
+    logOp("RECOVERY_DIFF_WALKTHROUGH_STEP", {
+      bundleKey: b?.bundleKey ?? null,
+      bundleIndex: safeIdx,
+      bundleCount: N,
+      stageInBundle: (b ? "hint" : null),
+      stage: _rdwStage,
+      stepType: safeIdx === -1 ? "overview" : (safeIdx >= N ? "complete" : "hint"),
+      category: b?.category ?? null,
+      involvedLabels: b?.involvedLabels ?? [],
+      label: d.label ?? null,
+      fromLabel: d.fromLabel ?? d.peripheral ?? null,
+      toLabel: d.toLabel ?? d.correctHub ?? null,
+      edgeLabel: d.expectedLabel ?? d.gotLabel ?? null,
+      layerAssignment: Object.fromEntries(state.nodes.map(n => [n.label, n.layerId ?? null])),
+      hintTextsVersion: RECOVERY_HINT_TEXTS_VERSION,
+      direction,
+    });
+    saveToLocalStorage();
+
+    renderRecoveryBundleStage();
+  }
+
+  // renderRecoveryBundleStage: 現在の _rdwBundleIndex / _rdwStageInBundle に応じて描画する。
+  function renderRecoveryBundleStage(opts) {
+    const N = _rdwBundles.length;
+    const safeIdx = _rdwBundleIndex;
+    const silent = !!(opts && opts.silent);
+
+    clearRecoveryWalkthroughHighlights();
+
+    const counterEl   = $("rdwCounter");
+    const stageTagEl  = $("rdwStageTag");
+    const whatEl      = $("rdwWhat");
+    const whyEl       = $("rdwWhy");
+    const whyWrapEl   = $("rdwWhyLine");
+    const fixEl       = $("rdwFix");
+    const prevBtn     = $("rdwPrev");
+    const nextBtn     = $("rdwNext");
+    const nextPhaseBtn = $("btnRecoveryDiffNext");
+
+    if (nextBtn) nextBtn.textContent = "次へ →";
+
+    // ── ゼロ件 ──────────────────────────────────────────────
+    if (N === 0) {
+      _rdwReachedComplete = true;
+      nextPhaseBtn?.classList.remove("btn-gated");
+      if (counterEl)  counterEl.textContent  = "採点結果";
+      if (stageTagEl) stageTagEl.style.display = "none";
+      if (whatEl) whatEl.textContent = _rdwStage === "layer"
+        ? "レイヤー配置に修正ポイントはありません。よくできています。"
+        : "関係（矢印）に修正ポイントはありません。よくできています。";
+      if (whyEl) whyEl.textContent = "";
+      if (whyWrapEl) whyWrapEl.style.display = "none";
+      if (fixEl) fixEl.textContent = "";
+      if (prevBtn) prevBtn.disabled = true;
+      if (nextBtn) nextBtn.disabled = true;
+      return;
+    }
+
+    // ── 概要（index = -1） ────────────────────────────────────
+    if (safeIdx === -1) {
+      const errorCount = _rdwErrors.length;
+      if (counterEl)  counterEl.textContent = `全 ${errorCount} 件`;
+      if (stageTagEl) stageTagEl.style.display = "none";
+      if (whatEl) whatEl.textContent = _rdwStage === "layer"
+        ? `あなたのレイヤー配置には ${errorCount} 件の修正ポイントがあります。`
+        : `あなたのマップの関係（矢印）には ${errorCount} 件の修正ポイントがあります。`;
+      if (whyEl) whyEl.textContent = "";
+      if (whyWrapEl) whyWrapEl.style.display = "none";
+      if (fixEl) fixEl.textContent = "「次へ」を押して、1件ずつ確認しましょう。";
+      if (prevBtn) prevBtn.disabled = true;
+      if (nextBtn) nextBtn.disabled = false;
+      return;
+    }
+
+    // ── 完了（index = N） ─────────────────────────────────────
+    if (safeIdx >= N) {
+      _rdwReachedComplete = true;
+      nextPhaseBtn?.classList.remove("btn-gated");
+      if (counterEl)  counterEl.textContent  = "確認完了";
+      if (stageTagEl) stageTagEl.style.display = "none";
+      if (prevBtn) prevBtn.disabled = false;
+      if (nextBtn) nextBtn.disabled = true;
+
+      let residualErrors = _rdwErrors;
+      const RS = window.__ICS_RECOVERY_SCORING__;
+      if (RS && mapLoadStatus.idealRecovery === "ready" && window.idealMapRecovery) {
+        try {
+          const learnerNorm = RS.normalizeRecoveryMap({ nodes: state.nodes, edges: state.edges });
+          const idealNorm   = RS.normalizeRecoveryMap(window.idealMapRecovery);
+          const result = (_rdwStage === "layer")
+            ? RS.gradeRecoveryLayerPhase(learnerNorm, idealNorm)
+            : RS.gradeRecoveryEdgePhase(learnerNorm, idealNorm);
+          residualErrors = result.errors;
+        } catch (err) {
+          console.error("[grading] 復旧期完了画面の再採点に失敗:", err);
+        }
+      }
+
+      if (residualErrors.length === 0) {
+        if (whatEl) whatEl.textContent = "すべての修正ポイントを解消できました。";
+        if (whyEl) whyEl.textContent = "";
+        if (whyWrapEl) whyWrapEl.style.display = "none";
+        if (fixEl) fixEl.textContent = "";
+      } else {
+        if (whatEl) whatEl.textContent = `未解消の修正ポイントが ${residualErrors.length} 件あります。`;
+        if (whyEl) whyEl.textContent = "";
+        if (whyWrapEl) whyWrapEl.style.display = "none";
+        if (fixEl) fixEl.textContent = (_rdwStage === "layer")
+          ? "このまま進むと、残っている欠落・誤配置は正解の層に確定されます。"
+          : "このままの内容で次へ進みます。";
+      }
+
+      if (!silent) {
+        logOp("RECOVERY_DIFF_WALKTHROUGH_COMPLETE", {
+          stage: _rdwStage, stepCount: N, errorCount: _rdwErrors.length, residualCount: residualErrors.length,
+        });
+        saveToLocalStorage();
+      }
+      return;
+    }
+
+    // ── bundle（0..N-1） ─────────────────────────────────────
+    const bundle = _rdwBundles[safeIdx];
+    const els = { counterEl, stageTagEl, whatEl, whyEl, whyWrapEl, fixEl, prevBtn, nextBtn };
+    if (_rdwStageInBundle === "hint") {
+      renderRecoveryHintStage(bundle, safeIdx, N, els);
+    } else {
+      renderRecoveryAnswerStage(bundle, safeIdx, N, els, opts);
+    }
+  }
+
+  function renderRecoveryHintStage(bundle, safeIdx, N, els) {
+    const { counterEl, stageTagEl, whatEl, whyEl, whyWrapEl, fixEl, prevBtn, nextBtn } = els;
+    if (counterEl)  counterEl.textContent = `${safeIdx + 1} / ${N}`;
+    if (stageTagEl) { stageTagEl.textContent = "ヒント"; stageTagEl.className = "dw-group-tag dw-stage-hint"; stageTagEl.style.display = ""; }
+    if (prevBtn) prevBtn.disabled = false;
+    if (nextBtn) { nextBtn.disabled = false; nextBtn.textContent = "修正できた →"; }
+
+    if (!_rdwBundleBefore[bundle.bundleKey]) {
+      _rdwBundleBefore[bundle.bundleKey] = bundle.errors.length;
+      logOp("RECOVERY_DIFF_WALKTHROUGH_STEP", {
+        bundleKey: bundle.bundleKey, bundleIndex: safeIdx, bundleCount: N,
+        stageInBundle: "hint", stage: _rdwStage, stepType: "hint_shown",
+        category: bundle.category, involvedLabels: bundle.involvedLabels,
+        instanceCount: bundle.errors.length,
+        layerAssignment: Object.fromEntries(state.nodes.map(n => [n.label, n.layerId ?? null])),
+        hintTextsVersion: RECOVERY_HINT_TEXTS_VERSION,
+      });
+      saveToLocalStorage();
+    }
+
+    const what = buildRecoveryBundleWhat(bundle);
+    const { hint } = buildRecoveryHintContent(bundle);
+    if (whatEl) whatEl.textContent = what;
+    if (whyEl) { whyEl.textContent = hint; if (whyWrapEl) whyWrapEl.style.display = hint ? "" : "none"; }
+    if (fixEl) fixEl.textContent = "正解の層・接続・ラベルはまだ表示されません。自分で修正してみましょう。";
+
+    applyRecoveryBundleDimming(bundle);
+  }
+
+  function renderRecoveryAnswerStage(bundle, safeIdx, N, els, opts) {
+    const { counterEl, stageTagEl, whatEl, whyEl, whyWrapEl, fixEl, prevBtn, nextBtn } = els;
+    const silent = !!(opts && opts.silent);
+
+    if (counterEl) counterEl.textContent = `${safeIdx + 1} / ${N}`;
+    if (prevBtn) prevBtn.disabled = false;
+    if (nextBtn) { nextBtn.disabled = false; nextBtn.textContent = (safeIdx + 1 >= N) ? "確認完了へ →" : "次へ →"; }
+
+    const before = bundle.errors.length;
+    const residuals = computeRecoveryBundleResiduals(bundle);
+    const after = residuals.length;
+    const outcome = (after === 0) ? "resolved" : (after < before ? "partial" : "unresolved");
+
+    if (stageTagEl) {
+      stageTagEl.textContent = (outcome === "resolved") ? "✓ 修正済み" : "正解";
+      stageTagEl.className = "dw-group-tag " + (outcome === "resolved" ? "dw-stage-resolved" : "dw-stage-answer");
+      stageTagEl.style.display = "";
+    }
+
+    const { reason } = buildRecoveryAnswerContent(bundle);
+    const fixText = buildRecoveryFixText(bundle);
+
+    if (outcome === "resolved") {
+      if (whatEl) whatEl.textContent = "自分で正しく修正できました。";
+      if (whyEl) { whyEl.textContent = reason; if (whyWrapEl) whyWrapEl.style.display = reason ? "" : "none"; }
+      if (fixEl) fixEl.textContent = "このままで正解です。";
+    } else {
+      const prefix = (outcome === "partial") ? `${before - after}件は修正済みです。残りは次のとおりです：\n` : "";
+      const residualWhat = residuals
+        .map(e => (_rdwSteps.find(s => s.error === e) || {}).what)
+        .filter(Boolean)
+        .join("\n");
+      if (whatEl) whatEl.textContent = prefix + residualWhat;
+      if (whyEl) { whyEl.textContent = reason; if (whyWrapEl) whyWrapEl.style.display = reason ? "" : "none"; }
+      if (fixEl) fixEl.textContent = fixText;
+    }
+
+    if (_rdwCtx) {
+      const { canvasEl, svgEl, labelToId } = _rdwCtx;
+      canvasEl?.querySelectorAll(".node").forEach(el => el.classList.add("diff-dimmed"));
+      svgEl?.querySelectorAll("g[data-from]").forEach(el => el.classList.add("diff-dimmed"));
+      for (const label of bundle.involvedLabels) {
+        const id = labelToId[label];
+        if (!id) continue;
+        const el = canvasEl?.querySelector(`.node[data-id="${id}"]`);
+        if (el) { el.classList.remove("diff-dimmed"); el.classList.add("diff-node-alert"); }
+      }
+      if (bundle.involvedLabels.length > 0) {
+        const firstId = labelToId[bundle.involvedLabels[0]];
+        if (firstId) canvasEl?.querySelector(`.node[data-id="${firstId}"]`)?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      }
+    }
+
+    if (!silent) {
+      logOp("RECOVERY_DIFF_WALKTHROUGH_STEP", {
+        bundleKey: bundle.bundleKey, bundleIndex: safeIdx, bundleCount: N,
+        stageInBundle: "answer", stage: _rdwStage, stepType: "answer_shown",
+        category: bundle.category, involvedLabels: bundle.involvedLabels,
+        bundleOutcome: outcome, residualCount: after, originalCount: before,
+        layerAssignment: Object.fromEntries(state.nodes.map(n => [n.label, n.layerId ?? null])),
+        hintTextsVersion: RECOVERY_HINT_TEXTS_VERSION,
+      });
+      saveToLocalStorage();
+    }
+  }
+
+  // ================================================================
   // buildROEdgeGroup: 1エッジ分の SVG グループを構築して返す（appendは呼び出し側）。
   // 座標は offsetLeft/offsetTop ベース（CSS transform の影響を受けないコンテンツ座標）。
   // renderReadOnlyMap のエッジループと drawGhostEdge が共用する。
@@ -5327,7 +6405,9 @@
     renderNodes();
     renderEdges();
     updateCanvasStat();
-    if (activePhaseKey === "p6" || activePhaseKey === "acute") renderPalette();
+    // [CHANGED] recoveryRevised を追加：RECOVERY_LAYER_DIFF（フェーズ15）はパレット表示・機能する
+    // （RECOVERY_MAP と同一の RECOVERY_PALETTE_NODES：addendum B §6-3）。
+    if (activePhaseKey === "p6" || activePhaseKey === "acute" || activePhaseKey === "recoveryRevised") renderPalette();
     if (state.highlightNodeId) applyHighlight(state.highlightNodeId);
   }
 
@@ -5474,6 +6554,74 @@
 
     // [DEPRECATED flow-v2] btnReviseBack/btnReviseNext ハンドラは削除。
     // Phase 11/13 は生きた遷移経路を持たない（修正プロンプト(b) 2-5）。
+
+    // [NEW] 差分提示フェーズ（RECOVERY_LAYER_DIFF / RECOVERY_DIFF 共用ビュー）のナビゲーション。
+    // ⑨戻り規則（addendum B §7）：フェーズ15→⑨（RECOVERY_MAP）は confirm 必須、
+    // フェーズ16→15 は confirm 不要（同じ recoveryRevised を編集し続けるだけのため）。
+    $("btnRecoveryDiffBack")?.addEventListener("click", () => {
+      if (state.phase === PHASE.RECOVERY_DIFF) {
+        switchPhase(PHASE.RECOVERY_LAYER_DIFF);
+        return;
+      }
+      const ok = confirm("復旧期マップを修正すると、差分提示で行った修正内容は破棄され、確認をやり直すことになります。よろしいですか？");
+      if (!ok) {
+        logOp("RECOVERY_BACK_CANCELLED", { fromPhase: state.phase });
+        return;
+      }
+      const discardedNodeCount    = phaseData.recoveryRevised?.nodes?.length ?? null;
+      const discardedEdgeCount    = phaseData.recoveryRevised?.edges?.length ?? null;
+      const discardedEdgeDiffCount = state.recoveryScoreRevised?.errors?.length ?? null;
+      logOp("RECOVERY_REVISED_RESET", {
+        fromPhase: state.phase, discardedNodeCount, discardedEdgeCount, discardedEdgeDiffCount,
+      });
+      // recoveryBaseline は測定固定点のため絶対に null 化・上書きしない（§7-4）。
+      phaseData.recoveryRevised = null;
+      state.recoveryLayerScoreRevised = null;
+      state.recoveryScoreRevised = null;
+      _rdwBundles = []; _rdwBundleIndex = -1; _rdwStageInBundle = "hint"; _rdwReachedComplete = false;
+      _rdwCtx = null; _rdwErrors = []; _rdwSteps = []; _rdwBundleBefore = {};
+      saveToLocalStorage();
+      switchPhase(PHASE.RECOVERY_MAP);
+    });
+    $("btnRecoveryDiffNext")?.addEventListener("click", () => {
+      if (!_rdwReachedComplete) {
+        showToast("すべての修正ポイントを確認してから進んでください（右側パネルの「次へ」で最後まで進めます）", 3500);
+        logOp("RECOVERY_WALKTHROUGH_EXIT_BLOCKED", {
+          stage: _rdwStage, bundleIndex: _rdwBundleIndex, bundleCount: _rdwBundles.length, stageInBundle: _rdwStageInBundle,
+        });
+        return;
+      }
+      if (state.phase === PHASE.RECOVERY_LAYER_DIFF) {
+        // 採点 → スナップ → 遷移 の順序が測定上決定的に重要（addendum B §8-1）。
+        const revisedResult = gradeRecoveryLayerRevisedPhase();
+        if (revisedResult) {
+          snapRecoveryLayersToIdeal(revisedResult);
+        } else {
+          logOp("RECOVERY_LAYER_SNAP_SKIPPED", { reason: "grading_unavailable" });
+        }
+        switchPhase(PHASE.RECOVERY_DIFF);
+        return;
+      }
+      gradeRecoveryEdgeRevisedPhase();
+      // [NOTE] この段階では⑨の既存ボタン（btnFromP6ToTransition）からの遷移先をまだ変更しない
+      // （addendum B §11-3）。フェーズ16から先はまだ配線されていないため、ここでは遷移せず
+      // 完了を通知するのみ（開発コンソールから switchPhase() で任意のフェーズへ移動して検証する）。
+      showToast("復旧期の差分確認が完了しました。", 3000);
+    });
+    $("rdwPrev")?.addEventListener("click", () => {
+      if (_rdwBundleIndex <= -1) return;
+      showRecoveryBundleStep(_rdwBundleIndex - 1, "prev");
+    });
+    $("rdwNext")?.addEventListener("click", () => {
+      const N = _rdwBundles.length;
+      if (_rdwBundleIndex >= 0 && _rdwBundleIndex < N && _rdwStageInBundle === "hint") {
+        _rdwStageInBundle = "answer";
+        renderRecoveryBundleStage();
+        return;
+      }
+      if (_rdwBundleIndex >= N) return;
+      showRecoveryBundleStep(_rdwBundleIndex + 1, "next");
+    });
 
     // [CHANGED flow-v2] 比較・分析フェーズの「戻る」（ACUTE_COMPARE → ACUTE_DIFF。
     // 旧 ACUTE_REVISE は経由しない）

@@ -15496,7 +15496,7 @@
         "to": "n-1b51ttm",
         "label": "指示命令",
         "bidirectional": false,
-        "edgeReason": "県全体の方針は県庁が決定し，保健所へ指示として伝わります．指揮命令系統は一本に保ちます．"
+        "relationReason": "県全体の方針は県庁が決定し，保健所へ指示として伝わります．指揮命令系統は一本に保ちます．"
       },
       {
         "id": "e-5y92t8w",
@@ -15504,7 +15504,7 @@
         "to": "n-e5u03zv",
         "label": "情報伝達",
         "bidirectional": false,
-        "edgeReason": "管内の状況・活動報告は保健所から県庁へ伝達します．指示とは逆向きの流れとして区別します．"
+        "relationReason": "管内の状況・活動報告は保健所から県庁へ伝達します．指示とは逆向きの流れとして区別します．"
       },
       {
         "id": "e-wkkod0r",
@@ -15512,7 +15512,7 @@
         "to": "n-952758i",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "保健所とコーディネーターは上下の指揮関係ではなく，医療分野の調整のために対等に連携します．"
+        "relationReason": "保健所とコーディネーターは上下の指揮関係ではなく，医療分野の調整のために対等に連携します．"
       },
       {
         "id": "e-dnixxh7",
@@ -15520,7 +15520,7 @@
         "to": "n-6yp25ia",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "歯科医師会は独立した職能団体であり，指揮下に置くのではなく連携協力として関係を構成します．"
+        "relationReason": "歯科医師会は独立した職能団体であり，指揮下に置くのではなく連携協力として関係を構成します．"
       },
       {
         "id": "e-cx7lb1z",
@@ -15528,7 +15528,7 @@
         "to": "n-fhgc1xc",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "医師会は独立した職能団体です．DMAT撤退後の医療支援の引き継ぎも，指示ではなく連携協力の中で合意形成します．"
+        "relationReason": "医師会は独立した職能団体です．DMAT撤退後の医療支援の引き継ぎも，指示ではなく連携協力の中で合意形成します．"
       },
       {
         "id": "e-psz7egg",
@@ -15536,7 +15536,7 @@
         "to": "n-1wk7j82",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "被災した医療機関の診療再開・機能維持を，医師会が支援します．"
+        "relationReason": "被災した医療機関の診療再開・機能維持を，医師会が支援します．"
       },
       {
         "id": "e-y0eyds2",
@@ -15544,7 +15544,7 @@
         "to": "n-uxp6llj",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "民間団体は行政の指揮下に置けないため，連携協力として活動を位置づけます．"
+        "relationReason": "民間団体は行政の指揮下に置けないため，連携協力として活動を位置づけます．"
       },
       {
         "id": "e-ofsat7h",
@@ -15552,7 +15552,7 @@
         "to": "n-2q8mbab",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "民間団体は避難所の運営支援という実働を担います．"
+        "relationReason": "民間団体は避難所の運営支援という実働を担います．"
       },
       {
         "id": "e-tfscs8z",
@@ -15560,7 +15560,7 @@
         "to": "n-tid8usx",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "要配慮者支援の方針を共有するため，保健所と地域包括支援センターは連携協力で結びます．"
+        "relationReason": "要配慮者支援の方針を共有するため，保健所と地域包括支援センターは連携協力で結びます．"
       },
       {
         "id": "e-91rmbou",
@@ -15568,7 +15568,7 @@
         "to": "n-1b51ttm",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "市町村は県とは別の行政主体であり，指揮関係ではなく相互の情報共有・連携として関係を構成します．"
+        "relationReason": "市町村は県とは別の行政主体であり，指揮関係ではなく相互の情報共有・連携として関係を構成します．"
       },
       {
         "id": "e-4az15f8",
@@ -15576,7 +15576,7 @@
         "to": "n-tid8usx",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "住民支援の調整を担う組織同士として，役割分担と情報共有のために連携します．"
+        "relationReason": "住民支援の調整を担う組織同士として，役割分担と情報共有のために連携します．"
       },
       {
         "id": "e-nqpf451",
@@ -15584,7 +15584,7 @@
         "to": "n-emi9jdl",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "社会福祉士会による後方支援は，地域包括支援センターとの連携の中で受け止められます．"
+        "relationReason": "社会福祉士会による後方支援は，地域包括支援センターとの連携の中で受け止められます．"
       },
       {
         "id": "e-a9kykrw",
@@ -15592,7 +15592,7 @@
         "to": "n-tid8usx",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "訪問支援の対象や分担は，要配慮者支援の調整を担う地域包括支援センターとの連携で決まります．"
+        "relationReason": "訪問支援の対象や分担は，要配慮者支援の調整を担う地域包括支援センターとの連携で決まります．"
       },
       {
         "id": "e-d1ejtet",
@@ -15600,7 +15600,7 @@
         "to": "n-kkuqhw1",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "在宅避難者への訪問・ケアマネジメント支援という直接の実働です．"
+        "relationReason": "在宅避難者への訪問・ケアマネジメント支援という直接の実働です．"
       },
       {
         "id": "e-m3zzifw",
@@ -15608,7 +15608,7 @@
         "to": "n-h018kmy",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "福祉避難所での要配慮者支援は，DWATの実働として位置づけられます．"
+        "relationReason": "福祉避難所での要配慮者支援は，DWATの実働として位置づけられます．"
       },
       {
         "id": "e-jt7fh3b",
@@ -15616,7 +15616,7 @@
         "to": "n-2q8mbab",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "避難所での介護支援は，DCATの実働として位置づけられます．"
+        "relationReason": "避難所での介護支援は，DCATの実働として位置づけられます．"
       },
       {
         "id": "e-w6bls9a",
@@ -15624,7 +15624,7 @@
         "to": "n-2q8mbab",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "避難所での口腔ケア等の専門支援という実働です．"
+        "relationReason": "避難所での口腔ケア等の専門支援という実働です．"
       },
       {
         "id": "e-rlovozn",
@@ -15632,7 +15632,7 @@
         "to": "n-6zqseus",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "仮設住宅の環境改修や復興期のリハビリ活動という実働です．"
+        "relationReason": "仮設住宅の環境改修や復興期のリハビリ活動という実働です．"
       },
       {
         "id": "e-s7pck3v",
@@ -15640,7 +15640,7 @@
         "to": "n-2q8mbab",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "避難所でのリハビリテーション活動という実働です．"
+        "relationReason": "避難所でのリハビリテーション活動という実働です．"
       },
       {
         "id": "e-6qljmif",
@@ -15648,7 +15648,7 @@
         "to": "n-6zqseus",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "仮設住宅入居者への生活支援・見守りという実働です．"
+        "relationReason": "仮設住宅入居者への生活支援・見守りという実働です．"
       },
       {
         "id": "e-ulpk95h",
@@ -15656,7 +15656,7 @@
         "to": "n-kkuqhw1",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "在宅避難者への生活支援・見守りという実働です．"
+        "relationReason": "在宅避難者への生活支援・見守りという実働です．"
       },
       {
         "id": "e-m7g4jrq",
@@ -15664,7 +15664,7 @@
         "to": "n-2q8mbab",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "DMAT撤退後の避難所への医療支援を医師会が引き継ぎます．"
+        "relationReason": "DMAT撤退後の避難所への医療支援を医師会が引き継ぎます．"
       },
       {
         "id": "e-fxnq9wn",
@@ -15672,7 +15672,7 @@
         "to": "n-2q8mbab",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "一般避難所での要配慮者の把握・福祉支援という実働です．"
+        "relationReason": "一般避難所での要配慮者の把握・福祉支援という実働です．"
       },
       {
         "id": "e-uzly2mz",
@@ -15680,7 +15680,7 @@
         "to": "n-fhgc1xc",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "医療支援の内容・分担は，コーディネーターと医師会の連携の中で調整されます．"
+        "relationReason": "医療支援の内容・分担は，コーディネーターと医師会の連携の中で調整されます．"
       },
       {
         "id": "e-ajvvnmp",
@@ -15688,7 +15688,7 @@
         "to": "n-t71pa8w",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "JRATの活動先・内容は，住民に近い市町村保健センターとの連携を通じて調整されます．"
+        "relationReason": "JRATの活動先・内容は，住民に近い市町村保健センターとの連携を通じて調整されます．"
       },
       {
         "id": "e-5pnnmu5",
@@ -15696,7 +15696,7 @@
         "to": "n-b52j592",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "DWATの活動先・内容は，市町村保健センターとの連携を通じて調整されます．"
+        "relationReason": "DWATの活動先・内容は，市町村保健センターとの連携を通じて調整されます．"
       },
       {
         "id": "e-76uctgl",
@@ -15704,7 +15704,7 @@
         "to": "n-vfhnw62",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "DCATの活動先・内容は，市町村保健センターとの連携を通じて調整されます．"
+        "relationReason": "DCATの活動先・内容は，市町村保健センターとの連携を通じて調整されます．"
       },
       {
         "id": "e-5k31ade",
@@ -15712,7 +15712,7 @@
         "to": "n-2q8mbab",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "市町村保健センターは調整を主に担いながら，避難所の住民への保健活動もあわせて担います．"
+        "relationReason": "市町村保健センターは調整を主に担いながら，避難所の住民への保健活動もあわせて担います．"
       },
       {
         "id": "e-watph5q",
@@ -15720,7 +15720,7 @@
         "to": "n-6zqseus",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "仮設住宅入居者への健康調査・訪問という直接支援もあわせて担います．"
+        "relationReason": "仮設住宅入居者への健康調査・訪問という直接支援もあわせて担います．"
       },
       {
         "id": "e-yp2ixbt",
@@ -15728,7 +15728,7 @@
         "to": "n-kkuqhw1",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "在宅避難者への訪問・健康管理という直接支援もあわせて担います．"
+        "relationReason": "在宅避難者への訪問・健康管理という直接支援もあわせて担います．"
       },
       {
         "id": "e-onwh6pk",
@@ -15736,7 +15736,7 @@
         "to": "n-h018kmy",
         "label": "支援",
         "bidirectional": false,
-        "edgeReason": "要配慮者の福祉避難所への入所調整支援を，地域包括支援センターが担います．"
+        "relationReason": "要配慮者の福祉避難所への入所調整支援を，地域包括支援センターが担います．"
       },
       {
         "id": "e-n9fy2qw",
@@ -15744,7 +15744,7 @@
         "to": "n-jxpjmz9",
         "label": "連携協力",
         "bidirectional": true,
-        "edgeReason": "地域支え合いセンターの相談支援は在宅避難者・仮設住宅という市町村保健センターと同じ対象に及ぶため，分担と情報を共有できるよう連携します．"
+        "relationReason": "地域支え合いセンターの相談支援は在宅避難者・仮設住宅という市町村保健センターと同じ対象に及ぶため，分担と情報を共有できるよう連携します．"
       }
     ],
     "answers": {

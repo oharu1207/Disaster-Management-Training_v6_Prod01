@@ -614,6 +614,95 @@
 
 </div><!-- /phase-6 -->
 
+<!-- ===== PHASE RECOVERY_LAYER_DIFF(15) / RECOVERY_DIFF(16): 復旧期 差分提示 [NEW] =====
+     急性期の phase-acuteDiff と同型の「ウォークスルーパネル＋編集可能キャンバス」構成だが、
+     DOM ID は急性期と一切共有しない（recoveryRevised を編集する専用ビュー）。
+     フェーズ15はノード追加・削除・レイヤー移動可（パレット表示）、フェーズ16はエッジ操作のみ可
+     （パレットは domIds.palette 解決先確保のみで非表示）。この段階では既存ボタン
+     （btnFromP6ToTransition）からの遷移先は変更していないため、本ビューは開発コンソールの
+     switchPhase(15) / switchPhase(16) からのみ到達できる。 -->
+<div id="phase-recoveryDiff" class="phase-view">
+
+  <div id="recoveryDiffTooltip" class="acute-node-tooltip" style="display:none;"></div>
+
+  <!-- LEFT SIDEBAR -->
+  <div class="map-sidebar">
+    <div class="sb-block" style="flex:1;min-height:0;display:flex;flex-direction:column;overflow-y:auto;">
+      <div id="recoveryDiffWalkthrough" class="diff-walkthrough">
+        <div class="dw-progress">
+          <span id="rdwCounter"></span>
+          <span id="rdwStageTag" class="dw-group-tag" style="display:none;"></span>
+        </div>
+        <div class="dw-body">
+          <div class="dw-line"><span class="dw-key">何が</span><span id="rdwWhat"></span></div>
+          <div class="dw-line" id="rdwWhyLine"><span class="dw-key">なぜ</span><span id="rdwWhy"></span></div>
+          <div class="dw-line"><span class="dw-key">直し方</span><span id="rdwFix"></span></div>
+        </div>
+        <div class="dw-nav">
+          <button id="rdwPrev" class="btn-secondary" disabled>← 前へ</button>
+          <button id="rdwNext" class="btn-primary">次へ →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- パレット（フェーズ15のみ機能。RECOVERY_MAP と同一の RECOVERY_PALETTE_NODES：
+         撤退候補を除外すると node_extra の可視化・測定が壊れるため除外しない：addendum B §6-3） -->
+    <div class="sb-block" style="flex:0;min-height:0;">
+      <div class="sb-title">🔧 追加可能なノード</div>
+      <div class="palette" id="palette-rdiff" style="max-height:220px;overflow-y:auto;"></div>
+    </div>
+  </div><!-- /map-sidebar -->
+
+  <!-- CANVAS -->
+  <div class="canvas-col">
+    <div class="canvas-toolbar acute-tutorial-bar">
+      <div class="acute-tutorial-row">
+        <div id="recoveryDiffTitle" class="acute-tutorial-text">あなたの復旧期マップの採点結果 — 1件ずつ確認していきましょう</div>
+        <div class="acute-tutorial-btns">
+          <button id="btnRecoveryDiffBack" class="btn-sub-phase">← 復旧期マップに戻る</button>
+          <button id="btnRecoveryDiffNext" class="btn-sub-phase btn-sub-phase-primary">確認完了 → 関係差分へ</button>
+        </div>
+      </div>
+      <div class="acute-tutorial-row2">
+        <span class="canvas-stat" id="canvasStat-rdiff">ノード: 0 ／ 矢印: 0</span>
+      </div>
+    </div>
+    <div class="canvasWrap" id="canvasWrap-rdiff">
+      <div id="arrowModeHint-rdiff" class="arrow-mode-hint arrow-mode-hint-overlay" style="display:none;">
+        ✦ 矢印モード ― 接続先のノードをクリック（Escでキャンセル）
+      </div>
+      <div class="phase-layer-bands">
+        <div class="layer-band" data-layer="1">
+          <span class="layer-label">指揮 Command</span>
+          <span class="layer-concept">指示命令の起点</span>
+        </div>
+        <div class="layer-band" data-layer="2">
+          <span class="layer-label">調整・統制 Section</span>
+          <span class="layer-concept">情報集約・組織間調整</span>
+        </div>
+        <div class="layer-band" data-layer="3">
+          <span class="layer-label">実働 Branch / Group</span>
+          <span class="layer-concept">現場活動チーム</span>
+        </div>
+        <div class="layer-band" data-layer="4">
+          <span class="layer-label">支援対象</span>
+          <span class="layer-concept">活動の対象となる機関・住民</span>
+        </div>
+      </div>
+      <svg id="svgLayer-rdiff" class="phase-svg-layer">
+        <defs>
+          <marker id="arrow-red-rdiff"    viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ff6b6b"/></marker>
+          <marker id="arrow-blue-rdiff"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4d8fff"/></marker>
+          <marker id="arrow-teal-rdiff"   viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#3dcf8a"/></marker>
+          <marker id="arrow-purple-rdiff" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c084fc"/></marker>
+        </defs>
+      </svg>
+      <div id="canvas-rdiff" class="phase-canvas"></div>
+    </div>
+  </div><!-- /canvas-col -->
+
+</div><!-- /phase-recoveryDiff -->
+
 <!-- ===== PHASE TRANSITION_COMPARE: 急性期・復旧期構造比較 [NEW] ===== -->
 <div id="phase-transitionCompare" class="phase-view">
 
