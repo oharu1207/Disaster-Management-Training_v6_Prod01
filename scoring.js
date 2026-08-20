@@ -127,11 +127,11 @@
   );
 
   /**
-   * 理想マップ（正規化済み）とハードコード定数の整合性を検査する。
+   * 基準マップ（正規化済み）とハードコード定数の整合性を検査する。
    * 副作用なし。ログ記録は呼び出し側の責務。
    * IDEAL_COMMAND_EDGES / IDEAL_HUB_MAP / IDEAL_SUPPORT_EDGES は仕様書§3.2〜§3.4の
    * 写像として意図的にハードコードされている（動的導出はしない設計判断）。
-   * 配信JSONの差し替え事故等でこれらが実際の理想マップとずれた場合に検出するための監査。
+   * 配信JSONの差し替え事故等でこれらが実際の基準マップとずれた場合に検出するための監査。
    * 情報伝達エッジはJ3により採点対象外のため検査しない。
    * @param {ReturnType<normalizeMap>} idealNorm
    * @returns {{ ok: boolean, mismatches: string[] }}
@@ -402,7 +402,7 @@
       const fromLayerId = idealLayerMap.get(e.fromLabel);
 
       // 第1段階: L3 チェック (spec §3.4)
-      // 接続元が理想マップに存在しない場合も安全側（L3違反）として扱う
+      // 接続元が基準マップに存在しない場合も安全側（L3違反）として扱う
       if (fromLayerId === undefined || fromLayerId !== 3) {
         errors.push(makeError('support_layer_violation', {
           fromLabel: e.fromLabel, toLabel: e.toLabel, fromLayerId: fromLayerId ?? null,
