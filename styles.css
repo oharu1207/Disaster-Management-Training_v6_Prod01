@@ -1086,6 +1086,15 @@ textarea { resize: vertical; min-height: 70px; }
   color: var(--text-dim) !important;
 }
 
+/* [NEW rev B-6] Phase6/フェーズ15：未配置かつ急性期にも存在した組織＝「削除」タグ。
+   pitem-removed と見た目（赤系タグ）は揃えるが、クリックで復帰できるため
+   opacity / pointer-events は通常のクリック可能アイテムのまま変更しない。 */
+.pitem.pitem-restorable .ptag {
+  background: rgba(239,68,68,0.12);
+  border-color: rgba(239,68,68,0.3);
+  color: #ef4444;
+}
+
 /* 未配置エラー時の一時的な強調（パレット項目） */
 .pitem.pitem-missing-error {
   animation: pitemShake 0.4s ease-in-out 2;

@@ -491,6 +491,10 @@
   //   importJSON(v2) 読込後             →  有効（インポートした p6 + 復元シグネチャ）
   let   phase6Initialized      = false;
   let   phase6RemovalSignature = "";
+  // [NEW rev B-7] hasP6Edits() 用：直近の initPhase6Canvas() / インポート復元時点でのノード数。
+  // ⑨で引き継ぎノードを削除しただけの状態（isInitial=trueのまま件数だけ減る）を検知するために
+  // 必要（addendum B rev B-7 §3）。
+  let   phase6InitialNodeCount = 0;
 
   // ================================================================
   // PHASE DATA STORE
@@ -1422,10 +1426,15 @@
       ? new Set(state.nodes.map(n => n.label))
       : null;
 
-    // Phase6: 削除候補ラベルの集合（優先度最高）
-    const removedLabels = (activePhaseKey === "p6")
-      ? new Set((window.phase5Data?.removals || []).map(r => r.label))
-      : new Set();
+    // [CHANGED rev B-7] Phase6 / フェーズ15 のタグは phase5Data.removals（⑧時点のスナップショット）
+    // ではなく現在の配置状態（state.nodes）から導出する。従来は⑨/フェーズ15内でノードを削除しても
+    // タグが更新されなかった（addendum B rev B-7 §0-3・§2-1）。「削除」タグ（未配置かつ急性期にも
+    // 存在した組織）の判定元は window.idealMapAcute.nodes のラベル集合＝⑨の引き継ぎ元となった
+    // 急性期基準マップそのもの（initPhase6Canvas() が phaseData.p6 の初期構成をここから複製する。
+    // phase5Data.removals による除外の有無は問わない：ラベルが急性期に存在した事実自体を見る）。
+    const idealAcuteLabels = (activePhaseKey === "p6" || activePhaseKey === "recoveryRevised")
+      ? new Set((window.idealMapAcute?.nodes || []).map(n => n.label))
+      : null;
 
     for (const n of activePaletteNodes) {
       const div = document.createElement("div");
@@ -1433,14 +1442,16 @@
       div.className = "pitem";
       if (BENEFICIARY_LABELS.has(n.label)) div.classList.add("node-beneficiary");
 
-      const isRemoved = removedLabels.has(n.label);
-      // 削除優先のため、削除候補のときは配置済み判定をスキップ
-      const isPlaced  = !isRemoved && (placedLabels?.has(n.label) ?? false);
+      const isPlaced = placedLabels?.has(n.label) ?? false;
+      // 未配置かつ急性期にも存在した組織＝「削除」タグ（クリックで復帰できる）。
+      // 未配置かつ復旧期固有の新規組織＝「＋追加」タグ。表示上の区別のみで、クリック時の
+      // 動作はどちらも addNode()（addendum B rev B-7 §2-1）。
+      const isRestorable = !isPlaced && !!idealAcuteLabels?.has(n.label);
 
-      if (isRemoved)     div.classList.add("pitem-removed");
-      else if (isPlaced) div.classList.add("pitem-placed");
+      if (isPlaced)          div.classList.add("pitem-placed");
+      else if (isRestorable) div.classList.add("pitem-restorable");
 
-      const tagText = isRemoved ? "削除" : isPlaced ? "配置済み" : "＋追加";
+      const tagText = isPlaced ? "配置済み" : isRestorable ? "削除" : "＋追加";
 
       div.innerHTML = `
         <span class="pico">${n.icon || ""}</span>
@@ -1448,7 +1459,7 @@
         <span class="ptag">${tagText}</span>
       `;
 
-      if (!isRemoved && !isPlaced) {
+      if (!isPlaced) {
         div.addEventListener("click", () => {
           addNode(n.label, n.group);
           logOp("ADD_NODE", { label: n.label, group: n.group });
@@ -1591,10 +1602,16 @@
   }
 
   // Phase6 に「ユーザーが加えた編集」が存在するかを判定する。
-  // isInitial=false のノード（自分で追加したもの）または矢印が1本以上あれば編集済み。
+  // isInitial=false のノード（自分で追加したもの）／矢印が1本以上／ノード数が初期構成から
+  // 変化している、のいずれかがあれば編集済み。
+  // [CHANGED rev B-7] ノード数の変化も編集とみなす。引き継ぎノードを削除しただけの状態は
+  // 残存ノードが全て isInitial=true のままのため、旧判定（isInitial=falseの有無のみ）では
+  // 「編集なし」と誤判定されていた（addendum B rev B-7 §3-1）。
   // toggleRemovalCandidate() で confirm を出すかどうかの判断に使う。
   function hasP6Edits() {
-    return phaseData.p6.nodes.some(n => !n.isInitial) || phaseData.p6.edges.length > 0;
+    return phaseData.p6.nodes.some(n => !n.isInitial)
+      || phaseData.p6.edges.length > 0
+      || phaseData.p6.nodes.length !== phase6InitialNodeCount;
   }
 
   // Phase6 の再構築（initPhase6Canvas の再実行）が必要かどうかを判定する。
@@ -1612,6 +1629,7 @@
   function invalidatePhase6() {
     phase6Initialized      = false;
     phase6RemovalSignature = "";
+    phase6InitialNodeCount = 0; // [NEW rev B-7]
     phaseData.p6 = {
       nodes: [], edges: [], answers: { q1: "", q2: "" },
       log: [], selectedNodeId: null, selectedEdgeId: null,
@@ -1620,8 +1638,13 @@
 
   function deleteNode(id) {
     const n = state.nodes.find(x => x.id === id);
-    if (n?.isInitial) {
-      showToast("急性期の基準マップ由来のノードは削除できません");
+    // [CHANGED] isInitial ではなく被支援者かどうかで判定する。isInitial は急性期では
+    // 「システムが置いた支援対象」、復旧期では「急性期からの引き継ぎ」を意味しており、
+    // 同一フラグで両方の削除可否を判定すると復旧期の引き継ぎ組織が一切削除できなくなる
+    // （addendum B rev B-7 §0-1・§0-2）。BENEFICIARY_LABELS は switchPhase() で
+    // MAP_PHASE_CONFIG[phase].beneficiaries から都度同期される、フェーズ別の被支援者集合。
+    if (n && BENEFICIARY_LABELS.has(n.label)) {
+      showToast("支援の対象となる場所は削除できません");
       return;
     }
     // レイヤー配置／関係付与／マップ修正（層・関係）／差分bundleループの各フェーズではノード削除不可
@@ -1672,7 +1695,8 @@
     for (const n of state.nodes) {
       const div = document.createElement("div");
       const layerClass = n.layerId ? `layer-${n.layerId}` : "layer-none";
-      const benefClass = BENEFICIARY_LABELS.has(n.label) ? " node-beneficiary" : "";
+      const isBeneficiary = BENEFICIARY_LABELS.has(n.label);
+      const benefClass = isBeneficiary ? " node-beneficiary" : "";
       // group は内部メタデータ。class には layer と beneficiary のみ反映する
       // フェーズ11（最終確認のみ）は setupDrag を呼ばないため、grab カーソルも出さない
       const isDraggablePhase = !isReadOnly && state.phase !== PHASE.ACUTE_REVISE;
@@ -1697,13 +1721,16 @@
           && state.phase !== PHASE.RECOVERY_LAYER_DIFF;
         div.innerHTML += `<div class="node-connect-btn" data-nid="${n.id}" title="矢印を引く" style="${showConnectBtn ? "" : "display:none"}">→</div>`;
 
-        // 削除ボタン: 急性期マップ構築フェーズ（1/14）・修正フェーズ（11/13）・差分bundleループ（10/12）・isInitial ノードは非表示
+        // 削除ボタン: 急性期マップ構築フェーズ（1/14）・修正フェーズ（11/13）・差分bundleループ（10/12）・
+        // 被支援者ノードは非表示
         // [CHANGED] RECOVERY_DIFF（フェーズ16）を追加：ノード削除不可のため非表示。RECOVERY_LAYER_DIFF
         // （フェーズ15）はノード削除を許可するため意図的に含めない（addendum B §6-1・§6-2）。
+        // [CHANGED] isInitial ではなく被支援者かどうかで判定する（deleteNode() と同じ基準に揃える。
+        // addendum B rev B-7 §0-1・§0-2）。
         const isRevise = state.phase === PHASE.ACUTE_REVISE || state.phase === PHASE.ACUTE_LAYER_REVISE
           || state.phase === PHASE.ACUTE_DIFF || state.phase === PHASE.ACUTE_LAYER_DIFF
           || state.phase === PHASE.RECOVERY_DIFF;
-        if (!n.isInitial && !isAcute1 && !isRevise) {
+        if (!isBeneficiary && !isAcute1 && !isRevise) {
           const deleteBtn = document.createElement("div");
           deleteBtn.className = "node-delete-btn";
           deleteBtn.textContent = "×";
@@ -2552,6 +2579,9 @@
               // getRemovalSignature() でシグネチャを記録しておくことで、
               // Phase6 入場時に p6NeedsRebuild()=false となり不要な再構築を防ぐ。
               phase6RemovalSignature = getRemovalSignature();
+              // [NEW rev B-7] インポート直後を hasP6Edits() の基準点とする（このノード数を
+              // 「編集なし」の初期状態とみなす）。
+              phase6InitialNodeCount = phaseData.p6.nodes.length;
             }
             if (validateEdgeConflicts(phaseData.acute.edges) ||
                 validateEdgeConflicts(phaseData.recovery.edges)) hasConflict = true;
@@ -2594,6 +2624,7 @@
             phase6Initialized = phaseData.p6.nodes.length > 0;
             if (phase6Initialized) {
               phase6RemovalSignature = getRemovalSignature();
+              phase6InitialNodeCount = phaseData.p6.nodes.length; // [NEW rev B-7]
             }
             if (validateEdgeConflicts(phaseData.acute.edges) ||
                 validateEdgeConflicts(phaseData.recovery.edges)) hasConflict = true;
@@ -6149,6 +6180,7 @@
     // 呼び出し後は phase6Initialized=true + シグネチャが揃い、p6NeedsRebuild()=false になる。
     phase6Initialized      = true;
     phase6RemovalSignature = getRemovalSignature();
+    phase6InitialNodeCount = phaseData.p6.nodes.length; // [NEW rev B-7] hasP6Edits() 用
     logOp("INIT_PHASE6", { nodeCount: phaseData.p6.nodes.length });
   }
 
