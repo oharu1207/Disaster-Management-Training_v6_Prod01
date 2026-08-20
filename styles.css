@@ -1565,6 +1565,11 @@ textarea { resize: vertical; min-height: 70px; }
 #phase-acuteRevise { display: none; grid-template-columns: 300px 1fr; height: calc(100vh - 54px); overflow: hidden; position: relative; }
 #phase-acuteRevise.active { display: grid; }
 
+/* ===== PHASE RECOVERY_LAYER_DIFF(15) / RECOVERY_DIFF(16): 復旧期 差分提示 =====
+   #phase-acuteDiff と同じ2カラム（サイドバー300px＋キャンバス）構成。 */
+#phase-recoveryDiff { display: none; grid-template-columns: 300px 1fr; height: calc(100vh - 54px); overflow: hidden; position: relative; }
+#phase-recoveryDiff.active { display: grid; }
+
 /* ── diff ウォークスルー: ノード警告強調（統一）── */
 @keyframes dw-node-pulse {
   0%   { box-shadow: 0 0 4px  rgba(255,255,255,0.55); }

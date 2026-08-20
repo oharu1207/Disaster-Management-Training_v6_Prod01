@@ -72,10 +72,12 @@
     PHASE.ACUTE_RECORD,       // idx 6
     PHASE.RECOVERY_PREP,      // idx 7
     PHASE.RECOVERY_MAP,       // idx 8
-    PHASE.TRANSITION_COMPARE, // idx 9
-    PHASE.RECOVERY_COMPARE,   // idx 10
-    PHASE.RECOVERY_RECORD,    // idx 11
-    PHASE.SEQUENCE,           // idx 12
+    PHASE.RECOVERY_LAYER_DIFF, // idx 9  [NEW]
+    PHASE.RECOVERY_DIFF,       // idx 10 [NEW]
+    PHASE.TRANSITION_COMPARE, // idx 11
+    PHASE.RECOVERY_COMPARE,   // idx 12
+    PHASE.RECOVERY_RECORD,    // idx 13
+    PHASE.SEQUENCE,           // idx 14
   ];
 
   // Phase 1 (ACUTE_MAP) 内部サブフェーズ
