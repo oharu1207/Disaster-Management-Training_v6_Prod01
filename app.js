@@ -1455,6 +1455,11 @@
             const added = state.nodes.find(x => x.label === n.label);
             logOp("RECOVERY_NODE_ADDED", { label: n.label, layerId: added?.layerId ?? null });
           }
+          // [FIX ゴースト表示] ノード追加時にも _rdwCtx・ゴースト・パレット誘導を再構築する。
+          // 従来は移動・削除・エッジ編集のみで呼ばれており、追加だけが漏れていた
+          // （renderAll() 由来の副作用でゴーストDOMが偶然消えるだけで、_rdwCtx.labelToId 等の
+          // 内部状態は更新されないままになっていた）。
+          maybeRerenderRecoveryAnswerStageAfterEdit();
         });
       }
 
@@ -1647,6 +1652,7 @@
     }
     renderAll();
     saveToLocalStorage();
+    maybeRerenderRecoveryAnswerStageAfterEdit(); // [FIX ゴースト表示] addNode側と同じ漏れの修正
   }
 
   // ================================================================
@@ -5195,12 +5201,36 @@
     return m;
   }
 
+  // buildRecoveryCtx: 描画のたびに呼ぶ。フェーズ15はノード追加・削除、フェーズ16は
+  // エッジ編集ができるため、labelToId / learnNodes / learnEdges は毎回 live state から
+  // 組み立て直す（ゴースト実装プロンプト §2。initRecoveryBundleLoop 時点のみで固定すると、
+  // 追加したノードが labelToId に載らずゴーストが出ない・消したノードへ引こうとする等の
+  // 不具合になる）。
+  function buildRecoveryCtx(extra) {
+    return {
+      canvasEl:     $("canvas-rdiff"),
+      svgEl:        $("svgLayer-rdiff"),
+      canvasWrapEl: $("canvasWrap-rdiff"),
+      labelToId:    buildRecoveryLabelToIdMap(state.nodes),
+      learnNodes:   state.nodes,
+      learnEdges:   state.edges,
+      ...extra,
+    };
+  }
+
+  // clearRecoveryWalkthroughHighlights: diff系クラスに加え、ゴースト要素（DOM）と
+  // パレット誘導クラスも除去する（ゴースト表示追加に伴う拡張。急性期
+  // clearWalkthroughHighlights と同じ設計）。
   function clearRecoveryWalkthroughHighlights() {
-    const canvasEl = $("canvas-rdiff");
-    const svgEl    = $("svgLayer-rdiff");
+    const canvasEl  = $("canvas-rdiff");
+    const svgEl     = $("svgLayer-rdiff");
+    const paletteEl = $("palette-rdiff");
     if (!canvasEl || !svgEl) return;
+    canvasEl.querySelectorAll(".node.diff-ghost-node").forEach(el => el.remove());
     canvasEl.querySelectorAll(".node").forEach(el => el.classList.remove("diff-node-alert", "diff-dimmed"));
+    svgEl.querySelectorAll("g.diff-ghost-edge").forEach(el => el.remove());
     svgEl.querySelectorAll("g[data-from]").forEach(el => el.classList.remove("diff-dimmed", "diff-edge-alert"));
+    paletteEl?.querySelectorAll(".pitem.diff-palette-alert").forEach(el => el.classList.remove("diff-palette-alert"));
   }
 
   function applyRecoveryBundleDimming(bundle) {
@@ -5213,6 +5243,181 @@
       if (!id) continue;
       const el = canvasEl?.querySelector(`.node[data-id="${id}"]`);
       if (el) el.classList.remove("diff-dimmed");
+    }
+  }
+
+  // ── ゴースト表示（正解プレビュー）─────────────────────────────────────
+  // 汎用DOMヘルパ（ensureDiffMarker / drawGhostEdgeByIds / drawGhostNode /
+  // getGhostBandCenterY）は急性期のものをそのまま再利用する（複製しない）。
+  // 急性期固有のカテゴリ意味論・定数（applyErrorHighlight / highlightDiffEdge /
+  // HUBS_FOR_DIFF）は変更禁止のため、復旧期専用に新設する。
+
+  // 復旧期の4ハブ（急性期の3ハブ＋地域包括支援センター。addendum B §B1.3）。
+  // 急性期 HUBS_FOR_DIFF とは完全に別の定数（流用禁止）。
+  const HUBS_FOR_RECOVERY_DIFF = new Set([
+    "C県A保健所", "地域災害医療コーディネーター", "市町村保健センター", "地域包括支援センター",
+  ]);
+
+  // パレット項目は data-* を持たないため、急性期 flashMissingPaletteItems と同じ
+  // .plabel テキスト一致で該当項目を特定する。
+  function flagPaletteMissingNode(label) {
+    const paletteEl = $("palette-rdiff");
+    if (!paletteEl) return;
+    const item = [...paletteEl.querySelectorAll(".pitem")]
+      .find(el => el.querySelector(".plabel")?.textContent === label);
+    if (item) item.classList.add("diff-palette-alert");
+  }
+
+  // drawGhostNodeAt: node_missing 専用。実ノードが存在しないため、急性期 drawGhostNode
+  // のように「実ノードの offsetLeft」を基準にできない。キャンバス幅中央・正解層バンド
+  // 中央に配置する。同一層バンドに複数出る場合は、既存の未解決ゴースト（今回追加分を
+  // 含む）を横一列に再配置して重なりを避ける（呼ぶたびに自己修正されるため、bundle 内の
+  // node_missing 誤りを1件ずつ順番に渡しても最終的に正しく整列する）。
+  function drawGhostNodeAt(label, expectedLayerId, ctx) {
+    const { canvasEl, canvasWrapEl } = ctx;
+    if (!canvasEl || !canvasWrapEl) return null;
+    const ghostId = "gnode-missing-" + label;
+    if (canvasEl.querySelector(`.node[data-id="${CSS.escape(ghostId)}"]`)) return null;
+
+    const ghostEl = document.createElement("div");
+    ghostEl.className  = `node layer-${expectedLayerId} diff-ghost-node diff-ghost-node-missing`;
+    ghostEl.dataset.id = ghostId;
+    ghostEl.dataset.missingLayer = String(expectedLayerId);
+    ghostEl.innerHTML  = `<div class="ntitle">${esc(label)}</div><div class="diff-ghost-chip">不足</div>`;
+    ghostEl.style.visibility = "hidden";
+    ghostEl.style.opacity    = "0";
+    canvasEl.appendChild(ghostEl);
+
+    // 同一バンドの未解決ゴースト（新規追加分を含む）を中央揃えで横並びに配置し直す
+    const siblings = [...canvasEl.querySelectorAll(
+      `.diff-ghost-node-missing[data-missing-layer="${expectedLayerId}"]`
+    )];
+    const targetY  = getGhostBandCenterY(expectedLayerId, canvasEl, canvasWrapEl);
+    const gap      = 16;
+    const widths   = siblings.map(el => el.offsetWidth);
+    const totalW   = widths.reduce((a, b) => a + b, 0) + gap * Math.max(0, siblings.length - 1);
+    const centerX  = canvasEl.offsetWidth / 2;
+    let x = centerX - totalW / 2;
+    siblings.forEach((el, i) => {
+      const h = el.offsetHeight;
+      let top = targetY - h / 2;
+      if (h > 0) top = Math.max(0, Math.min(top, canvasEl.offsetHeight - h));
+      el.style.left       = x + "px";
+      el.style.top        = top + "px";
+      el.style.visibility = "";
+      x += widths[i] + gap;
+    });
+
+    requestAnimationFrame(() => {
+      ghostEl.style.transition = "opacity 0.3s ease";
+      ghostEl.style.opacity    = "0.4";
+    });
+
+    return ghostEl;
+  }
+
+  // applyRecoveryErrorHighlight: エラー1件分のノード＋エッジ強調を適用する（急性期
+  // applyErrorHighlight の復旧期版）。node_missing / node_extra は復旧期のみのカテゴリ
+  // のため、急性期版には存在しない分岐をここに追加する。
+  function applyRecoveryErrorHighlight(err, ctx) {
+    const { canvasEl, svgEl, labelToId, learnNodes } = ctx;
+    const d = err.detail || {};
+
+    const addNodeAlert = (label) => {
+      const id = label && labelToId[label];
+      if (!id) return;
+      const el = canvasEl.querySelector(`.node[data-id="${id}"]`);
+      if (el) el.classList.add("diff-node-alert");
+    };
+
+    switch (err.category) {
+      case "layer_mismatch":
+        addNodeAlert(d.label);
+        if (!ctx.noGhost) {
+          const ghostEl = drawGhostNode(d.label, d.expected, ctx);
+          if (ghostEl) {
+            const realNodeId  = ctx.labelToId[d.label];
+            const ghostNodeId = "gnode-" + realNodeId;
+            drawGhostEdgeByIds(realNodeId, ghostNodeId, "移動", "移動", {
+              svgEl: ctx.svgEl, learnNodes: ctx.learnNodes, learnEdges: ctx.learnEdges || [],
+              canvasEl: ctx.canvasEl, canvasWrapEl: ctx.canvasWrapEl,
+              extraNodes: [{ id: ghostNodeId, x: 0, y: 0 }],
+            });
+          }
+        }
+        break;
+      case "node_extra":
+        addNodeAlert(d.label);
+        break;
+      case "node_missing":
+        if (!ctx.noGhost) drawGhostNodeAt(d.label, d.expectedLayerId, ctx);
+        flagPaletteMissingNode(d.label);
+        break;
+      case "hub_misassignment": {
+        let targetLabel;
+        if (d.type === "swap") {
+          targetLabel = d.peripheral;
+        } else {
+          const from = d.fromLabel, to = d.toLabel;
+          targetLabel = (from && !HUBS_FOR_RECOVERY_DIFF.has(from)) ? from
+                      : (to   && !HUBS_FOR_RECOVERY_DIFF.has(to))   ? to
+                      : (from || to);
+        }
+        addNodeAlert(targetLabel);
+        break;
+      }
+    }
+
+    highlightRecoveryDiffEdge(svgEl, err, labelToId, ctx.learnEdges || [], learnNodes, canvasEl, ctx.canvasWrapEl, ctx.noGhost || false);
+  }
+
+  // highlightRecoveryDiffEdge: 急性期 highlightDiffEdge の復旧期版。カテゴリ名・detail
+  // 形状は recovery-scoring.js の出力に完全一致させる（軸1〜4・hub_misassignmentの
+  // swap/missing/overuse）。
+  function highlightRecoveryDiffEdge(svgEl, err, labelToId, learnEdges, learnNodes, canvasEl, canvasWrapEl, noGhost) {
+    const d = err.detail || {};
+
+    const findExistingEdgeGroup = (fromLabel, toLabel) => {
+      const fromId = labelToId[fromLabel];
+      const toId   = labelToId[toLabel];
+      if (!fromId || !toId) return null;
+      const g1 = svgEl.querySelector(`g[data-from="${fromId}"][data-to="${toId}"]`);
+      if (g1) return g1;
+      return svgEl.querySelector(`g[data-from="${toId}"][data-to="${fromId}"]`);
+    };
+
+    const alertExisting = (fromLabel, toLabel) => {
+      const g = findExistingEdgeGroup(fromLabel, toLabel);
+      if (g) g.classList.add("diff-edge-alert");
+    };
+
+    const ghostMissing = (fromLabel, toLabel, edgeLabel) => {
+      if (noGhost) return;
+      const fromId = labelToId[fromLabel];
+      const toId   = labelToId[toLabel];
+      if (!fromId || !toId) return;
+      drawGhostEdgeByIds(fromId, toId, edgeLabel, "不足", { svgEl, learnNodes, learnEdges, canvasEl, canvasWrapEl });
+    };
+
+    switch (err.category) {
+      case "command_overuse":         alertExisting(d.fromLabel, d.toLabel); break;
+      case "command_missing":         ghostMissing(d.fromLabel, d.toLabel, "指示命令"); break;
+      case "edge_label_error":        alertExisting(d.fromLabel, d.toLabel); break;
+      case "support_layer_violation": alertExisting(d.fromLabel, d.toLabel); break;
+      case "support_overuse":         alertExisting(d.fromLabel, d.toLabel); break;
+      case "support_missing":         ghostMissing(d.fromLabel, d.toLabel, "支援"); break;
+      case "coordination_path_error": alertExisting(d.fromLabel, d.toLabel); break;
+      case "hub_misassignment": {
+        if (d.type === "swap") {
+          alertExisting(d.wrongHub, d.peripheral);
+          ghostMissing(d.correctHub, d.peripheral, "連携協力");
+        } else if (d.type === "missing") {
+          ghostMissing(d.fromLabel, d.toLabel, "連携協力");
+        } else if (d.type === "overuse") {
+          alertExisting(d.fromLabel, d.toLabel);
+        }
+        break;
+      }
     }
   }
 
@@ -5247,12 +5452,7 @@
   // initRecoveryBundleLoop: RECOVERY_LAYER_DIFF / RECOVERY_DIFF 入場時に呼ぶ。
   function initRecoveryBundleLoop(errors, stage) {
     _rdwStage = stage;
-    const canvasEl     = $("canvas-rdiff");
-    const svgEl        = $("svgLayer-rdiff");
-    const canvasWrapEl = $("canvasWrap-rdiff");
-    const labelToId    = buildRecoveryLabelToIdMap(state.nodes);
-
-    _rdwCtx = { canvasEl, svgEl, labelToId, learnNodes: state.nodes, learnEdges: state.edges, canvasWrapEl };
+    _rdwCtx = buildRecoveryCtx();
     _rdwErrors = errors || [];
     _rdwSteps  = buildRecoveryWalkthroughSteps(_rdwErrors);
     _rdwBundles = buildRecoveryBundles(_rdwSteps);
@@ -5311,6 +5511,8 @@
     const safeIdx = _rdwBundleIndex;
     const silent = !!(opts && opts.silent);
 
+    // ゴースト実装プロンプト §2：描画のたびに live state から ctx を再構築する。
+    _rdwCtx = buildRecoveryCtx();
     clearRecoveryWalkthroughHighlights();
 
     const counterEl   = $("rdwCounter");
@@ -5394,6 +5596,16 @@
         if (fixEl) fixEl.textContent = (_rdwStage === "layer")
           ? "このまま進むと、残っている欠落・誤配置は正解の層に確定されます。"
           : "このままの内容で次へ進みます。";
+      }
+
+      // 確認完了（全件表示）：ノード警告・既存エッジ警告のみ適用し、ゴーストは描かない
+      // （noGhost:true。急性期の確認完了画面と同一の抑制方針。§3-6）。
+      if (_rdwCtx && residualErrors.length > 0) {
+        ensureDiffMarker(_rdwCtx.svgEl);
+        const noGhostCtx = { ..._rdwCtx, noGhost: true };
+        for (const err of residualErrors) {
+          applyRecoveryErrorHighlight(err, noGhostCtx);
+        }
       }
 
       if (!silent) {
@@ -5481,16 +5693,29 @@
       if (fixEl) fixEl.textContent = fixText;
     }
 
+    // ゴースト表示（急性期 renderAnswerStage と同一構成。§3-1：正解ステージのみで描画）。
     if (_rdwCtx) {
       const { canvasEl, svgEl, labelToId } = _rdwCtx;
       canvasEl?.querySelectorAll(".node").forEach(el => el.classList.add("diff-dimmed"));
       svgEl?.querySelectorAll("g[data-from]").forEach(el => el.classList.add("diff-dimmed"));
+
+      // 解消済み（resolved）は警告バッジ・ゴースト・チップを一切描かない。
+      // 一部解消／未解消は残存エラー（residuals）のみに対して描画する。
+      if (outcome !== "resolved") {
+        ensureDiffMarker(svgEl);
+        for (const err of residuals) applyRecoveryErrorHighlight(err, _rdwCtx);
+      }
+
       for (const label of bundle.involvedLabels) {
         const id = labelToId[label];
         if (!id) continue;
         const el = canvasEl?.querySelector(`.node[data-id="${id}"]`);
-        if (el) { el.classList.remove("diff-dimmed"); el.classList.add("diff-node-alert"); }
+        if (el) el.classList.remove("diff-dimmed");
       }
+      svgEl?.querySelectorAll("g[data-from]").forEach(el => {
+        if (el.classList.contains("diff-edge-alert")) el.classList.remove("diff-dimmed");
+      });
+
       if (bundle.involvedLabels.length > 0) {
         const firstId = labelToId[bundle.involvedLabels[0]];
         if (firstId) canvasEl?.querySelector(`.node[data-id="${firstId}"]`)?.scrollIntoView({ block: "nearest", behavior: "smooth" });

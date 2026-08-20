@@ -1755,3 +1755,27 @@ g.diff-dimmed > text {
   z-index: 8; /* 実ノード（z-index:10）の下に表示 */
 }
 
+/* 復旧期ゴースト表示：node_missing 用の「不足」チップ（ゴーストエッジの
+   SVGチップと同一の文言・配色。ノードは HTML div のため CSS で再現する） */
+.diff-ghost-node .diff-ghost-chip {
+  position: absolute;
+  left: 50%; bottom: -22px;
+  transform: translateX(-50%);
+  background: rgba(20,24,36,0.92);
+  border: 1px solid rgba(200,200,210,0.45);
+  color: rgba(200,200,210,0.9);
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* 復旧期ゴースト表示：node_missing のパレット誘導（diff-node-alertと同系統の見た目） */
+.pitem.diff-palette-alert {
+  outline: 2.5px solid rgba(255,255,255,0.95);
+  outline-offset: 2px;
+  box-shadow: 0 0 12px rgba(255,255,255,0.55);
+  animation: dw-node-pulse 0.6s ease-in-out 3;
+}
+
