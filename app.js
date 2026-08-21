@@ -183,6 +183,10 @@
 
   const PHASE6_BENEFICIARY_LABELS = new Set(["避難所", "医療機関", "福祉避難所", "在宅避難者", "仮設住宅"]);
 
+  // 復旧期マップ（RECOVERY_MAP）離脱時に、学習者がパレットから手動で追加することを必須とするノード。
+  // 急性期には存在せず復旧期準備（phase5Data.removals）でも扱われない、復旧期固有の新規組織4件のみ。
+  const RECOVERY_REQUIRED_ADDITION_LABELS = new Set(["DCAT", "社会福祉士会", "地域支え合いセンター", "介護支援専門員協会"]);
+
   const NODE_DESCRIPTIONS = {
     "県庁":                          "広域指揮・県全体の災害対応方針を決定する行政機関",
     "C県A保健所":                   "地域の現地指揮拠点・支援チームの受入・調整を担う行政機関",
@@ -727,7 +731,6 @@
   // 検証パス時は true を返し、失敗時は state を巻き戻して false を返す。
   // 検証順: 空 → 未配置 → 層未設定
   function validatePhase6Leaving(attemptedPhase, prevPhase) {
-    const removedLabels = new Set((window.phase5Data?.removals || []).map(r => r.label));
     const placedLabels  = new Set((phaseData.p6?.nodes || []).map(n => n.label));
 
     // 1. 空チェック
@@ -738,17 +741,15 @@
         {}, 3000);
     }
 
-    // 2. 未配置ノードチェック（削除候補以外で未配置のラベルを検出）
-    const missingLabels = RECOVERY_PALETTE_NODES
-      .map(n => n.label)
-      .filter((label, i, arr) => arr.indexOf(label) === i)
-      .filter(label => !removedLabels.has(label))
+    // 2. 復旧期固有の必須追加ノードチェック（急性期由来ノードを⑨の中で削除した場合は対象外。
+    // それらの削除の是非は後段の復旧期採点・差分提示側で扱う）
+    const missingLabels = [...RECOVERY_REQUIRED_ADDITION_LABELS]
       .filter(label => !placedLabels.has(label));
     if (missingLabels.length > 0) {
       flashMissingPaletteItems(missingLabels);
       return _bailValidation(prevPhase, attemptedPhase,
         "RECOVERY_REQUIRED_NODE_MISSING",
-        `未配置のノードがあります：${missingLabels.join("、")}。削除しないノードはすべてキャンバスに追加してください。`,
+        `復旧期で新たに必要な組織が未配置です：${missingLabels.join("、")}。パレットから追加してください。`,
         { labels: missingLabels }, 5000);
     }
 
