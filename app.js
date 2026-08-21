@@ -4610,8 +4610,8 @@
   // addendum B rev B-4 §0）。
   // ================================================================
 
-  // ── ヒント文（addendum B §B14.6。ht-r1）。急性期の HINT_TEXTS は変更しない ──
-  const RECOVERY_HINT_TEXTS_VERSION = "ht-r1";
+  // ── ヒント文（addendum B §B14.6。ht-r2）。急性期の HINT_TEXTS は変更しない ──
+  const RECOVERY_HINT_TEXTS_VERSION = "ht-r2";
 
   const RECOVERY_HINT_TEXTS = {
 
@@ -4674,6 +4674,73 @@
       "県庁がシナリオの中でどのような役割を持っているか、表2の記述をもう一度確認してみましょう。" +
       "県庁は、現場の各組織を直接まとめる立場でしょうか？",
   };
+
+  // ── ヒント段階の「何が」専用文面（ht-r2）。正解値（層・相手・種類・まとめ役）は含めない。
+  // recovery_hint_what_ht-r2_draft.md §2 のとおり（加筆・要約・言い換えなし）。
+  // {n} は bundle.errors.length に置換する。{label}/{peripheral}/{fromLabel}/{toLabel} は
+  // detail から置換する（buildRecoveryHintWhat 参照）。
+  const RECOVERY_WHAT_HINT = {
+
+    // ── 軸0：組織集合 ──────────────────────────────────
+    // 組織名は出す（伏せると学習者が何も判断できない）。正解の層は伏せる。
+    node_missing:
+      "「{label}」がまだ置かれていません。",
+
+    // どれが余分かは画面のハイライトで分かる。文章では件数のみ。
+    node_extra:
+      "画面に置かれている組織のうち、復旧期の構成として見直しが必要なものが{n}件あります。",
+
+    // ── 軸0L：レイヤー ─────────────────────────────────
+    // 対象ノードは出す（ハイライト済み）。正解の層は伏せる。
+    layer_mismatch:
+      "「{label}」を置いた層を見直しましょう。",
+
+    // ── 軸1：指揮系統 ──────────────────────────────────
+    // 相手を出すと答えになるため、件数のみ。
+    command_missing:
+      "指揮系統の中で、まだ引かれていないつながりが{n}件あります。",
+
+    command_overuse:
+      "指示命令として引かれている矢印のうち、見直しが必要なものが{n}件あります。",
+
+    // ── 軸2：ハブ接続 ──────────────────────────────────
+    // 起点は出す。正しいまとめ役は伏せる。
+    hub_misassignment_swap:
+      "「{peripheral}」のつなぎ先を見直しましょう。",
+
+    hub_misassignment_missing:
+      "「{peripheral}」が、どのまとめ役ともつながっていません。",
+
+    hub_misassignment_overuse:
+      "まとめ役とのつながりのうち、正解の構造にはないものが{n}件あります。",
+
+    // つないでいるペアは出す（正しい組み合わせのため）。正しい種類は伏せる。
+    edge_label_error:
+      "「{fromLabel}」と「{toLabel}」をつなぐこと自体は正しいのですが、矢印の種類を見直しましょう。",
+
+    // ── 軸3：支援 ─────────────────────────────────────
+    // 起点のみ出す。支援先は伏せる。
+    support_missing:
+      "「{fromLabel}」からの支援で、まだ引かれていないものがあります。",
+
+    support_overuse:
+      "引かれている支援の矢印のうち、見直しが必要なものが{n}件あります。",
+
+    support_layer_violation:
+      "支援の矢印の出どころを見直したいものが{n}件あります。",
+
+    // ── 軸4：調整経路 ──────────────────────────────────
+    coordination_path_error:
+      "連携協力のつながりのうち、経路を見直したいものが{n}件あります。",
+  };
+
+  // RECOVERY_WHAT_HINT のうち {n}（bundle.errors.length）のみで完結し、
+  // detail 由来のラベルを埋め込まないキー（＝件数のみで正解を伏せるカテゴリ）。
+  const RECOVERY_WHAT_HINT_COUNT_ONLY_KEYS = new Set([
+    "node_extra", "command_missing", "command_overuse",
+    "hub_misassignment_overuse", "support_overuse", "support_layer_violation",
+    "coordination_path_error",
+  ]);
 
   // ── ベースライン・作業コピー ──────────────────────────────────────
 
@@ -5122,13 +5189,72 @@
     return bundles;
   }
 
-  // buildRecoveryBundleWhat: 束内の "what"（差分の事実）を重複排除して連結する。
+  // buildRecoveryBundleWhat: 束内の "what"（正解値を含む差分の事実）を重複排除して連結する。
+  // ※正解ステージ（renderRecoveryAnswerStage）専用。ヒント段階からは呼ばないこと（ht-r2）。
   function buildRecoveryBundleWhat(bundle) {
     const seen = new Set();
     const lines = [];
     for (const e of bundle.errors) {
       const step = _rdwSteps.find(s => s.error === e);
       const text = step ? step.what : "";
+      if (!text || seen.has(text)) continue;
+      seen.add(text);
+      lines.push(text);
+    }
+    return lines.join("\n");
+  }
+
+  // fillRecoveryWhatHintTemplate: RECOVERY_WHAT_HINT 専用のプレースホルダ置換。
+  // {label}/{peripheral}/{fromLabel}/{toLabel} を detail から埋める。
+  // RECOVERY_HINT_TEXTS 側の splitTemplateToSegmentsRecovery（{from}/{to}、なぜ欄用）とは別物。
+  function fillRecoveryWhatHintTemplate(template, d) {
+    return (template || "")
+      .replace(/\{label\}/g, d.label ?? "")
+      .replace(/\{peripheral\}/g, d.peripheral ?? "")
+      .replace(/\{fromLabel\}/g, d.fromLabel ?? "")
+      .replace(/\{toLabel\}/g, d.toLabel ?? "");
+  }
+
+  // fillRecoveryHubMissingWhatText: hub_misassignment(type:"missing") 専用。
+  // detail には peripheral が無く fromLabel/toLabel のみのため、非ハブ側を peripheral として
+  // 補って埋める。理想ハブペアには稀にハブ同士（周辺組織を持たない）のペアがあり、その場合は
+  // {peripheral} を埋められないため、正解を示唆しない汎用文にフォールバックする。
+  function fillRecoveryHubMissingWhatText(template, d) {
+    const peripheral = !HUBS_FOR_RECOVERY_DIFF.has(d.fromLabel) ? d.fromLabel
+                      : !HUBS_FOR_RECOVERY_DIFF.has(d.toLabel)  ? d.toLabel
+                      : null;
+    if (peripheral === null) return "まとめ役どうしのつながりに見直しが必要な箇所があります。";
+    return template.replace(/\{peripheral\}/g, peripheral);
+  }
+
+  // buildRecoveryHintWhat: ヒント段階専用の "何が"。RECOVERY_WHAT_HINT から構築し、
+  // 正解値（層・相手・種類・まとめ役）を含めない（ht-r2）。
+  function buildRecoveryHintWhat(bundle) {
+    let key = bundle.category;
+    if (bundle.category === "hub_misassignment") {
+      const subtypes = new Set(bundle.errors.map(e => e.detail?.type));
+      key = (subtypes.size === 1 && subtypes.has("swap"))    ? "hub_misassignment_swap"
+          : (subtypes.size === 1 && subtypes.has("missing")) ? "hub_misassignment_missing"
+          : "hub_misassignment_overuse"; // overuse単独、またはサブタイプ混在時のフォールバック（§3-3）
+    }
+
+    const template = RECOVERY_WHAT_HINT[key];
+    if (!template) {
+      console.warn(`[ICS] RECOVERY_WHAT_HINT に "${key}" が未定義です（category: ${bundle.category}）。汎用文にフォールバックします。`);
+      return `修正が必要な箇所が${bundle.errors.length}件あります。`;
+    }
+
+    if (RECOVERY_WHAT_HINT_COUNT_ONLY_KEYS.has(key)) {
+      return template.replace(/\{n\}/g, String(bundle.errors.length));
+    }
+
+    const seen = new Set();
+    const lines = [];
+    for (const e of bundle.errors) {
+      const d = e.detail || {};
+      const text = (key === "hub_misassignment_missing")
+        ? fillRecoveryHubMissingWhatText(template, d)
+        : fillRecoveryWhatHintTemplate(template, d);
       if (!text || seen.has(text)) continue;
       seen.add(text);
       lines.push(text);
@@ -5681,7 +5807,7 @@
       saveToLocalStorage();
     }
 
-    const what = buildRecoveryBundleWhat(bundle);
+    const what = buildRecoveryHintWhat(bundle);
     const { hint } = buildRecoveryHintContent(bundle);
     if (whatEl) whatEl.textContent = what;
     if (whyEl) { whyEl.textContent = hint; if (whyWrapEl) whyWrapEl.style.display = hint ? "" : "none"; }
