@@ -5223,7 +5223,7 @@
     const peripheral = !HUBS_FOR_RECOVERY_DIFF.has(d.fromLabel) ? d.fromLabel
                       : !HUBS_FOR_RECOVERY_DIFF.has(d.toLabel)  ? d.toLabel
                       : null;
-    if (peripheral === null) return "まとめ役どうしのつながりに見直しが必要な箇所があります。";
+    if (peripheral === null) return "まとめ役どうしのつながりを見直しましょう。";
     return template.replace(/\{peripheral\}/g, peripheral);
   }
 
@@ -5581,11 +5581,18 @@
     }
   }
 
-  // computeRecoveryBundleResiduals: live状態を無音で再採点し、当該 bundleKey に属する
-  // 誤りだけを残存分として返す（正解ステージの「修正できたか」判定用）。
-  function computeRecoveryBundleResiduals(bundle) {
+  // computeRecoveryBundleResidualSteps: live状態を無音で再採点し、当該 bundleKey に属する
+  // 誤りを step（what/error を保持）として残存分をそのまま返す（正解ステージの「修正できたか」
+  // 判定・「何が」表示用）。再採点のたびに buildRecoveryWalkthroughSteps() が新しい error
+  // オブジェクトを生成するため、_rdwSteps との参照一致（===）では照合できない（急性期
+  // buildAnswerContent と同じく、step 自体を返して s.what を直接使う方式に揃える）。
+  // 採点不能時・例外時は空配列ではなく初回生成時の step（_rdwSteps から抽出）を返す
+  // （「何も表示されない」状態を作らないため）。
+  function computeRecoveryBundleResidualSteps(bundle) {
     const RS = window.__ICS_RECOVERY_SCORING__;
-    if (!RS || mapLoadStatus.idealRecovery !== "ready" || !window.idealMapRecovery) return bundle.errors;
+    if (!RS || mapLoadStatus.idealRecovery !== "ready" || !window.idealMapRecovery) {
+      return _rdwSteps.filter(s => s.bundleKey === bundle.bundleKey);
+    }
     try {
       const learnerNorm = RS.normalizeRecoveryMap({ nodes: state.nodes, edges: state.edges });
       const idealNorm   = RS.normalizeRecoveryMap(window.idealMapRecovery);
@@ -5593,10 +5600,10 @@
         ? RS.gradeRecoveryLayerPhase(learnerNorm, idealNorm)
         : RS.gradeRecoveryEdgePhase(learnerNorm, idealNorm);
       const steps = buildRecoveryWalkthroughSteps(result.errors);
-      return steps.filter(s => s.bundleKey === bundle.bundleKey).map(s => s.error);
+      return steps.filter(s => s.bundleKey === bundle.bundleKey);
     } catch (err) {
       console.error("[grading] 復旧期束の残存計算に失敗:", err);
-      return bundle.errors;
+      return _rdwSteps.filter(s => s.bundleKey === bundle.bundleKey);
     }
   }
 
@@ -5825,8 +5832,8 @@
     if (nextBtn) { nextBtn.disabled = false; nextBtn.textContent = (safeIdx + 1 >= N) ? "確認完了へ →" : "次へ →"; }
 
     const before = bundle.errors.length;
-    const residuals = computeRecoveryBundleResiduals(bundle);
-    const after = residuals.length;
+    const residualSteps = computeRecoveryBundleResidualSteps(bundle);
+    const after = residualSteps.length;
     const outcome = (after === 0) ? "resolved" : (after < before ? "partial" : "unresolved");
 
     if (stageTagEl) {
@@ -5844,8 +5851,8 @@
       if (fixEl) fixEl.textContent = "このままで正解です。";
     } else {
       const prefix = (outcome === "partial") ? `${before - after}件は修正済みです。残りは次のとおりです：\n` : "";
-      const residualWhat = residuals
-        .map(e => (_rdwSteps.find(s => s.error === e) || {}).what)
+      const residualWhat = residualSteps
+        .map(s => s.what)
         .filter(Boolean)
         .join("\n");
       if (whatEl) whatEl.textContent = prefix + residualWhat;
@@ -5860,10 +5867,10 @@
       svgEl?.querySelectorAll("g[data-from]").forEach(el => el.classList.add("diff-dimmed"));
 
       // 解消済み（resolved）は警告バッジ・ゴースト・チップを一切描かない。
-      // 一部解消／未解消は残存エラー（residuals）のみに対して描画する。
+      // 一部解消／未解消は残存エラー（residualSteps）のみに対して描画する。
       if (outcome !== "resolved") {
         ensureDiffMarker(svgEl);
-        for (const err of residuals) applyRecoveryErrorHighlight(err, _rdwCtx);
+        for (const s of residualSteps) applyRecoveryErrorHighlight(s.error, _rdwCtx);
       }
 
       for (const label of bundle.involvedLabels) {
